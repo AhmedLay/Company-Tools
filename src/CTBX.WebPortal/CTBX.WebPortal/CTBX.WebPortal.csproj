@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CTBX.ServiceDefaults\CTBX.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\CTBX.WebPortal.Client\CTBX.WebPortal.Client.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.0" />
+  </ItemGroup>
+
+</Project>
