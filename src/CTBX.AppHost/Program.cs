@@ -19,6 +19,10 @@ var postgresDbResource = builder.AddPostgres("ctbx-db")
                                      options.WithHostPort(port: 49100);                                     
                                  });
 
+var ctbxDb = postgresDbResource
+                    .WithEnvironment("POSTGRES_DB", "ctbxdb") // setting this will create a db
+                    .AddDatabase("ctbxdb");
+
 var idpDb = postgresDbResource
             .AddDatabase("idpDb");
 
@@ -32,18 +36,22 @@ var idpService = builder.AddProject<Projects.IDP>("idp")
              .WithReference(idpDb)
              .WaitFor(idpDb);
 
-var backend = builder.AddProject<Projects.CTBX_Backend>("ctbx-backend");
-
-
 // gets the url from the https launchsettings profile
 var idpUrl = idpService.GetEndpoint("https");
 
+var backend = builder.AddProject<Projects.CTBX_Backend>("ctbx-backend")
+                     .WithEnvironment("IdentityOptions__RequireHttpsMetadata", "false")
+                     .WithEnvironment("IdentityOptions__MetadataAddress", $"{idpUrl}/.well-known/openid-configuration")
+                     .WithEnvironment("IdentityOptions__Audience", backendClientId)
+                     .WithEnvironment("IdentityOptions__Authority", idpUrl)
+                     .WithReference(ctbxDb);
+
 var portal = builder.AddProject<Projects.CTBX_WebPortal>("ctbx-webportal")
-                    .WithEnvironment("Identity__Authority", idpUrl)
-                    .WithEnvironment("Identity__ClientId", webPortalClientId)
-                    .WithEnvironment("Identity__ClientSecret", webPortalclientSecret)
-                    .WithEnvironment("CockpitOptions__BackendUrl", backend.GetEndpoint("https"))
-                    .WithEnvironment("CockpitOptions__ResourcesScopes", backendClientId)
+                    .WithEnvironment("IdentityOptions__Authority", idpUrl)
+                    .WithEnvironment("IdentityOptions__ClientId", webPortalClientId)
+                    .WithEnvironment("IdentityOptions__ClientSecret", webPortalclientSecret)
+                    .WithEnvironment("PortalOptions__BackendUrl", backend.GetEndpoint("https"))
+                    .WithEnvironment("PortalOptions__ResourcesScopes", backendClientId)
                     .WithReference(idpService)
                     .WaitFor(idpService);
 
