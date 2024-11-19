@@ -1,0 +1,14 @@
+﻿@inherits LoginOrLogoutIconButtonBase
+
+<AuthorizeView>
+    <Authorized>
+        <form action="authentication/logout" method="post">
+            <AntiforgeryToken />
+            <input type="hidden" name="ReturnUrl" value="@CurrentUrl" />
+        </form>
+    </Authorized>
+    <NotAuthorized>
+        
+        <NavLink Href="authentication/login">Login</NavLink>
+    </NotAuthorized>
+</AuthorizeView>

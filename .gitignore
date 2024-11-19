@@ -394,5 +394,12 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
+# Verify
+*.received.*
+
 # JetBrains Rider
 *.sln.iml
+
+# Dv settings
+*.designtime.json
+*.development.json
