@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Data\Scripts\001.create-quartz-schema.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Scripts\001.create-quartz-schema.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Npgsql" Version="8.2.1" />
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.8" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5" />
+
+    <PackageReference Include="OpenIddict" Version="5.8.0" />
+    <PackageReference Include="OpenIddict.AspNetCore" Version="5.8.0" />
+    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.8.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+
+    <PackageReference Include="OpenIddict.Server" Version="5.8.0" />
+
+    <PackageReference Include="OpenIddict.Abstractions" Version="5.8.0" />
+    <PackageReference Include="OpenIddict.Quartz" Version="5.8.0" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.13.0" />
+    <PackageReference Include="Quartz.Serialization.Json" Version="3.13.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CTBX.ServiceDefaults\CTBX.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  
+
+</Project>
