@@ -2,10 +2,16 @@ using CTBX.WebPortal;
 using CTBX.WebPortal.Auth;
 using CTBX.WebPortal.Client.Pages;
 using CTBX.WebPortal.Components;
+using MudBlazor.Services;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+
+builder.Services.AddMudServices();
 
 builder.Services.RegisterAuthNServices(builder.Configuration);
 
