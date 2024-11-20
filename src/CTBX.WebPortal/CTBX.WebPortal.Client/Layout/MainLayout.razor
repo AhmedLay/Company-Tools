@@ -1,25 +1,25 @@
 ﻿@inherits LayoutComponentBase
 
 <MudThemeProvider/>
-    <MudPopoverProvider/>
-        <MudDialogProvider/>
-            <MudSnackbarProvider/> 
-                <div class="page">
-                    <div class="sidebar">
-                        <NavMenu />
-                    </div>
+<MudPopoverProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/> 
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
 
-                    <main>
-                        <div class="top-row px-4">
-                            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-                            <LoginOrLogoutIconButton CurrentUrl="_currentUrl" />
-                        </div>
-
-                        <article class="content px-4">
-                            @Body
-                        </article>
-                    </main>
-                </div>
+    <main>
+        <div class="top-row px-4">
+            <button class="btn btn-primary" @onclick="test">Click me</button>
+            <p role="status">Current count: @currentCount2</p>
+            <LoginOrLogoutIconButton CurrentUrl="_currentUrl" />
+        </div>
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
@@ -33,6 +33,7 @@
 
     private bool _drawerOpen = true;
     private string? _currentUrl;
+    private int currentCount2;
 
     void DrawerToggle()
     {
@@ -58,4 +59,10 @@
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
+
+    public void test(){
+        Console.WriteLine("lala");
+        currentCount2++;
+    }
+
 }
