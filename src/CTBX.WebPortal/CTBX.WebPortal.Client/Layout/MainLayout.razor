@@ -1,31 +1,44 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider/>
+
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
 <MudPopoverProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/> 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+        <main>
+        <div class="switch">
+            <!-- MudSwitch bleibt unverändert -->
+            <MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="" />
+
+            <!-- MudIconButton statt MudButton -->
+            @if (_isDarkMode)
+            {
+                <!-- Dark Mode Icon -->
+                <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Primary" />
+                
+            }
+            @if(!_isDarkMode)
+            {
+                <!-- Light Mode Icon -->
+                <MudIconButton Icon="@Icons.Material.Filled.LightMode" Color="Color.Primary" />
+            }
+        </div>
+            <article class="content px-10">
+                @Body
+            </article>
+        </main>
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <button class="btn btn-primary" @onclick="test">Click me</button>
-            <p role="status">Current count: @currentCount2</p>
-            <LoginOrLogoutIconButton CurrentUrl="_currentUrl" />
-        </div>
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
-
-<div id="blazor-error-ui" data-nosnippet>
+@* <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
-</div>
+</div> *@
 
 @code {
     [Inject]
@@ -33,7 +46,8 @@
 
     private bool _drawerOpen = true;
     private string? _currentUrl;
-    private int currentCount2;
+    private MudTheme _theme = new();
+    private bool _isDarkMode;
 
     void DrawerToggle()
     {
@@ -60,9 +74,5 @@
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 
-    public void test(){
-        Console.WriteLine("lala");
-        currentCount2++;
-    }
 
 }
