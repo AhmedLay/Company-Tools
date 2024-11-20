@@ -2,6 +2,7 @@
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
         <MudSpacer />
+ 
     </MudAppBar>
     <MudDrawer @bind-Open="@_open" Elevation="1">
         <MudDrawerHeader>
@@ -15,7 +16,6 @@
     </MudDrawer>
     <MudMainContent Class="pt-16 px-16">
         <MudContainer Class="mt-6">
-@*             <MudAlert Severity="Severity.Success" Class="mt-16">Text inside MudContainer</MudAlert> *@
         </MudContainer>
     </MudMainContent>
 </MudLayout>
