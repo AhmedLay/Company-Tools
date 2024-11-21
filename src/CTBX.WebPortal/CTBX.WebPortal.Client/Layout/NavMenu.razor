@@ -5,7 +5,7 @@
 
 		<MudSpacer />
 
-		<!-- Dark mode switch in the app bar -->
+
 		<MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
 					   Color="Color.Inherit"
 					   OnClick="@ToggleDarkMode" />
@@ -22,19 +22,17 @@
 				Overview
 			</MudNavLink>
 
-			<!-- Vacation Request -->
+
 			<MudNavLink Href="/vacation" Match="NavLinkMatch.All">
 				<MudIcon Icon="@Icons.Material.Filled.BeachAccess" />
 				Vacation Request
 			</MudNavLink>
 
-			<!-- Sick Report -->
 			<MudNavLink Href="/sickleavereport" Match="NavLinkMatch.All">
 				<MudIcon Icon="@Icons.Material.Filled.Healing" />
 				Sick Report
 			</MudNavLink>
 
-			<!-- Settings -->
 			<MudNavLink Href="/settings" Match="NavLinkMatch.All">
 				<MudIcon Icon="@Icons.Material.Filled.Settings" />
 				Settings
@@ -44,7 +42,7 @@
 
 	<MudMainContent Class="pt-16 px-16">
 		<MudContainer Class="mt-6">
-			<!-- Main content will render here -->
+
 		</MudContainer>
 	</MudMainContent>
 </MudLayout>

@@ -33,9 +33,7 @@ body.dark-mode {
 }
 
 @media (min-width: 641px) {
-    .page{
-        flex-direction:row;
-    }
+    
   
 
 }
