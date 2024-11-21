@@ -12,18 +12,17 @@
 
         <main>
         <div class="switch">
-            <!-- MudSwitch bleibt unverändert -->
-            <MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="" />
 
-            <!-- MudIconButton statt MudButton -->
+            <MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="" />
+     
             @if (_isDarkMode)
             {
-                <!-- Dark Mode Icon -->
+                
                 <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Primary" />
             }
             else
             {
-                <!-- Light Mode Icon -->
+                
                 <MudIconButton Icon="@Icons.Material.Filled.LightMode" Color="Color.Primary" />
             }
         </div>
@@ -33,11 +32,11 @@
         </main>
     </div>
 
-@* <div id="blazor-error-ui" data-nosnippet>
+<div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
-</div> *@
+</div>
 
 @code {
     [Inject]

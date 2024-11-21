@@ -15,6 +15,12 @@ main {
     align-items: center; /* Vertikale Ausrichtung */
 }
 
+body.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+
 
 
 @media (max-width: 640.98px) {
@@ -28,44 +34,25 @@ main {
             margin-left: 0;
         }
 
-    .sidebar {
-        display: none; /* Sidebar bei kleinen Geräten ausblenden */
-    }
 }
 
 @media (min-width: 641px) {
     .page {
-        flex-direction: row; /* Layout zu "row" ändern für größere Bildschirme */
+        display: flex;  
     }
 
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
-        display: block; /* Sidebar bei größeren Bildschirmen anzeigen */
-    }
 
-    .top {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
 }
 
-/*#blazor-error-ui {
+
+#blazor-error-ui {
     color-scheme: light only;
     background: lightyellow;
     bottom: 0;
     box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
-    display: none;*/ /* Standardmäßig ausblenden */
-    /*left: 0;
+    display: none;  Standardmäßig ausblenden 
+    left: 0;
     padding: 0.6rem 1.25rem 0.7rem 1.25rem;
     position: fixed;
     width: 100%;
@@ -78,4 +65,4 @@ main {
         position: absolute;
         right: 0.75rem;
         top: 0.5rem;
-    }*/
+    }

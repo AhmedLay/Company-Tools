@@ -1,24 +1,47 @@
 ﻿<MudLayout>
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+
         <MudSpacer />
- 
     </MudAppBar>
+
     <MudDrawer @bind-Open="@_open" Elevation="1">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">CompanyBar</MudText>
+            <MudText Typo="Typo.h6">"Logo CompanyToolbox"</MudText>
         </MudDrawerHeader>
         <MudNavMenu>
-            <MudNavLink Match="NavLinkMatch.All">feature one</MudNavLink>
-            <MudNavLink Match="NavLinkMatch.All">feature two</MudNavLink>
-            <MudNavLink Match="NavLinkMatch.All">feature three</MudNavLink>
+            <MudNavLink Href="/Overview" Match="NavLinkMatch.All">
+                <MudIcon Icon="@Icons.Material.Filled.AutoAwesomeMosaic" />
+                Overview
+            </MudNavLink>
+
+            <!-- Vacation Request -->
+            <MudNavLink Href="/vacation-request" Match="NavLinkMatch.All">
+                <MudIcon Icon="@Icons.Material.Filled.BeachAccess" />
+                Vacation Request
+            </MudNavLink>
+
+            <!-- Sick Report -->
+            <MudNavLink Href="/sick-report" Match="NavLinkMatch.All">
+                <MudIcon Icon="@Icons.Material.Filled.Healing" />
+                Sick Report
+            </MudNavLink>
+
+            <!-- Settings -->
+            <MudNavLink Href="/settings" Match="NavLinkMatch.All">
+                <MudIcon Icon="@Icons.Material.Filled.Settings" />
+                Settings
+            </MudNavLink>
         </MudNavMenu>
     </MudDrawer>
+
     <MudMainContent Class="pt-16 px-16">
         <MudContainer Class="mt-6">
+            <!-- Main content will render here -->
         </MudContainer>
     </MudMainContent>
 </MudLayout>
+
 @code {
     private bool _open = false;
 
