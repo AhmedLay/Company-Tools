@@ -13,18 +13,6 @@
         <main>
         <div class="switch">
 
-            <MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="" />
-     
-            @if (_isDarkMode)
-            {
-                
-                <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Primary" />
-            }
-            else
-            {
-                
-                <MudIconButton Icon="@Icons.Material.Filled.LightMode" Color="Color.Primary" />
-            }
         </div>
             <article class="content px-10">
                 @Body
