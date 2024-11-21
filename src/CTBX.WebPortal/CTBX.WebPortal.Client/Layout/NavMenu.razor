@@ -1,69 +1,65 @@
 ﻿<MudLayout>
-      <MudThemeProvider @bind-IsDarkMode="_isDarkMode"/>
-    <MudAppBar Elevation="1">
-        <MudIconButton Icon="@(_open ? Icons.Material.Filled.Close : Icons.Material.Filled.Menu)" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+	<MudThemeProvider @bind-IsDarkMode="_isDarkMode" />
+	<MudAppBar Elevation="1">
+		<MudIconButton Icon="@(_open ? Icons.Material.Filled.Close : Icons.Material.Filled.Menu)" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
 
+		<MudSpacer />
 
-        <MudSpacer />
-        <!-- Dark mode switch in the app bar -->
-        <MudSwitch @bind-Value="_isDarkMode" Color="Color.Inherit" Class="ma-4" T="bool" Label="" />
+		<!-- Dark mode switch in the app bar -->
+		<MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
+					   Color="Color.Inherit"
+					   OnClick="@ToggleDarkMode" />
 
-        <!-- Optional: Add an icon button to reflect the dark mode -->
-        @if (_isDarkMode)
-        {
-            <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" />
-        }
-        else
-        {
-            <MudIconButton Icon="@Icons.Material.Filled.LightMode" Color="Color.Inherit" />
-        }
+	</MudAppBar>
 
-    </MudAppBar>
+	<MudDrawer @bind-Open="@_open" Elevation="1">
+		<MudDrawerHeader>
+			<MudText Typo="Typo.h6">"Logo CompanyToolbox"</MudText>
+		</MudDrawerHeader>
+		<MudNavMenu>
+			<MudNavLink Href="/Overview" Match="NavLinkMatch.All">
+				<MudIcon Icon="@Icons.Material.Filled.AutoAwesomeMosaic" />
+				Overview
+			</MudNavLink>
 
-    <MudDrawer @bind-Open="@_open" Elevation="1">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6">"Logo CompanyToolbox"</MudText>
-        </MudDrawerHeader>
-        <MudNavMenu>
-            <MudNavLink Href="/Overview" Match="NavLinkMatch.All">
-                <MudIcon Icon="@Icons.Material.Filled.AutoAwesomeMosaic" />
-                Overview
-            </MudNavLink>
+			<!-- Vacation Request -->
+			<MudNavLink Href="/vacation-request" Match="NavLinkMatch.All">
+				<MudIcon Icon="@Icons.Material.Filled.BeachAccess" />
+				Vacation Request
+			</MudNavLink>
 
-            <!-- Vacation Request -->
-            <MudNavLink Href="/vacation-request" Match="NavLinkMatch.All">
-                <MudIcon Icon="@Icons.Material.Filled.BeachAccess" />
-                Vacation Request
-            </MudNavLink>
+			<!-- Sick Report -->
+			<MudNavLink Href="/sick-report" Match="NavLinkMatch.All">
+				<MudIcon Icon="@Icons.Material.Filled.Healing" />
+				Sick Report
+			</MudNavLink>
 
-            <!-- Sick Report -->
-            <MudNavLink Href="/sick-report" Match="NavLinkMatch.All">
-                <MudIcon Icon="@Icons.Material.Filled.Healing" />
-                Sick Report
-            </MudNavLink>
+			<!-- Settings -->
+			<MudNavLink Href="/settings" Match="NavLinkMatch.All">
+				<MudIcon Icon="@Icons.Material.Filled.Settings" />
+				Settings
+			</MudNavLink>
+		</MudNavMenu>
+	</MudDrawer>
 
-            <!-- Settings -->
-            <MudNavLink Href="/settings" Match="NavLinkMatch.All">
-                <MudIcon Icon="@Icons.Material.Filled.Settings" />
-                Settings
-            </MudNavLink>
-        </MudNavMenu>
-    </MudDrawer>
-
-    <MudMainContent Class="pt-16 px-16">
-        <MudContainer Class="mt-6">
-            <!-- Main content will render here -->
-        </MudContainer>
-    </MudMainContent>
+	<MudMainContent Class="pt-16 px-16">
+		<MudContainer Class="mt-6">
+			<!-- Main content will render here -->
+		</MudContainer>
+	</MudMainContent>
 </MudLayout>
 
 @code {
-    private bool _open = false;
-    private bool _isDarkMode;
+	private bool _open = false;
+	private bool _isDarkMode;
 
-    private void ToggleDrawer()
-    {
-        _open = !_open;
-    }
+	private void ToggleDrawer()
+	{
+		_open = !_open;
+	}
+
+	private void ToggleDarkMode()
+	{
+		_isDarkMode = !_isDarkMode;
+	}
 }
-
