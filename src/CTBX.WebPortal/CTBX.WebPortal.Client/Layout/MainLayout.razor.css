@@ -1,14 +1,76 @@
 .page {
-    position: relative;
-    display: flex;
-    flex-direction: column; /* Standardmäßiges Layout für mobile Geräte */
-    
+
 }
 
-.switch {
-    display: flex;
-    justify-content: flex-end; /* Elemente nach rechts ausrichten */
-    align-items: center; /* Vertikale Ausrichtung */
+.sidebar {
+
+}
+
+.main-content {
+    max-width: 100%;
+    padding: 10px;
+    margin: 10px;
+}
+
+
+#blazor-error-ui {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 16px;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .reload,
+    #blazor-error-ui .dismiss {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        margin-left: 15px;
+        cursor: pointer;
+    }
+
+        #blazor-error-ui .reload:hover,
+        #blazor-error-ui .dismiss:hover {
+            text-decoration: underline;
+        }
+
+@media (max-width: 640px) {
+    .page {
+        flex-direction: column;
+    }
+
+    .main-content {
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+
+    #blazor-error-ui {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+@media (min-width: 641px) {
+    .page {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        display: block;
+    }
+
+    .main-content {
+        padding: 1px;
+    }
+
+    #blazor-error-ui {
+        font-size: 16px;
+    }
 }
 
 body.dark-mode {
@@ -16,24 +78,10 @@ body.dark-mode {
     color: white;
 }
 
-
-
-
-@media (max-width: 640.98px) {
-    .top {
-        justify-content: space-between; /* Verteile Elemente in der .top-Leiste */
-        padding: 0.5rem; /* Weniger Padding auf mobilen Geräten */
+    body.dark-mode .page {
+        background-color: #1f1f1f;
     }
 
-        /* Optionale Anpassungen für Links und Buttons in der .top-Leiste */
-        .top ::deep a, .top ::deep .btn-link {
-            margin-left: 0;
-        }
-
-}
-
-@media (min-width: 641px) {
-    
-  
-
-}
+    body.dark-mode #blazor-error-ui {
+        background-color: rgba(255, 0, 0, 0.9);
+    }
