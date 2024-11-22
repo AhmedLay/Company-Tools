@@ -23,27 +23,30 @@
         <MudDrawerHeader>
             <img src="assets/logo.png" alt="CompanyToolbox Logo" style="height:40px; margin-left:10px;" />
         </MudDrawerHeader>
-        <MudNavMenu>
-            <MudNavLink Href="/overview" Match="NavLinkMatch.All" OnClick="@(() => NavigateAndCloseDrawer("/overview"))">
-                <MudIcon Icon="@Icons.Material.Filled.AutoAwesomeMosaic" />
+        <div style="height:35px;"></div>
+
+        <MudNavMenu Class="menu-container">
+            <MudButton OnClick="@(() => NavigateAndCloseDrawer("/overview"))"
+                       StartIcon="@Icons.Material.Filled.AutoAwesomeMosaic">
                 Overview
-            </MudNavLink>
+            </MudButton>
 
-            <MudNavLink Href="/vacation" Match="NavLinkMatch.All" OnClick="@(() => NavigateAndCloseDrawer("/vacation"))">
-                <MudIcon Icon="@Icons.Material.Filled.BeachAccess" />
+            <MudButton OnClick="@(() => NavigateAndCloseDrawer("/vacation"))"
+                       StartIcon="@Icons.Material.Filled.BeachAccess">
                 Vacation Request
-            </MudNavLink>
+            </MudButton>
 
-            <MudNavLink Href="/sickleavereport" Match="NavLinkMatch.All" OnClick="@(() => NavigateAndCloseDrawer("/sickleavereport"))">
-                <MudIcon Icon="@Icons.Material.Filled.Healing" />
+            <MudButton OnClick="@(() => NavigateAndCloseDrawer("/sickleavereport"))"
+                       StartIcon="@Icons.Material.Filled.Healing">
                 Sick Report
-            </MudNavLink>
+            </MudButton>
 
-            <MudNavLink Href="/settings" Match="NavLinkMatch.All" OnClick="@(() => NavigateAndCloseDrawer("/settings"))">
-                <MudIcon Icon="@Icons.Material.Filled.Settings" />
+            <MudButton OnClick="@(() => NavigateAndCloseDrawer("/settings"))"
+                       StartIcon="@Icons.Material.Filled.Settings">
                 Settings
-            </MudNavLink>
+            </MudButton>
         </MudNavMenu>
+
     </MudDrawer>
 
     <MudMainContent Class="pt-16 px-16">
