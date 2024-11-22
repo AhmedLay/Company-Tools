@@ -48,7 +48,7 @@
 
     <MudMainContent Class="pt-16 px-16">
         <MudContainer Class="mt-6">
-            <!-- Content Goes Here -->
+
         </MudContainer>
     </MudMainContent>
 </MudLayout>
@@ -67,10 +67,10 @@
 
     private void NavigateAndCloseDrawer(string uri)
     {
-        // Close the drawer before navigation
+      
         _open = false;
-        StateHasChanged();  // Trigger UI update immediately to reflect the change
-        NavigationManager.NavigateTo(uri);  // Navigate to the target URI
+        StateHasChanged();  
+        NavigationManager.NavigateTo(uri);  
     }
 
     private void ToggleDarkMode()
