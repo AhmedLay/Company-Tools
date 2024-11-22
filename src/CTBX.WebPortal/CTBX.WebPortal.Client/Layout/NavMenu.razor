@@ -1,6 +1,6 @@
 ﻿<MudLayout>
 	<MudThemeProvider @bind-IsDarkMode="_isDarkMode" />
-	<MudAppBar Elevation="1">
+    <MudAppBar Elevation="1" Color="@(_isDarkMode ? Color.Dark : Color.Info)">
 		<MudIconButton Icon="@(_open ? Icons.Material.Filled.Close : Icons.Material.Filled.Menu)" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
 
 		<MudSpacer />
