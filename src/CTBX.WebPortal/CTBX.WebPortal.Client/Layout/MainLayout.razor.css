@@ -1,87 +1,42 @@
-.page {
 
+.mud-main-content {
+    margin-top: 150px; 
+    padding: 40px; 
+    padding-left: 50px; 
 }
 
-.sidebar {
 
+.mud-app-bar {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 64px; 
+    background-color: var(--mud-palette-primary); 
 }
 
-.main-content {
-    max-width: 100%;
-    padding: 10px;
+    .mud-app-bar img {
+        height: 40px;
+        margin-left: 10px;
+    }
+
+
+.mud-drawer {
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+body {
     margin: 10px;
+    font-family: Arial,
 }
 
-
-#blazor-error-ui {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(255, 0, 0, 0.8);
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-size: 16px;
-    z-index: 1000;
+.logo-container {
+    margin-left: 12px; 
+    display: flex; 
+    align-items: center; 
 }
 
-    #blazor-error-ui .reload,
-    #blazor-error-ui .dismiss {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        margin-left: 15px;
-        cursor: pointer;
-    }
-
-        #blazor-error-ui .reload:hover,
-        #blazor-error-ui .dismiss:hover {
-            text-decoration: underline;
-        }
-
-@media (max-width: 640px) {
-    .page {
-        flex-direction: column;
-    }
-
-    .main-content {
-        padding: 10px; 
-    }
-
-    #blazor-error-ui {
-        font-size: 14px;
-        padding: 10px;
-    }
+/* Logo-Bild */
+.logo-image {
+    height: 40px;
+    margin-left: 10px;
 }
-
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
-    }
-
-    .sidebar {
-        display: block;
-    }
-
-    .main-content {
-        padding: 1px;
-    }
-
-    #blazor-error-ui {
-        font-size: 16px;
-    }
-}
-
-body.dark-mode {
-    background-color: #121212;
-    color: white;
-}
-
-    body.dark-mode .page {
-        background-color: #1f1f1f;
-    }
-
-    body.dark-mode #blazor-error-ui {
-        background-color: rgba(255, 0, 0, 0.9);
-    }

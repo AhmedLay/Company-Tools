@@ -1,54 +1,62 @@
 ﻿@inherits LayoutComponentBase
 
+<MudThemeProvider @bind-IsDarkMode="_isDarkMode" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-<MudThemeProvider/>
-<MudPopoverProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
-<div class="page">
+<MudLayout>
+    <MudAppBar Elevation="1" Color="@(_isDarkMode ? Color.Dark : Color.Info)">
 
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
 
-    <main class="main-content">
+        <a href="https://nirusolutions.de/" target="_blank" rel="noopener noreferrer">
+            <MudText Typo="Typo.h5" Class="logo-container">
+                <img src="assets/logo2.png" alt="CompanyToolbox Logo" class="logo-image" />
+            </MudText>
+        </a>
 
-            @Body
+        <MudSpacer />
 
-    </main>
-</div>
+        <MudLink Href="/" Style="text-decoration: none;">
+            <MudText Typo="Typo.h6" Align="Align.Left" Style="color: white;">CompanyToolBox</MudText>
+        </MudLink>
 
 
-<div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
-</div>
+
+        <MudSpacer />
+
+        <MudIconButton Icon="@Icons.Material.Filled.Mail" Color="Color.Inherit" />
+
+        <MudIconButton Icon="@Icons.Material.Filled.Language" Color="Color.Inherit" />
+
+        <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Inherit" />
+
+        <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
+                       Color="Color.Inherit" OnClick="@ToggleDarkMode" />
+
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavRebuild />
+    </MudDrawer>
+
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
 
 @code {
-    [Inject]
-    public NavigationManager NavigationManager { get; set; } = default!;
-    private string? _currentUrl;
+    private bool _drawerOpen = true;
+    private bool _isDarkMode;
 
-    protected override Task OnInitializedAsync()
+    private void DrawerToggle()
     {
-        _currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-        NavigationManager.LocationChanged += OnLocationChanged;
-
-        StateHasChanged();
-        return Task.CompletedTask;
+        _drawerOpen = !_drawerOpen;
     }
 
-    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    private void ToggleDarkMode()
     {
-        _currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
-        StateHasChanged();
+        _isDarkMode = !_isDarkMode;
     }
-
-    public void Dispose()
-    {
-        NavigationManager.LocationChanged -= OnLocationChanged;
-    }
-
-
 }

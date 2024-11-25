@@ -1,0 +1,23 @@
+﻿
+<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All" >Home</MudNavLink>
+
+    <MudNavLink Href="overview" Match="NavLinkMatch.Prefix" >Overview</MudNavLink>
+
+    <MudNavGroup Title="Reports" Expanded="true">
+        <MudNavLink Href="vacation" Match="NavLinkMatch.Prefix" >Vacation Request</MudNavLink>
+        <MudNavLink Href="sickleavereport" Match="NavLinkMatch.Prefix" >Sick Report</MudNavLink>
+    </MudNavGroup>
+
+
+    <MudNavGroup Title="Settings" Expanded="true">
+        <MudNavLink Href="/users">Users</MudNavLink>
+        <MudNavLink Href="/security">Security</MudNavLink>
+    </MudNavGroup>
+
+   
+</MudNavMenu>
+
+@code {
+
+}
