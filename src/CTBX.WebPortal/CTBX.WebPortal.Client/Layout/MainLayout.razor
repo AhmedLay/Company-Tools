@@ -18,11 +18,9 @@
 
         <MudSpacer />
 
-        <MudLink Href="/" Style="text-decoration: none;">
+     @*    <MudLink Href="/" Style="text-decoration: none;">
             <MudText Typo="Typo.h6" Align="Align.Left" Style="color: white;">CompanyToolBox</MudText>
-        </MudLink>
-
-
+        </MudLink> *@
 
         <MudSpacer />
 
@@ -41,9 +39,11 @@
         <NavRebuild />
     </MudDrawer>
 
+    <div class="content-wrapper">
     <MudMainContent>
         @Body
     </MudMainContent>
+    </div>
 </MudLayout>
 
 @code {

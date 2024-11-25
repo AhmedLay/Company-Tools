@@ -1,9 +1,12 @@
 
 .mud-main-content {
-    margin-top: 150px; 
-    padding: 40px; 
-    padding-left: 50px; 
+    margin-top: 150px;
+    padding: 40px;
+    padding-left: 50px; /* Falls bereits vorhanden, Wert erhöhen */
+    margin-left: 20px; /* Fügt zusätzlichen Abstand links hinzu */
+    margin-top:20px;
 }
+
 
 
 .mud-app-bar {
@@ -26,14 +29,23 @@
 
 body {
     margin: 10px;
-    font-family: Arial,
+    margin-left: 20px; /* Verschiebt den Inhalt weiter nach rechts */
+    margin-top: 20px;
+    font-family: Arial;
 }
+
 
 .logo-container {
     margin-left: 12px; 
     display: flex; 
     align-items: center; 
 }
+
+.content-wrapper {
+    margin-left: 20px;
+    margin-top:10px;
+}
+
 
 /* Logo-Bild */
 .logo-image {

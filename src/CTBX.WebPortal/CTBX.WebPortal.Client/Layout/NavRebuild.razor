@@ -1,19 +1,32 @@
 ﻿
 <MudNavMenu>
-    <MudNavLink Href="" Match="NavLinkMatch.All" >Home</MudNavLink>
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
 
-    <MudNavLink Href="overview" Match="NavLinkMatch.Prefix" >Overview</MudNavLink>
+    <MudNavLink Href="overview" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AutoAwesomeMosaic">Overview</MudNavLink>
 
-    <MudNavGroup Title="Reports" Expanded="true">
+    <MudNavGroup Title="Reports" Icon="@Icons.Material.Filled.Report" Expanded="false">
         <MudNavLink Href="vacation" Match="NavLinkMatch.Prefix" >Vacation Request</MudNavLink>
         <MudNavLink Href="sickleavereport" Match="NavLinkMatch.Prefix" >Sick Report</MudNavLink>
     </MudNavGroup>
 
 
-    <MudNavGroup Title="Settings" Expanded="true">
+    <MudNavGroup Title="Settings" Icon="@Icons.Material.Filled.Settings" Expanded="false">
         <MudNavLink Href="/users">Users</MudNavLink>
         <MudNavLink Href="/security">Security</MudNavLink>
     </MudNavGroup>
+
+    <MudNavGroup Title="Future Features 1" Icon="@Icons.Material.Filled.SafetyCheck" Expanded="false">
+        <MudNavLink Href="ss" Match="NavLinkMatch.Prefix">Placeholder 1</MudNavLink>
+        <MudNavLink Href="ss" Match="NavLinkMatch.Prefix">Placeholder 2</MudNavLink>
+    </MudNavGroup>
+
+    <MudNavGroup Title="Future Features 2" Icon="@Icons.Material.Filled.Notes" Expanded="false">
+        <MudNavLink Href="ss" Match="NavLinkMatch.Prefix"> Placeholder 3</MudNavLink>
+        <MudNavLink Href="ss" Match="NavLinkMatch.Prefix">Placeholder 4</MudNavLink>
+        <MudNavLink Href="ss" Match="NavLinkMatch.Prefix">Placeholder 5</MudNavLink>
+        <MudNavLink Href="ss" Match="NavLinkMatch.Prefix">Placeholder 6</MudNavLink>
+    </MudNavGroup>
+    
 
    
 </MudNavMenu>
