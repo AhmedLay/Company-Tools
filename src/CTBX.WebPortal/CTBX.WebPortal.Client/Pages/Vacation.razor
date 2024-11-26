@@ -1,13 +1,43 @@
 ﻿@page "/vacation"
+<PageTitle>Vacation Request</PageTitle>
 
-<PageTitle>Home</PageTitle>
+<MudCard>
+    <MudCardContent>
+        <MudText Align="Align.Center">Vacation Request</MudText>
+        <MudForm Spacing="2">
+            <MudTextField T="string" Label="LAALALALA" />
+            <MudTextField T="string" Label="Personal ID (later selbst ausgefüllt)" />
+            <MudDatePicker Label="From" />
+            <MudDatePicker Label="To" />
 
-<h1>Vacation Request</h1>
+            <MudForm Spacing="2">
+                <MudText Align="Align.Center">Sonstiges</MudText>
+                <MudTextField T="string" Label="Random Text" />
+                <MudNumericField T="int" Label="Lala" />
+            </MudForm>
 
-Military Bases on Okinawa: Impact on Economy
-The Japan-US relations have been a complex issue for a long period of time. The problems based on the idea of the American military bases on the territory of Japan, Okinawa in particular, caused a number of discussions as it had a certain impact on the country’s economic and political...
+            <MudTextField T="int" Label="Remaining Vacation Days" Value="10" ReadOnly="true" Disabled="true" />
 
-Topic: Military
-Words: 500 Pages: 2
-Elie Wiesel’s Night: Ghetto and Concentration Camp Horrors
-Elie Wiesel revealed his experience in the ghetto in his novel Night. He portrayed the horrors of the war years and the horrors of the Nazi concentration camps. The author shares his thoughts and deepest emotions. The book is a very intimate confession of a person who tried to come...
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudButton OnClick="SaveDraft" Variant="Variant.Outlined" Color="Color.Secondary" FullWidth="true">Save Draft</MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudButton OnClick="SubmitRequest" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">Submit Request</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private void SaveDraft()
+    {
+        Console.WriteLine("Draft saved successfully!");
+    }
+
+    private void SubmitRequest()
+    {
+        Console.WriteLine("Vacation request submitted!");
+    }
+}
