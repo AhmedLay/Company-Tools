@@ -1,3 +1,4 @@
+using Aspire.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -19,9 +20,14 @@ var postgresDbResource = builder.AddPostgres("ctbx-db")
                                      options.WithHostPort(port: 49100);                                     
                                  });
 
-var ctbxDb = postgresDbResource
+var readStore = builder.AddMongoDB("ctbx-readstore")
+                       .WithMongoExpress(opts=> opts.WithHostPort(port: 49200));
+
+var readDb = readStore.AddDatabase("ctbx-read-db");
+
+var eventsDb = postgresDbResource
                     .WithEnvironment("POSTGRES_DB", "ctbxdb") // setting this will create a db
-                    .AddDatabase("ctbxdb");
+                    .AddDatabase("ctbx-events-db");
 
 var idpDb = postgresDbResource
             .AddDatabase("idpDb");
@@ -44,7 +50,10 @@ var backend = builder.AddProject<Projects.CTBX_Backend>("ctbx-backend")
                      .WithEnvironment("IdentityOptions__MetadataAddress", $"{idpUrl}/.well-known/openid-configuration")
                      .WithEnvironment("IdentityOptions__Audience", backendClientId)
                      .WithEnvironment("IdentityOptions__Authority", idpUrl)
-                     .WithReference(ctbxDb);
+                     .WithReference(eventsDb)
+                     .WithReference(readDb)
+                     .WaitFor(eventsDb)
+                     .WaitFor(readDb);
 
 var portal = builder.AddProject<Projects.CTBX_WebPortal>("ctbx-webportal")
                     .WithEnvironment("IdentityOptions__Authority", idpUrl)
