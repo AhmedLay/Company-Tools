@@ -1,0 +1,17 @@
+﻿@page "/errortest"
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="text-center mt-5">
+    <MudPaper Elevation="3" Class="p-4">
+        <MudText Typo="Typo.h4" Class="mb-3">error testing page</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="ThrowError">Trigger Error</MudButton>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private void ThrowError()
+    {
+        throw new Exception("Test Error: Something went wrong!");
+    }
+}
+
+

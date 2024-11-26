@@ -1,0 +1,18 @@
+﻿@inject NavigationManager Navigation
+@page "/error"
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="text-center">
+    <MudPaper Elevation="4" Class="p-4">
+        <MudText Typo="Typo.h4" Class="mb-3">Oops! Something went wrong.</MudText>
+        <MudText Class="mb-4">We encountered an error while processing your request. Please try again later.</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GoHome">Go to Homepage</MudButton>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private void GoHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+}

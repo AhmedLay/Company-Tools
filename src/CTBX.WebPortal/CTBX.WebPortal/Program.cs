@@ -17,6 +17,7 @@ builder.Services.RegisterAuthNServices(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddServiceDiscovery();
@@ -40,6 +41,9 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 app.UseAuthentication();
 app.UseAuthorization();

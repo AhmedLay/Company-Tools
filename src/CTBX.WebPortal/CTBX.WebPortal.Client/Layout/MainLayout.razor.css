@@ -1,98 +1,54 @@
-.page {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+
+.mud-main-content {
+    margin-top: 150px;
+    padding: 40px;
+    padding-left: 50px; /* Falls bereits vorhanden, Wert erhöhen */
+    margin-left: 20px; /* Fügt zusätzlichen Abstand links hinzu */
+    margin-top:20px;
 }
 
-main {
-    flex: 1;
-}
 
-.sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
-}
 
-.top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
+.mud-app-bar {
     display: flex;
     align-items: center;
+    padding: 0 16px;
+    height: 64px; 
+    background-color: var(--mud-palette-primary); 
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
+    .mud-app-bar img {
+        height: 40px;
+        margin-left: 10px;
     }
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
 
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-@media (max-width: 640.98px) {
-    .top-row {
-        justify-content: space-between;
-    }
-
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
+.mud-drawer {
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
-    }
-
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
-    }
-
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
-
-    .top-row, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
+body {
+    margin: 10px;
+    margin-left: 20px; /* Verschiebt den Inhalt weiter nach rechts */
+    margin-top: 20px;
+    font-family: Arial;
 }
 
-#blazor-error-ui {
-    color-scheme: light only;
-    background: lightyellow;
-    bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    display: none;
-    left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
+
+.logo-container {
+    margin-left: 12px; 
+    display: flex; 
+    align-items: center; 
 }
 
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
+.content-wrapper {
+    margin-left: 20px;
+    margin-top:10px;
+}
+
+
+/* Logo-Bild */
+.logo-image {
+    height: 40px;
+    margin-left: 10px;
+}

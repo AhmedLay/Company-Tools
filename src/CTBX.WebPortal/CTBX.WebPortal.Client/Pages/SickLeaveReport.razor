@@ -1,0 +1,36 @@
+﻿@page "/sickleavereport"
+<PageTitle>Sick Report</PageTitle>
+
+<MudCard>
+    <MudCardContent>
+        <MudText Align="Align.Center"> Sick Report</MudText>
+        <MudForm Spacing="2">
+            <MudTextField T="string" Label="LAALALALA" />
+            <MudTextField T="string" Label="Personal ID (later selbst ausgefüllt)" />
+            <MudDatePicker Label="From" />
+            <MudDatePicker Label="To" />
+
+            <MudForm Spacing="2">
+                <MudText Align="Align.Center">Sonstiges</MudText>
+                <MudTextField T="string" Label="Random Text" />
+                <MudNumericField T="int" Label="Lala" />
+            </MudForm>
+
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudButton OnClick="SubmitRequest" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Submit Request</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </MudCardContent>
+</MudCard>
+
+@code {
+
+
+    private void SubmitRequest()
+    {
+        Console.WriteLine("Vacation request submitted!");
+    }
+}
+

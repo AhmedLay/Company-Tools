@@ -1,7 +1,66 @@
 ﻿@page "/"
-
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudContainer  Class="pa-4">
+    <!-- Header Section -->
+    <MudPaper Elevation="2" Class="pa-4 mb-4">
+        <h1 class="text-center">Welcome to the Company Toolbox</h1>
+        <p class="text-center">
+            Your one-stop solution for all company tools and resources. Streamline your workflow, enhance productivity, and access everything you need in one place.
+        </p>
+    </MudPaper>
 
-Welcome to your new app.
+    <!-- Introduction Section -->
+    <MudGrid Spacing="3">
+        <MudItem xs="12" md="4">
+            <MudPaper Elevation="1" Class="pa-3">
+                <h3>Absence Manager</h3>
+                <p>
+                    Keep track of your absences with ease. Plan ahead by managing leave requests, tracking vacation days, and monitoring attendance patterns.
+                </p>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" Href="/vacation">
+                    Explore
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="4">
+            <MudPaper Elevation="1" Class="pa-3">
+                <h3>Inventory</h3>
+                <p>
+                    Simplify your inventory tracking with real-time updates. Manage stock levels, monitor supplies, and streamline restocking processes efficiently.
+                    Ensure optimal inventory levels to prevent shortages or overstocking, saving time and resources.
+                </p>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" Href="/sickleavereport">
+                    Start
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="4">
+            <MudPaper Elevation="1" Class="pa-3">
+                <h3>Human Resource Management</h3>
+                <p>
+                    Streamline HR operations with tools for onboarding, employee records and policy management.
+                </p>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" Href="/settings">
+                    Manage HR
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
+    <!-- Additional Info Section -->
+    <MudPaper Elevation="1" Class="pa-4 mt-4">
+        <h2>About Our Toolbox</h2>
+        <p>
+            The Company Toolbox is designed to simplify your daily tasks by centralizing all essential tools in one platform. From managing employee absence to generating detailed reports, our toolbox offers a comprehensive solution tailored to your business needs.
+        </p>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Href="/about">
+            Learn More About Us
+        </MudButton>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    // Add any backend logic here if needed
+}
+

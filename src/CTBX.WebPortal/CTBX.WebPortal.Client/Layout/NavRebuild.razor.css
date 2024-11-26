@@ -1,0 +1,29 @@
+/*
+@media (min-width: 641px) {
+    .navbar-toggler {
+        display: none;
+    }
+
+    .nav-scrollable {
+
+        display: block;
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+
+    .mud-drawer {
+        margin: 0;
+        padding: 0;
+    }
+
+    .mud-app-bar {
+        margin: 0;
+        padding: 0;
+    }
+
+    .menu-container {
+        text-transform: none;
+    }
+
+}
+*/
