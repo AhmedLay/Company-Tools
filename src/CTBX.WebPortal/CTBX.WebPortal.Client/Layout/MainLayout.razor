@@ -31,7 +31,7 @@
         <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Inherit" />
 
         <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
-                       Color="Color.Inherit" OnClick="@ToggleDarkMode" />
+        Color="Color.Inherit" OnClick="@ToggleDarkMode" />
 
     </MudAppBar>
 
@@ -41,7 +41,21 @@
 
     <div class="content-wrapper">
         <MudMainContent>
-            @Body
+            <ErrorBoundary>
+                <ChildContent>
+                    @Body
+                </ChildContent>
+                <ErrorContent>
+
+                 <MudContainer MaxWidth="MaxWidth.Large" Class="text-center">
+                   <MudPaper Elevation="4" Class="p-4">
+                      <MudText Typo="Typo.h4" Class="mb-3">Oops! Something went wrong.</MudText>
+                     <MudText Class="mb-4">We encountered an error while processing your request. Please try again later.</MudText>
+                   </MudPaper>
+                  </MudContainer>
+
+                </ErrorContent>
+            </ErrorBoundary>
         </MudMainContent>
     </div>
 </MudLayout>
@@ -49,7 +63,7 @@
 @code {
     private bool _drawerOpen = true;
     private bool _isDarkMode;
-
+   
     private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
@@ -59,4 +73,6 @@
     {
         _isDarkMode = !_isDarkMode;
     }
+  
+    
 }
