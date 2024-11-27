@@ -1,0 +1,57 @@
+﻿@page "/file-upload"
+@using Microsoft.AspNetCore.Components.Forms
+@using System.IO
+
+<div>Select your file</div>
+<InputFile OnChange="FileUpload" />
+
+<div>File name: @FileName</div>
+<div>File size: @FileSize</div>
+<div>File type: @FileType</div>
+<div>Last Modified: @LastModified</div>
+<div>Saved File Path: @SavedFilePath</div>
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div style="color:green;"> @ErrorMessage</div>
+}
+
+@code {
+    public string FileName { get; set; } = "";
+    public long FileSize { get; set; }
+    public string FileType { get; set; } = "";
+    public DateTimeOffset LastModified { get; set; }
+    public string SavedFilePath { get; set; } = "";
+    const int MAX_FILESIZE = 1000 * 1024; // 1 MB
+    public string ErrorMessage { get; set; } = "";
+
+    public async Task FileUpload(InputFileChangeEventArgs e)
+    {
+        var browserFile = e.File;
+
+        if (browserFile != null)
+        {
+            FileSize = browserFile.Size;
+            FileType = browserFile.ContentType;
+            FileName = browserFile.Name;
+            LastModified = browserFile.LastModified;
+
+            try
+            {
+                var fileStream = browserFile.OpenReadStream(MAX_FILESIZE);
+                var uploadPath = Path.Combine(Environment.CurrentDirectory, "Uploads");
+                Directory.CreateDirectory(uploadPath);
+
+                var targetFilePath = Path.Combine(uploadPath, browserFile.Name);
+                using var targetStream = new FileStream(targetFilePath, FileMode.Create);
+                await fileStream.CopyToAsync(targetStream);
+
+                SavedFilePath = targetFilePath;
+                ErrorMessage = "file uploaed";
+            }
+            catch (Exception exception)
+            {
+                ErrorMessage = exception.Message;
+            }
+        }
+    }
+}

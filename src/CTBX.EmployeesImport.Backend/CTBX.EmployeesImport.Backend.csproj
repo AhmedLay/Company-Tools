@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CTBX.EmployeesImport.Shared\CTBX.EmployeesImport.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
