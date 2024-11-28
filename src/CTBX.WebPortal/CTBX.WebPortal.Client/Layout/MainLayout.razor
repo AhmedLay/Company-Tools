@@ -2,11 +2,18 @@
 
 <MudThemeProvider @bind-IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
-<MudDialogProvider />
+<MudDialogProvider FullWidth="true"
+                   MaxWidth="MaxWidth.ExtraSmall"
+                   CloseButton="true"
+                   BackdropClick="false"
+                   NoHeader="true"
+                   Position="DialogPosition.Center"
+                   CloseOnEscapeKey="true"
+                   BackgroundClass="my-custom-class" />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1" Color="@(_isDarkMode ? Color.Dark : Color.Info)">
+    <MudAppBar Elevation="1" Color="@(_isDarkMode ? Color.Dark : Color.Inherit)">
 
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
 
@@ -47,12 +54,12 @@
                 </ChildContent>
                 <ErrorContent>
 
-                 <MudContainer MaxWidth="MaxWidth.Large" Class="text-center">
-                   <MudPaper Elevation="4" Class="p-4">
-                      <MudText Typo="Typo.h4" Class="mb-3">Oops! Something went wrong.</MudText>
-                     <MudText Class="mb-4">We encountered an error while processing your request. Please try again later.</MudText>
-                   </MudPaper>
-                  </MudContainer>
+                    <MudContainer MaxWidth="MaxWidth.Large" Class="text-center">
+                        <MudPaper Elevation="4" Class="p-4">
+                            <MudText Typo="Typo.h4" Class="mb-3">Oops! Something went wrong.</MudText>
+                            <MudText Class="mb-4">We encountered an error while processing your request. Please try again later.</MudText>
+                        </MudPaper>
+                    </MudContainer>
 
                 </ErrorContent>
             </ErrorBoundary>
@@ -62,8 +69,8 @@
 
 @code {
     private bool _drawerOpen = true;
-    private bool _isDarkMode;
-   
+    private bool _isDarkMode = true;
+
     private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;

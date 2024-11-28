@@ -1,0 +1,32 @@
+﻿
+<MudDialog>
+    <TitleContent>
+        Warning!
+    </TitleContent>
+    <DialogContent>
+       Your file is to big !
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter]
+    private MudDialogInstance? MudDialog { get; set; }
+
+    private void Submit()
+    {
+        if (MudDialog != null)
+        {
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+    }
+
+    private void Cancel()
+    {
+        MudDialog?.Cancel();  
+    }
+}
