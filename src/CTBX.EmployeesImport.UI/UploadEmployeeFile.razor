@@ -1,7 +1,10 @@
-﻿@inject IDialogService DialogService
-@page "/file-upload"
+﻿@page "/file-upload"
+@inject IDialogService DialogService
+@inject HttpClient Http
+
 @using CTBX.EmployeesImport.UI.Dialogs
 @using Microsoft.AspNetCore.Components.Forms
+@using System.Net.Http.Json
 <MudPaper Class="d-flex flex-column align-center py-4">
     <MudText Typo="Typo.h4" GutterBottom="true">Employee File Upload</MudText>
     <MudText Typo="Typo.body1" Class="mb-4 text-center">
@@ -25,27 +28,40 @@
         for="fileInput">
             Upload Files
         </MudButton>
-        <MudButton Variant="Variant.Filled"
+
+        <MudButton
+        OnClick="UploadFilesToServer"
+        Variant="Variant.Filled"
         Color="Color.Warning"
         StartIcon="@Icons.Material.Filled.CloudUpload"
         for="fileInput">
             Upload Files To Server
         </MudButton>
+
+
+
     </div>
 
     <div class="d-flex flex-wrap justify-center">
-        @foreach (var item in saveFile.Files)
+        @if (saveFile.Files.Count == 0)
         {
-            <MudPaper Class="pa-2 mx-2">
-                <MudText Typo="Typo.body1">@item.FileName (@item.FileSize bytes)</MudText>
-                <MudIconButton Color="Color.Error"
-                OnClick="(_ => Remove(item))"
-                Icon="@Icons.Material.Filled.Remove"
-                arial-label="delete">
-                </MudIconButton>
-            </MudPaper>
+            <MudText Typo="Typo.body2" Color="Color.Primary">No files uploaded yet.</MudText>
+        }
+        else
+        {
+            @foreach (var (item, index) in saveFile.Files.Select((file, i) => (file, i + 1)))
+            {
+                <MudPaper Class="pa-2 mx-2 d-flex align-items-center">
+                    <MudText Typo="Typo.body1">@($"{index}. {item.FileName} ({item.FileSize} bytes)")</MudText>
+                    <MudIconButton Color="Color.Error"
+                    OnClick="(_ => Remove(item))"
+                    Icon="@Icons.Material.Filled.Remove"
+                    aria-label="delete" />
+                </MudPaper>
+            }
         }
     </div>
+
 </MudPaper>
 
 
@@ -60,6 +76,12 @@
     {
         foreach (var file in e.GetMultipleFiles())
         {
+            if (saveFile.Files.Any(f => f.FileName == file.Name))
+            {
+                await DialogService.ShowMessageBox("Duplicate File", $"The file '{file.Name}' has already been added.");
+                continue;
+            }
+
             if (file.Size > 1000 * 1024)
             {
                 await OpenDialogForInvalidSize(_topCenter);
@@ -85,6 +107,35 @@
         }
     }
 
+    private async Task UploadFilesToServer()
+    {
+        foreach (var file in saveFile.Files)
+        {
+            var content = new MultipartFormDataContent();
+
+            var byteArrayContent = new ByteArrayContent(file.ImagesBytes);
+            byteArrayContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.FileType);
+            content.Add(byteArrayContent, "file", file.FileName);
+
+            // Send file to server 
+            var response = await Http.PostAsync("fileupload", content);
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("File got uploaded");
+            }
+            else
+            {
+                Console.WriteLine($"Failed to upload file. Status Code: {response.StatusCode}");
+            }
+
+            Remove(file);
+        }
+    }
+
+
+
     private void Remove(FileData file)
     {
         saveFile.Files.Remove(file);
@@ -92,12 +143,14 @@
 
     private Task OpenDialogForInvalidSize(DialogOptions options)
     {
-        return DialogService.ShowAsync<InvalidSizeDialog>("Simple Dialog", options);
+        return DialogService.ShowAsync<InvalidSizeDialog>("File Size Error", options);
     }
 
     private Task OpenDialogForInvalidType(DialogOptions options)
     {
-        return DialogService.ShowAsync<InvalidTypeDialog>("File Size Error", options);
+        return DialogService.ShowAsync<InvalidTypeDialog>("File Type Error", options);
     }
+
+    
 
 }

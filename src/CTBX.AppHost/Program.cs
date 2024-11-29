@@ -71,11 +71,4 @@ idpService
     .WithEnvironment("IdentityDataConfig__PortalClientRedirectUrl", $"{portalUrl}/signin-oidc")
     .WithEnvironment("IdentityDataConfig__PortalClientPostLogoutUrl", $"{portalUrl}/signout-callback-oidc");
 
-
-builder.AddProject<Projects.testaaaaa>("testaaaaa");
-
-
-builder.AddProject<Projects.CTBX_ImportEmployee_API>("ctbx-importemployee-api");
-
-
 builder.Build().Run();
