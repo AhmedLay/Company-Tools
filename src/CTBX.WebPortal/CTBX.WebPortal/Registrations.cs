@@ -1,6 +1,5 @@
 ﻿using System.Net.Http.Headers;
 using CTBX.WebPortal.Auth;
-using System.Security.Principal;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -29,6 +28,7 @@ public static class Registrations
                 );
             });
         }).RequireAuthorization();
+
         return app;
     }
 

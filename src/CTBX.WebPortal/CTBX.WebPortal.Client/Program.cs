@@ -3,17 +3,7 @@ using MudBlazor.Services;
 
 
 
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddMudServices();
-
-
-builder.Services.AddScoped(sp =>
-new HttpClient
-{
-    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
-});
-//how to configure it right to backend 
-
+builder.RegisterFeatures();
 await builder.Build().RunAsync();
-

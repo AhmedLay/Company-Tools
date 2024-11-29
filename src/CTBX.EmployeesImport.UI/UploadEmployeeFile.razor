@@ -1,10 +1,7 @@
 ﻿@page "/file-upload"
-@inject IDialogService DialogService
-@inject HttpClient Http
+@inject ISnackbar Snackbar
+@inject UploadEmployeesService Service
 
-@using CTBX.EmployeesImport.UI.Dialogs
-@using Microsoft.AspNetCore.Components.Forms
-@using System.Net.Http.Json
 <MudPaper Class="d-flex flex-column align-center py-4">
     <MudText Typo="Typo.h4" GutterBottom="true">Employee File Upload</MudText>
     <MudText Typo="Typo.body1" Class="mb-4 text-center">
@@ -12,133 +9,56 @@
         Maximum 10 at once per upload.
         Supported formats: <strong>.csv</strong>, <strong>.txt</strong>. Each file must follow the required format.
     </MudText>
-    <InputFile id="fileInput" OnChange="UploadFiles" hidden multiple />
-
-    @*     todo:
-    dialog when file to big or wrong type
-    upload to server
-    listing prettier
- *@
-
-    <div class="d-flex justify-center gap-2 mb-4">
-        <MudButton HtmlTag="label"
-        Variant="Variant.Filled"
-        Color="Color.Success"
-        StartIcon="@Icons.Material.Filled.UploadFile"
-        for="fileInput">
-            Upload Files
-        </MudButton>
-
-        <MudButton OnClick="UploadFilesToServer"
-        Variant="Variant.Filled"
-        Color="Color.Warning"
-        StartIcon="@Icons.Material.Filled.CloudUpload"
-        for="fileInput">
-            Upload Files To Server
-        </MudButton>
-
-
-
-    </div>
-
-    <div class="d-flex flex-wrap justify-center">
-        @if (saveFile.Files.Count == 0)
-        {
-            <MudText Typo="Typo.body2" Color="Color.Primary">No files uploaded yet.</MudText>
-        }
-        else
-        {
-            @foreach (var (item, index) in saveFile.Files.Select((file, i) => (file, i + 1)))
-            {
-                <MudPaper Class="pa-2 mx-2 d-flex align-items-center">
-                    <MudText Typo="Typo.body1">@($"{index}. {item.FileName} ({item.FileSize} bytes)")</MudText>
-                    <MudIconButton Color="Color.Error"
-                    OnClick="(_ => Remove(item))"
-                    Icon="@Icons.Material.Filled.Remove"
-                    aria-label="delete" />
-                </MudPaper>
-            }
-        }
-    </div>
-
+    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
+    FilesChanged="UploadFiles">
+        <ActivatorContent>
+            <MudButton Variant="Variant.Filled"
+            Color="Color.Success"
+            StartIcon="@Icons.Material.Filled.UploadFile">
+                Upload Files
+            </MudButton>
+        </ActivatorContent>
+    </MudFileUpload>
 </MudPaper>
 
 
 @code {
-    SaveFile saveFile = new SaveFile();
     public string Error { get; set; } = string.Empty;
     public int MaxFiles = 10;
-
-
-
-    private async Task UploadFiles(InputFileChangeEventArgs e)
+    
+    private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
     {
-        foreach (var file in e.GetMultipleFiles(MaxFiles))
+        byte[] content = [];
+        foreach (var file in files)
         {
-            if (saveFile.Files.Any(f => f.FileName == file.Name))
-            {
-                await DialogService.ShowMessageBox("Duplicate File", $"The file '{file.Name}' has already been added.");
-                continue;
-            }
+            // await file.OpenReadStream().ReadAsync(content, default);
 
-            if (file.Size > 1000 * 1024)
-            {
-                await DialogService.ShowMessageBox("Invalid File Size", $"The file '{file.Name}' is cannot be larger than 1MB.");
-                continue;
-            }
+            // _fileDataList.Add(new()
+            //  {
+            //      FileName = file.Name,
+            //      FileSize = file.Size,
+            //      FileType = file.ContentType,
+            //      Content = content
+            //  });
 
-            var validFileTypes = new[] { "text/plain", "text/csv" };
-            var fileExtension = Path.GetExtension(file.Name)?.ToLower();
-            if (!validFileTypes.Contains(file.ContentType) && !(fileExtension == ".txt" || fileExtension == ".csv"))
+            try
             {
-                await DialogService.ShowMessageBox("Invalid File Type", $"The file '{file.Name}' must be .csv or .txt");
-                continue;
+                await Service.UploadFile(file);
+                Snackbar.Add("Files Uploaded",Severity.Success);
             }
+            catch (Exception ex)
+            {
 
-            var fileData = new FileData();
-            var buffer = new byte[file.Size];
-            await file.OpenReadStream().ReadAsync(buffer);
-            fileData.FileName = file.Name;
-            fileData.FileSize = file.Size;
-            fileData.FileType = file.ContentType;
-            fileData.ImagesBytes = buffer;
-            saveFile.Files.Add(fileData);
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+            
         }
+
+        // Todo [AL] move to submit button
+        //await Service.UploadFiles(_fileDataList.ToImmutableList(), CancellationToken.None);
+
+        
     }
-
-    private async Task UploadFilesToServer()
-    {
-        foreach (var file in saveFile.Files)
-        {
-            var content = new MultipartFormDataContent();
-
-            var byteArrayContent = new ByteArrayContent(file.ImagesBytes);
-            byteArrayContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.FileType);
-            content.Add(byteArrayContent, "file", file.FileName);
-
-            // Send file to server
-            // var response = await Http.PostAsync("api/Fileupload", content);
-            var response = await Http.GetAsync("api/hello");
-
-
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("File got uploaded");
-            }
-            else
-            {
-                Console.WriteLine($"Failed to upload file. Status Code: {response.StatusCode}");
-            }
-
-
-        }
-    }
-
-    private void Remove(FileData file)
-    {
-        saveFile.Files.Remove(file);
-    }
-
 
 
 
