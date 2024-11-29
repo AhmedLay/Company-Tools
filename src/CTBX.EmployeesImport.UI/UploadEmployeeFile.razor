@@ -22,19 +22,18 @@
 
     <div class="d-flex justify-center gap-2 mb-4">
         <MudButton HtmlTag="label"
-        Variant="Variant.Filled"
-        Color="Color.Success"
-        StartIcon="@Icons.Material.Filled.UploadFile"
-        for="fileInput">
+                   Variant="Variant.Filled"
+                   Color="Color.Success"
+                   StartIcon="@Icons.Material.Filled.UploadFile"
+                   for="fileInput">
             Upload Files
         </MudButton>
 
-        <MudButton
-        OnClick="UploadFilesToServer"
-        Variant="Variant.Filled"
-        Color="Color.Warning"
-        StartIcon="@Icons.Material.Filled.CloudUpload"
-        for="fileInput">
+        <MudButton OnClick="UploadFilesToServer"
+                   Variant="Variant.Filled"
+                   Color="Color.Warning"
+                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                   for="fileInput">
             Upload Files To Server
         </MudButton>
 
@@ -54,9 +53,9 @@
                 <MudPaper Class="pa-2 mx-2 d-flex align-items-center">
                     <MudText Typo="Typo.body1">@($"{index}. {item.FileName} ({item.FileSize} bytes)")</MudText>
                     <MudIconButton Color="Color.Error"
-                    OnClick="(_ => Remove(item))"
-                    Icon="@Icons.Material.Filled.Remove"
-                    aria-label="delete" />
+                                   OnClick="(_ => Remove(item))"
+                                   Icon="@Icons.Material.Filled.Remove"
+                                   aria-label="delete" />
                 </MudPaper>
             }
         }
@@ -65,7 +64,7 @@
 </MudPaper>
 
 
-@code{
+@code {
     SaveFile saveFile = new SaveFile();
     public string Error { get; set; } = string.Empty;
     private readonly DialogOptions _topCenter = new() { Position = DialogPosition.TopCenter };
@@ -117,7 +116,7 @@
             byteArrayContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.FileType);
             content.Add(byteArrayContent, "file", file.FileName);
 
-            // Send file to server 
+            // Send file to server
             var response = await Http.PostAsync("fileupload", content);
 
 
@@ -130,7 +129,7 @@
                 Console.WriteLine($"Failed to upload file. Status Code: {response.StatusCode}");
             }
 
-            Remove(file);
+
         }
     }
 
@@ -151,6 +150,6 @@
         return DialogService.ShowAsync<InvalidTypeDialog>("File Type Error", options);
     }
 
-    
+
 
 }
