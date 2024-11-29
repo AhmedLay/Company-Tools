@@ -117,7 +117,7 @@
             content.Add(byteArrayContent, "file", file.FileName);
 
             // Send file to server
-            var response = await Http.PostAsync("fileupload", content);
+            var response = await Http.PostAsync("api/Fileupload", content);
 
 
             if (response.IsSuccessStatusCode)
