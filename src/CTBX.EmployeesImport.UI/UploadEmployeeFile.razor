@@ -22,18 +22,18 @@
 
     <div class="d-flex justify-center gap-2 mb-4">
         <MudButton HtmlTag="label"
-                   Variant="Variant.Filled"
-                   Color="Color.Success"
-                   StartIcon="@Icons.Material.Filled.UploadFile"
-                   for="fileInput">
+        Variant="Variant.Filled"
+        Color="Color.Success"
+        StartIcon="@Icons.Material.Filled.UploadFile"
+        for="fileInput">
             Upload Files
         </MudButton>
 
         <MudButton OnClick="UploadFilesToServer"
-                   Variant="Variant.Filled"
-                   Color="Color.Warning"
-                   StartIcon="@Icons.Material.Filled.CloudUpload"
-                   for="fileInput">
+        Variant="Variant.Filled"
+        Color="Color.Warning"
+        StartIcon="@Icons.Material.Filled.CloudUpload"
+        for="fileInput">
             Upload Files To Server
         </MudButton>
 
@@ -53,9 +53,9 @@
                 <MudPaper Class="pa-2 mx-2 d-flex align-items-center">
                     <MudText Typo="Typo.body1">@($"{index}. {item.FileName} ({item.FileSize} bytes)")</MudText>
                     <MudIconButton Color="Color.Error"
-                                   OnClick="(_ => Remove(item))"
-                                   Icon="@Icons.Material.Filled.Remove"
-                                   aria-label="delete" />
+                    OnClick="(_ => Remove(item))"
+                    Icon="@Icons.Material.Filled.Remove"
+                    aria-label="delete" />
                 </MudPaper>
             }
         }
@@ -67,13 +67,13 @@
 @code {
     SaveFile saveFile = new SaveFile();
     public string Error { get; set; } = string.Empty;
-    private readonly DialogOptions _topCenter = new() { Position = DialogPosition.TopCenter };
+    public int MaxFiles = 10;
 
 
 
     private async Task UploadFiles(InputFileChangeEventArgs e)
     {
-        foreach (var file in e.GetMultipleFiles())
+        foreach (var file in e.GetMultipleFiles(MaxFiles))
         {
             if (saveFile.Files.Any(f => f.FileName == file.Name))
             {
@@ -83,7 +83,7 @@
 
             if (file.Size > 1000 * 1024)
             {
-                await OpenDialogForInvalidSize(_topCenter);
+                await DialogService.ShowMessageBox("Invalid File Size", $"The file '{file.Name}' is cannot be larger than 1MB.");
                 continue;
             }
 
@@ -91,7 +91,7 @@
             var fileExtension = Path.GetExtension(file.Name)?.ToLower();
             if (!validFileTypes.Contains(file.ContentType) && !(fileExtension == ".txt" || fileExtension == ".csv"))
             {
-                await OpenDialogForInvalidType(_topCenter);
+                await DialogService.ShowMessageBox("Invalid File Type", $"The file '{file.Name}' must be .csv or .txt");
                 continue;
             }
 
@@ -117,7 +117,8 @@
             content.Add(byteArrayContent, "file", file.FileName);
 
             // Send file to server
-            var response = await Http.PostAsync("api/Fileupload", content);
+            // var response = await Http.PostAsync("api/Fileupload", content);
+            var response = await Http.GetAsync("api/hello");
 
 
             if (response.IsSuccessStatusCode)
@@ -133,22 +134,11 @@
         }
     }
 
-
-
     private void Remove(FileData file)
     {
         saveFile.Files.Remove(file);
     }
 
-    private Task OpenDialogForInvalidSize(DialogOptions options)
-    {
-        return DialogService.ShowAsync<InvalidSizeDialog>("File Size Error", options);
-    }
-
-    private Task OpenDialogForInvalidType(DialogOptions options)
-    {
-        return DialogService.ShowAsync<InvalidTypeDialog>("File Type Error", options);
-    }
 
 
 

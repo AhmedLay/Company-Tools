@@ -12,7 +12,7 @@ public class FileUploadController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> UploadFile([FromForm] IFormFile[] files)
+    public async Task<IActionResult> UploadFile(IFormFile[] files)
     {
         if (files == null || !files.Any())
             return BadRequest("No files uploaded.");

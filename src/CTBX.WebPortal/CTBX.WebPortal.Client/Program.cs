@@ -13,7 +13,7 @@ new HttpClient
 {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 });
-
+//how to configure it right to backend 
 
 await builder.Build().RunAsync();
 

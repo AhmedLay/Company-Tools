@@ -71,4 +71,5 @@ idpService
     .WithEnvironment("IdentityDataConfig__PortalClientRedirectUrl", $"{portalUrl}/signin-oidc")
     .WithEnvironment("IdentityDataConfig__PortalClientPostLogoutUrl", $"{portalUrl}/signout-callback-oidc");
 
+
 builder.Build().Run();
