@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Headers;
-using CTBX.WebPortal.Auth;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -8,12 +7,11 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Yarp.ReverseProxy.Transforms;
 using Microsoft.Identity.Web;
 using System.IdentityModel.Tokens.Jwt;
-namespace CTBX.WebPortal;
+using static CTBX.WebPortal.Utils.Constants;
+namespace CTBX.WebPortal.Utils;
 public static class Registrations
 {
-    const string SI_OIDC_SCHEME = "SmartInspectOidc";
-    const string SI_OIDC_ACCESS_TOKEN_NAME = "access_token";
-    const string SI_OIDC_ACCESS_TOKEN_BEARER = "Bearer";
+
 
     public static WebApplication ForwardBackendApiRequest(this WebApplication app, string webAPIBackEndRootUrl)
     {
