@@ -1,3 +1,5 @@
+namespace CTBX.Backend;
+
 public class IdentityOptions
 {
     public required bool RequireHttpsMetadata { get; set; }

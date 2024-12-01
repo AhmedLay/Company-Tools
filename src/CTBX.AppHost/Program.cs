@@ -26,7 +26,7 @@ var readStore = builder.AddMongoDB("ctbx-readstore")
 var readDb = readStore.AddDatabase("ctbx-read-db");
 
 var eventsDb = postgresDbResource
-                    .WithEnvironment("POSTGRES_DB", "ctbxdb") // setting this will create a db
+                    .WithEnvironment("POSTGRES_DB", "ctbx-events-db") // setting this will create a db
                     .AddDatabase("ctbx-events-db");
 
 var idpDb = postgresDbResource
