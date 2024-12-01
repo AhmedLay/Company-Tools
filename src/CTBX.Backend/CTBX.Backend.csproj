@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CTBX.AbsenceManagement\CTBX.AbsenceManagement.csproj" />
+    <ProjectReference Include="..\CTBX.AbsenceManagement\CTBX.AbsenceManagement.Backend.csproj" />
     <ProjectReference Include="..\CTBX.ServiceDefaults\CTBX.ServiceDefaults.csproj" />
   </ItemGroup>
 
