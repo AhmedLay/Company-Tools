@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 
-namespace CTBX.AbsenceManagement;
+namespace MinimalApiArchitecture.Application;
 
 public class EndPoints : CarterModule
 {

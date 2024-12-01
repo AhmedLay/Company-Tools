@@ -1,6 +1,5 @@
 using System.Security.Principal;
 using Carter;
-using CTBX.AbsenceManagement;
 using CTBX.Backend;
 
 var builder = WebApplication.CreateBuilder(args);

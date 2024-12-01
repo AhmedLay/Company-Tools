@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 
-namespace CTBX.AbsenceManagement;
+namespace MinimalApiArchitecture.Application;
 
 public static class AbsenceManagementFeatureRegistration
 {
