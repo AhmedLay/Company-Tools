@@ -1,14 +1,25 @@
 ﻿@inherits LoginOrLogoutIconButtonBase
-
 <AuthorizeView>
     <Authorized>
+
         <form action="authentication/logout" method="post">
             <AntiforgeryToken />
             <input type="hidden" name="ReturnUrl" value="@CurrentUrl" />
+            <MudTooltip Text="authentication/logout">
+                <MudFab ButtonType="ButtonType.Submit"
+                        Color="Color.Inherit"
+                        Label="@(GetLoggedInUsersInitials() )"
+                        EndIcon="@Icons.Material.Filled.Logout"
+                        Size="Size.Small">
+
+                
+                </MudFab>
+            </MudTooltip>
         </form>
     </Authorized>
     <NotAuthorized>
-        
-        <NavLink Href="authentication/login">Login</NavLink>
+        <MudTooltip Text="authentication/login">
+            <MudIconButton Icon="@Icons.Material.Filled.Login" ButtonType="ButtonType.Submit" Color="Color.Inherit" Href="authentication/login" />
+        </MudTooltip>
     </NotAuthorized>
 </AuthorizeView>

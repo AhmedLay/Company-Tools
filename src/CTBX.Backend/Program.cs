@@ -1,6 +1,9 @@
 using System.Security.Principal;
+using Carter;
+using CTBX.Backend;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCarter();
 builder.AddMongoDBClient("ctbx-read-db");
 builder.AddServiceDefaults();
 builder.Services.RegisterJWTBearerAuthNService(builder.Configuration);
@@ -9,6 +12,5 @@ var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
-app.MapGet("/", () => "Hello World!");
-
+app.MapCarter();
 app.Run();
