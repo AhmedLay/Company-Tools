@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CTBX.EmployeesImport.UI\CTBX.EmployeesImport.UI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Layout\NavRebuild.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
@@ -26,6 +22,10 @@
 
   <ItemGroup>
     <Folder Include="Pages\Settings\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CTBX.EmployeesImport.UI\CTBX.EmployeesImport.UI.csproj" />
   </ItemGroup>
 
 </Project>

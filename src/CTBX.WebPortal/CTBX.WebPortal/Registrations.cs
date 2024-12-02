@@ -27,7 +27,9 @@ public static class Registrations
                     accessToken
                 );
             });
-        }).RequireAuthorization();
+        })
+            .RequireAuthorization()
+            ;
 
         return app;
     }

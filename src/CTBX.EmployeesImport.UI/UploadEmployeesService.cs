@@ -23,13 +23,33 @@ public class UploadEmployeesService
         var uploadedFile = new FileData();
         uploadedFile.FileName = file.Name;
         uploadedFile.FileContent = ms.ToArray();
-        
+
         ms.Close();
         await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
-   }
+    }
+
+    public async Task SaveFileToFolder(IBrowserFile file, string folderPath)
+    {
+        // Überprüfen, ob der Ordner existiert, ansonsten erstellen
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+        }
+
+        // Zielpfad zusammenstellen
+        var filePath = Path.Combine(folderPath, file.Name);
+
+        // Dateiinhalt lesen und speichern
+        using var stream = file.OpenReadStream();
+        using var fileStream = File.Create(filePath); // Datei erstellen im Zielordner
+        await stream.CopyToAsync(fileStream); // Inhalt in die Datei kopieren
+        stream.Close();
+    }
+
+
 }
 
 public static class BackendRoutes
 {
-    public const string FILEUPLOAD = "api/ctbx/Fileupload";
+    public const string FILEUPLOAD = "api/ctbx/fileupload";
 }

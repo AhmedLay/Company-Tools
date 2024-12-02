@@ -9,14 +9,17 @@
         Maximum 10 at once per upload.
         Supported formats: <strong>.csv</strong>, <strong>.txt</strong>. Each file must follow the required format.
     </MudText>
-    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
-    FilesChanged="UploadFiles">
+
+    <MudFileUpload
+        T="IReadOnlyList<IBrowserFile>"
+        FilesChanged="UploadFiles">
         <ActivatorContent>
-            <MudButton Variant="Variant.Filled"
-            Color="Color.Success"
-            StartIcon="@Icons.Material.Filled.UploadFile">
-                Upload Files
-            </MudButton>
+    <MudButton
+        Variant="Variant.Filled"
+        Color="Color.Success"
+        StartIcon="@Icons.Material.Filled.UploadFile">
+        Upload Files
+        </MudButton>
         </ActivatorContent>
     </MudFileUpload>
 </MudPaper>
@@ -31,8 +34,6 @@
         byte[] content = [];
         foreach (var file in files)
         {
-            // await file.OpenReadStream().ReadAsync(content, default);
-
             // _fileDataList.Add(new()
             //  {
             //      FileName = file.Name,
@@ -40,10 +41,9 @@
             //      FileType = file.ContentType,
             //      Content = content
             //  });
-
             try
             {
-                await Service.UploadFile(file);
+                await Service.SaveFileToFolder(file, @"C: \Users\User\Desktop\CompanyToolbox\src\CTBX.EmployeesImport.Shared\FilePaths\");
                 Snackbar.Add("Files Uploaded",Severity.Success);
             }
             catch (Exception ex)
@@ -55,7 +55,7 @@
         }
 
         // Todo [AL] move to submit button
-        //await Service.UploadFiles(_fileDataList.ToImmutableList(), CancellationToken.None);
+        // await Service.UploadFiles(_fileDataList.ToImmutableList(), CancellationToken.None);
 
         
     }
