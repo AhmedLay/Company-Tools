@@ -6,7 +6,7 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1" Color="@(_isDarkMode ? Color.Dark : Color.Info)">
+    <MudAppBar Elevation="1" Color="@(_isDarkMode ? Color.Dark : Color.Inherit)">
 
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
 
@@ -63,7 +63,7 @@
 
 @code {
     private bool _drawerOpen = true;
-    private bool _isDarkMode;
+    private bool _isDarkMode = true;
    
     private void DrawerToggle()
     {
