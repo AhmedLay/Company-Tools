@@ -28,7 +28,7 @@ public static class Registrations
                 );
             });
         })
-            .RequireAuthorization()
+            //.RequireAuthorization()
             ;
 
         return app;

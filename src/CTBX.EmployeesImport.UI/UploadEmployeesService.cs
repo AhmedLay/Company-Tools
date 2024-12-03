@@ -1,13 +1,14 @@
 ﻿using CTBX.EmployeesImport.Shared;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Configuration;
 using System.Net.Http.Json;
 
 namespace CTBX.EmployeesImport.UI;
 
 public class UploadEmployeesService
 {
-    private readonly HttpClient _httpClient;
 
+    private readonly HttpClient _httpClient;
     public UploadEmployeesService(HttpClient httpClient)
     {
         _httpClient = httpClient;
@@ -46,8 +47,20 @@ public class UploadEmployeesService
         stream.Close(); // close the stream
 
         //DATABASE PART
+        // filepath and status saving a
+        var record = new FileRecord
+        {
+            FileName = file.Name,
+            FilePath = filePath,
+            Status = FileStatus.pending
+        };
 
-
+        
+        //using (var dbfile = new FilePathDB())
+        //{
+        //    dbfile.FileRecords.Add(record);
+        //    await dbfile.SaveChangesAsync();
+        //}
     }
 
 

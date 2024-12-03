@@ -7,32 +7,29 @@
     <MudText Typo="Typo.body1" Class="mb-4 text-center">
         Please upload a CSV or TXT file to import your employees into the database.
         Maximum 10 at once per upload.
-        Supported formats: <strong>.csv</strong>, <strong>.txt</strong>. Each file must follow the required format.
+        Supported formats: .csv or .txt.
+        Each file must follow the required format.
     </MudText>
 
     <MudFileUpload
-        T="IReadOnlyList<IBrowserFile>"
-        FilesChanged="UploadFiles">
+    T="IReadOnlyList<IBrowserFile>"
+    FilesChanged="UploadFiles">
         <ActivatorContent>
-    <MudButton
-        Variant="Variant.Filled"
-        Color="Color.Success"
-        StartIcon="@Icons.Material.Filled.UploadFile">
-        Upload Files
-        </MudButton>
+            <MudButton
+            Variant="Variant.Filled"
+            Color="Color.Success"
+            StartIcon="@Icons.Material.Filled.UploadFile">
+                Upload Files
+            </MudButton>
         </ActivatorContent>
     </MudFileUpload>
 </MudPaper>
 
 
 @code {
-    public string Error { get; set; } = string.Empty;
-    public int MaxFiles = 10;
-    
     private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
     {
-        var filepath = @"C:\Users\User\Desktop\CompanyToolbox\src\CTBX.EmployeesImport.Shared\FilePaths\"
-        byte[] content = [];
+        var filepath = @"C:\Users\User\Desktop\CompanyToolbox\src\CTBX.EmployeesImport.Shared\FilePaths\";        
         foreach (var file in files)
         {
             try
@@ -40,10 +37,10 @@
                 await Service.SaveFileToFolder(file,filepath);
                 Snackbar.Add("Files Uploaded",Severity.Success);
             }
-            catch (Exception ex)
+            catch
             {
 
-                Snackbar.Add(ex.Message, Severity.Error);
+                Snackbar.Add("something went wrong, try again.");
             }           
         }    
     }
