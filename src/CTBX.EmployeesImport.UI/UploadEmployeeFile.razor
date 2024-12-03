@@ -1,7 +1,6 @@
 ﻿@page "/file-upload"
 @inject ISnackbar Snackbar
 @inject UploadEmployeesService Service
-@using FluentValidation
 
 <MudPaper Class="d-flex flex-column align-center py-4">
     <MudText Typo="Typo.h4" GutterBottom="true">Employee File Upload</MudText>
@@ -37,7 +36,6 @@
             try
             {
                 await Service.SaveFileToFolder(file,filepath);
-                Snackbar.Add("Files Uploaded",Severity.Success);
             }
             catch
             {
