@@ -1,8 +1,9 @@
 ﻿using Eventuous.Postgresql.Subscriptions;
 using Eventuous.Projections.MongoDB;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Npgsql;
 using System.Security.Claims;
-
+namespace CTBX.Backend;
 public static class Registrations
 {
     public static IServiceCollection RegisterJWTBearerAuthNService(this IServiceCollection services, IConfiguration config)
@@ -44,10 +45,10 @@ public static class Registrations
     public static IServiceCollection RegisterEventuousStores(this IServiceCollection services, IConfiguration configuration)
     {
 
-        services.AddEventuousPostgres(configuration.GetConnectionString("ctbx-events-db")!,"ctbx");
-        
-        services.AddCheckpointStore<MongoCheckpointStore>();
+        services.AddEventuousPostgres(configuration.GetConnectionString("ctbx-events-db")!,"ctbx",true);
 
+        services.AddCheckpointStore<MongoCheckpointStore>();
+        
         services.AddSubscription<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions>(
             "CTBXProjections",
             builder => { 

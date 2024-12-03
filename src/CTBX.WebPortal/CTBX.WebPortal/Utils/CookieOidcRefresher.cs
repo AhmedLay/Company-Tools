@@ -9,7 +9,7 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace CTBX.WebPortal.Auth;
+namespace CTBX.WebPortal.Utils;
 
 // https://github.com/dotnet/aspnetcore/issues/8175
 internal sealed class CookieOidcRefresher(IOptionsMonitor<OpenIdConnectOptions> oidcOptionsMonitor)
