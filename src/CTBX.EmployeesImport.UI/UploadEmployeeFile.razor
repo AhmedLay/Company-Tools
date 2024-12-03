@@ -31,33 +31,21 @@
     
     private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
     {
+        var filepath = @"C:\Users\User\Desktop\CompanyToolbox\src\CTBX.EmployeesImport.Shared\FilePaths\"
         byte[] content = [];
         foreach (var file in files)
         {
-            // _fileDataList.Add(new()
-            //  {
-            //      FileName = file.Name,
-            //      FileSize = file.Size,
-            //      FileType = file.ContentType,
-            //      Content = content
-            //  });
             try
             {
-                await Service.SaveFileToFolder(file, @"C: \Users\User\Desktop\CompanyToolbox\src\CTBX.EmployeesImport.Shared\FilePaths\");
+                await Service.SaveFileToFolder(file,filepath);
                 Snackbar.Add("Files Uploaded",Severity.Success);
             }
             catch (Exception ex)
             {
 
                 Snackbar.Add(ex.Message, Severity.Error);
-            }
-            
-        }
-
-        // Todo [AL] move to submit button
-        // await Service.UploadFiles(_fileDataList.ToImmutableList(), CancellationToken.None);
-
-        
+            }           
+        }    
     }
 
 

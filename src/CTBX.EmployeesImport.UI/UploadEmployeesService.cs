@@ -30,20 +30,24 @@ public class UploadEmployeesService
 
     public async Task SaveFileToFolder(IBrowserFile file, string folderPath)
     {
-        // Überprüfen, ob der Ordner existiert, ansonsten erstellen
+        // FOLDER PART
+        //check if the path exists
         if (!Directory.Exists(folderPath))
-        {
+        { // if it doenst it gets created 
             Directory.CreateDirectory(folderPath);
         }
-
-        // Zielpfad zusammenstellen
+        //sets the path and the file 
         var filePath = Path.Combine(folderPath, file.Name);
 
-        // Dateiinhalt lesen und speichern
+        // open a stream
         using var stream = file.OpenReadStream();
-        using var fileStream = File.Create(filePath); // Datei erstellen im Zielordner
-        await stream.CopyToAsync(fileStream); // Inhalt in die Datei kopieren
-        stream.Close();
+        using var fileStream = File.Create(filePath); // creates a file in the folder
+        await stream.CopyToAsync(fileStream); // copy the data from the file 
+        stream.Close(); // close the stream
+
+        //DATABASE PART
+
+
     }
 
 
