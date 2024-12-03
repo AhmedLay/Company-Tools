@@ -27,41 +27,10 @@ public class UploadEmployeesService
 
         ms.Close();
         await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
+
     }
 
-    public async Task SaveFileToFolder(IBrowserFile file, string folderPath)
-    {
-        // FOLDER PART
-        //check if the path exists
-        if (!Directory.Exists(folderPath))
-        { // if it doenst it gets created 
-            Directory.CreateDirectory(folderPath);
-        }
-        //sets the path and the file 
-        var filePath = Path.Combine(folderPath, file.Name);
 
-        // open a stream
-        using var stream = file.OpenReadStream();
-        using var fileStream = File.Create(filePath); // creates a file in the folder
-        await stream.CopyToAsync(fileStream); // copy the data from the file 
-        stream.Close(); // close the stream
-
-        //DATABASE PART
-        // filepath and status saving a
-        var record = new FileRecord
-        {
-            FileName = file.Name,
-            FilePath = filePath,
-            Status = FileStatus.pending
-        };
-
-        
-        //using (var dbfile = new FilePathDB())
-        //{
-        //    dbfile.FileRecords.Add(record);
-        //    await dbfile.SaveChangesAsync();
-        //}
-    }
 
 
 }

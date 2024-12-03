@@ -29,13 +29,13 @@
 
 @code {
     private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
-    {
-        var filepath = @"C:\Users\User\Desktop\CompanyToolbox\src\CTBX.EmployeesImport.Shared\FilePaths\";        
+    {    
         foreach (var file in files)
         {
             try
             {
-                await Service.SaveFileToFolder(file,filepath);
+                Snackbar.Add("Upload succedded");
+                await Service.UploadFile(file);
             }
             catch
             {

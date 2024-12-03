@@ -23,8 +23,16 @@ public static class Endpoints
     {
         app.MapPost("/api/ctbx/fileupload", async (FileData file) =>
         {
-            await Task.Delay(0);
-            return Results.Ok(file);
+            var folderpath = @"C:\Users\User\Desktop\CompanyToolbox\src\CTBX.EmployeesImport.Shared\uploadedFiles\";
+            var filePath = Path.Combine(folderpath, file.FileName);
+
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                return Results.File(fileBytes, "text/plain", file.FileName);
+            }
+
+            return Results.NotFound();
         });
 
     }
@@ -32,7 +40,7 @@ public static class Endpoints
 }
 public class FileData
 {
-    public string? FileName { get; set; }
+    public string FileName { get; set; } = string.Empty;
     public byte[]? FileContent { get; set; }
     public string Id { get; set; } = "";
 }
