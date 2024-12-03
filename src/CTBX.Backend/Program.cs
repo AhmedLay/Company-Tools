@@ -1,8 +1,10 @@
 using System.Collections.Immutable;
 using System.Security.Principal;
-using static System.Net.WebRequestMethods;
+using Carter;
+using CTBX.Backend;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCarter();
 builder.AddMongoDBClient("ctbx-read-db");
 builder.AddServiceDefaults();
 builder.Services.AddCors(opts=>opts.AddPolicy("all",p=> p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
@@ -11,9 +13,8 @@ builder.Services.RegisterEventuousStores(builder.Configuration);
 var app = builder.Build();
 app.UseCors("all");
 app.MapDefaultEndpoints();
-app.MapUploadEmployeesFiles();
-app.MapGet("/", () => "Hello World!");
 
+app.MapCarter();
 app.Run();
 
 public static class Endpoints

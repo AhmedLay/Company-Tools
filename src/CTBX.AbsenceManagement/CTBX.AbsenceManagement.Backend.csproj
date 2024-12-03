@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>MinimalApiArchitecture.Application</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" Version="9.0.0" />
+    <PackageReference Include="Carter" Version="9.0.0" />
+    <PackageReference Include="Carter.Analyzers" Version="9.0.0" />
+    <PackageReference Include="Eventuous.Application" Version="0.15.1" />
+    <PackageReference Include="Eventuous.Postgresql" Version="0.15.1" />
+    <PackageReference Include="Eventuous.Projections.MongoDB" Version="0.15.1" />
+
+  </ItemGroup>
+</Project>

@@ -1,0 +1,51 @@
+﻿@inject ISnackbar Snackbar
+@using MudBlazor
+@using Microsoft.AspNetCore.Components.Forms
+
+<MudContainer>
+    <MudText Typo="Typo.h5">
+        Upload Employee File here
+    </MudText>
+    <MudText Typo="Typo.body1">
+        here you can upload your employee list. The file will be converted and saved into the database.
+        Make sure the file is not bigger than 1mb and is saved in a .txt oder .csv file.
+    </MudText>
+
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudFileUpload
+                T="IBrowserFile"
+                FilesChanged="UploadFiles"
+                Accept=".txt,.csv" multiple>
+                <ActivatorContent>
+                    <MudButton
+                        Variant="Variant.Filled"
+                        Color="Color.Warning"
+                        StartIcon="@Icons.Material.Filled.FileUpload">
+                        Upload Files
+                    </MudButton>
+                </ActivatorContent>
+                <SelectedTemplate>
+                    @if (context != null)
+                    {
+                        <MudText>@context.Name</MudText>
+                    }
+                </SelectedTemplate>
+            </MudFileUpload>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+
+@code
+{
+    IList<IBrowserFile> files = new List<IBrowserFile>();
+    private void UploadFiles(IBrowserFile file)
+    {
+        files.Add(file);
+        Snackbar.Add($"File {file.Name} got selected and is ready to be uploaded");
+        //upload here 
+    }
+
+
+}

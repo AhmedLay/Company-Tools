@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace CTBX.WebPortal.Auth;
+namespace CTBX.WebPortal.Utils;
 
 internal static partial class CookieOidcServiceCollectionExtensions
 {

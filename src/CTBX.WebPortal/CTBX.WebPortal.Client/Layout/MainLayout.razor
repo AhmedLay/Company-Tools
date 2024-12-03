@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
 <MudThemeProvider @bind-IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
@@ -39,6 +39,7 @@
         <LoginOrLogoutIconButton CurrentUrl="_currentUrl" />
         <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
         Color="Color.Inherit" OnClick="@ToggleDarkMode" />
+        <LoginOrLogoutIconButton />
 
     </MudAppBar>
 
@@ -70,7 +71,7 @@
 @code {
     private bool _drawerOpen = true;
     private bool _isDarkMode = true;
-
+   
     private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
