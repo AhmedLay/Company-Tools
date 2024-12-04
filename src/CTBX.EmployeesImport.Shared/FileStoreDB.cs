@@ -3,11 +3,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace CTBX.EmployeesImport.Shared
 {
-    public class FilePathDB : DbContext
+    public class FileStoreDB : DbContext
     {
         private readonly IConfiguration _configuration;
 
-        public FilePathDB(IConfiguration configuration)
+        public FileStoreDB(IConfiguration configuration)
         {
             _configuration = configuration;
         }

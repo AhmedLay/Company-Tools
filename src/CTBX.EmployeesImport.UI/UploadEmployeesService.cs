@@ -29,10 +29,6 @@ public class UploadEmployeesService
         await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
 
     }
-
-
-
-
 }
 
 public static class BackendRoutes

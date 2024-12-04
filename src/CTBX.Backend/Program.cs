@@ -24,23 +24,46 @@ public static class Endpoints
         app.MapPost("/api/ctbx/fileupload", async (FileData file) =>
         {
             var folderpath = @"C:\Users\User\Desktop\CompanyToolbox\src\CTBX.EmployeesImport.Shared\uploadedFiles\";
-            var filePath = Path.Combine(folderpath, file.FileName);
 
-            if (System.IO.File.Exists(filePath))
+            try
             {
-                var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
-                return Results.File(fileBytes, "text/plain", file.FileName);
-            }
+                // Ensure the folder exists
+                if (!Directory.Exists(folderpath))
+                {
+                    // if it doenst it gets created
+                    Directory.CreateDirectory(folderpath);
+                }
+                //sets the name of the file and the creates the final path
+                var fileName = file.FileName;
+                var filePath = Path.Combine(folderpath, fileName);
 
-            return Results.NotFound();
+                //checks if the file is empty, if yes returns a bad request
+                if (file.FileContent == null || file.FileContent.Length == 0)
+                {
+                    return Results.BadRequest(new { Message = "File content is empty." });
+                }
+                // saves the file to the final path
+                await File.WriteAllBytesAsync(filePath, file.FileContent);
+
+                return Results.Ok(new { Message = "File uploaded successfully to ", FilePath = filePath });
+
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem($"An error occurred while uploading the file: {ex.Message}");
+            }
         });
 
     }
 
-}
-public class FileData
-{
-    public string FileName { get; set; } = string.Empty;
-    public byte[]? FileContent { get; set; }
-    public string Id { get; set; } = "";
+
+
+
+    public class FileData
+    {
+        public string FileName { get; set; } = string.Empty;
+        public byte[]? FileContent { get; set; }
+        public string Id { get; set; } = "";
+    }
+
 }
