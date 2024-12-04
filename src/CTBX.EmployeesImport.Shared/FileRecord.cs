@@ -13,7 +13,3 @@ namespace CTBX.EmployeesImport.Shared
         public string Status { get; set; } = string.Empty;
     }
 }
-
-
-
-

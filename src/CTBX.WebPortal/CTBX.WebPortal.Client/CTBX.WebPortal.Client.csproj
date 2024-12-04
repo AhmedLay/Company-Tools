@@ -13,11 +13,6 @@
     <PackageReference Include="MudBlazor" Version="7.15.0" />
     <PackageReference Include="MudBlazor.Translations" Version="1.4.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\CTBX.AbsenceManagement.UI\CTBX.AbsenceManagement.UI.csproj" />
-  </ItemGroup>
-
   <ItemGroup>
     <Content Update="Layout\NavRebuild.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -30,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CTBX.EmployeesImport.UI\CTBX.EmployeesImport.UI.csproj" />
+    <ProjectReference Include="..\..\CTBX.AbsenceManagement.UI\CTBX.AbsenceManagement.UI.csproj" />
   </ItemGroup>
 
 </Project>

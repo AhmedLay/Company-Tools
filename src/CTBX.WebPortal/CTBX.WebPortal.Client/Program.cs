@@ -13,7 +13,7 @@ builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticat
 
 builder.Services.AddMudServices();
 builder.Services.AddMudTranslations();
-
+builder.RegisterFeatures();
 
 
 await builder.Build().RunAsync();

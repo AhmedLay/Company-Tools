@@ -23,15 +23,11 @@ public class UploadEmployeesService
 
         var uploadedFile = new FileData();
         uploadedFile.FileName = file.Name;
-        uploadedFile.FileContent = ms.ToArray();
-
+        //uploadedFile.FileContent = ms.ToArray();
+        Console.WriteLine($"Uploading File {file.Name} ...");
         ms.Close();
         await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
 
     }
 }
 
-public static class BackendRoutes
-{
-    public const string FILEUPLOAD = "api/ctbx/fileupload";
-}

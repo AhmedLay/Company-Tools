@@ -49,17 +49,17 @@ public static class Registrations
 
         services.AddCheckpointStore<MongoCheckpointStore>();
         
-        services.AddSubscription<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions>(
-            "CTBXProjections",
-            builder => { 
-                  //builder
+        //services.AddSubscription<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions>(
+        //    "CTBXProjections",
+        //    builder => { 
+        //          //builder
                 
-                // TODO [AL] register projections here
-                //.AddEventHandler<BookingStateProjection>()
-                //.AddEventHandler<MyBookingsProjection>()
-                //.WithPartitioningByStream(2)
-                }
-        );
+        //        // TODO [AL] register projections here
+        //        //.AddEventHandler<BookingStateProjection>()
+        //        //.AddEventHandler<MyBookingsProjection>()
+        //        //.WithPartitioningByStream(2)
+        //        }
+        //);
 
         return services;
     }
