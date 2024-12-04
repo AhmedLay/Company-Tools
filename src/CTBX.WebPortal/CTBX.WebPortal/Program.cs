@@ -3,9 +3,6 @@ using CTBX.WebPortal.Components;
 using CTBX.WebPortal.Utils;
 using MudBlazor.Services;
 
-
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -44,8 +41,8 @@ app.UseStaticFiles();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.UseAntiforgery();
 app.MapStaticAssets();

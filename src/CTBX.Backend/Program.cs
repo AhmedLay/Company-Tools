@@ -1,7 +1,9 @@
-using System.Collections.Immutable;
-using System.Security.Principal;
 using Carter;
 using CTBX.Backend;
+using Dapper;
+using Microsoft.Data.SqlClient;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCarter();
@@ -13,7 +15,6 @@ builder.Services.RegisterEventuousStores(builder.Configuration);
 var app = builder.Build();
 app.UseCors("all");
 app.MapDefaultEndpoints();
-
 app.MapCarter();
 app.Run();
 
@@ -23,7 +24,10 @@ public static class Endpoints
     {
         app.MapPost("/api/ctbx/fileupload", async (FileData file) =>
         {
-            var folderpath = @"C:\Users\User\Desktop\CompanyToolbox\src\CTBX.EmployeesImport.Shared\uploadedFiles\";
+            //just for testing, for now we have temp as folder 
+            var folderpath = Path.GetTempPath();  
+
+            string connectionstring = "filedbconnectstring";
 
             try
             {
@@ -45,7 +49,20 @@ public static class Endpoints
                 // saves the file to the final path
                 await File.WriteAllBytesAsync(filePath, file.FileContent);
 
-                return Results.Ok(new { Message = "File uploaded successfully to ", FilePath = filePath });
+                //were using dapper to put it to to database 
+                using (var connection = new SqlConnection(connectionstring))
+                { // for build the connection with the db 
+                    var fileUpload = new FileRecord
+                    {
+                        FilePath = filePath,
+                        Status = "pending"
+                    };
+                    var insertquery = "INSERT INTO FileUploads (FilePath, Status) VALUES (@FilePath, @Status)";
+                    // queryasync / executeasync ? 
+                    await connection.ExecuteAsync(insertquery, fileUpload);
+                }
+
+                return Results.Ok(new { Message = "File uploaded successfully ", FilePath = filePath });
 
             }
             catch (Exception ex)
@@ -56,14 +73,19 @@ public static class Endpoints
 
     }
 
-
-
-
     public class FileData
     {
         public string FileName { get; set; } = string.Empty;
         public byte[]? FileContent { get; set; }
         public string Id { get; set; } = "";
     }
+
+    public class FileRecord
+    {
+        public int Id { get; set; }
+        public string FilePath { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+    }
+
 
 }
