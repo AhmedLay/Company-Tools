@@ -27,8 +27,6 @@ public static class Endpoints
             //just for testing, for now we have temp as folder 
             var folderpath = Path.GetTempPath();  
 
-            string connectionstring = "filedbconnectstring";
-
             try
             {
                 // Ensure the folder exists
@@ -49,7 +47,8 @@ public static class Endpoints
                 // saves the file to the final path
                 await File.WriteAllBytesAsync(filePath, file.FileContent);
 
-                //were using dapper to put it to to database 
+                //were using dapper to put it to to database
+                string connectionstring = "filedbconnectstring";
                 using (var connection = new SqlConnection(connectionstring))
                 { // for build the connection with the db 
                     var fileUpload = new FileRecord
