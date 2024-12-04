@@ -14,7 +14,7 @@
     <PackageReference Include="MudBlazor.Translations" Version="1.4.0" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="Layout\NavRebuild.razor">
+    <Content Update="Layout\NavMenu.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using CTBX.EmployeesImport.Shared;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace CTBX.EmployeesImport.UI;
@@ -23,11 +24,16 @@ public class UploadEmployeesService
 
         var uploadedFile = new FileData();
         uploadedFile.FileName = file.Name;
-        //uploadedFile.FileContent = ms.ToArray();
+        uploadedFile.FileContent = ms.ToArray();
         Console.WriteLine($"Uploading File {file.Name} ...");
+
         ms.Close();
         await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
 
     }
 }
+
+
+
+
 

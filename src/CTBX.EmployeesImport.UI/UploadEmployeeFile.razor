@@ -12,12 +12,12 @@
     </MudText>
 
     <MudFileUpload Accept=".txt, .csv"
-                   T="IReadOnlyList<IBrowserFile>"
-                   FilesChanged="UploadFiles">
+    T="IReadOnlyList<IBrowserFile>"
+    FilesChanged="UploadFiles">
         <ActivatorContent>
             <MudButton Variant="Variant.Filled"
-                       Color="Color.Success"
-                       StartIcon="@Icons.Material.Filled.UploadFile">
+            Color="Color.Success"
+            StartIcon="@Icons.Material.Filled.UploadFile">
                 Upload Files
             </MudButton>
         </ActivatorContent>
@@ -28,34 +28,20 @@
 @code {
     private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
     {
-        List<Task> tasks = [];
+        // List<Task> tasks = [];
         foreach (var file in files)
         {
-            // try
-            // {
-            tasks.Add(Service.UploadFile(file));
-
-            //     Snackbar.Add("Upload succedded",Severity.Success);
-            // }
-            // catch
-            // {
-
-            //     Snackbar.Add("something went wrong, try again.",, Severity.Error);
-            // }
+            try
+            {
+                await Service.UploadFile(file);
+                Snackbar.Add("Upload succedded", Severity.Success);
+            }
+            catch
+            {
+                Snackbar.Add("something went wrong, try again.", Severity.Error);
+            }
         }
 
-
-        try
-        {
-            await Task.WhenAll(tasks);
-
-            Snackbar.Add("Upload succedded", Severity.Success);
-        }
-        catch
-        {
-
-            Snackbar.Add("something went wrong, try again.",Severity.Error);
-        }
     }
 
 

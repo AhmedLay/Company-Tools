@@ -10,6 +10,5 @@ public class FileData
 {
     public string? FileName { get; set; }
     public byte[]? FileContent { get; set; }
-    public string Id { get; set; } = "";
 }
 
