@@ -13,6 +13,7 @@
 
     <MudFileUpload
     T="IReadOnlyList<IBrowserFile>"
+    Accept=".txt, .csv"
     FilesChanged="UploadFiles">
         <ActivatorContent>
             <MudButton Variant="Variant.Filled"
@@ -34,36 +35,19 @@
             }
         </MudList>
     }
-
-
-
 </MudPaper>
 
-
 @code {
-    // private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
-    // {
-    //     // List<Task> tasks = [];
-    //     foreach (var file in files)
-    //     {
-    //         try
-    //         {
-    //             await Service.UploadFile(file);
-    //             Snackbar.Add("Upload succedded", Severity.Success);
-    //         }
-    //         catch
-    //         {
-    //             Snackbar.Add("something went wrong, try again.", Severity.Error);
-    //         }
-    //     }
-
-    // }
-
     IList<IBrowserFile> files = new List<IBrowserFile>();
     private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
     {
         foreach (var file in files)
         {
+            if (file.Size == 0)
+            {
+                Snackbar.Add("The file try to upload is empty, try again", Severity.Error);
+                break;
+            }
             Console.WriteLine($"Uploading file: {file.Name}, Size: {file.Size} bytes");
             try
             {
@@ -77,7 +61,37 @@
             }
 
     }
-        
+
     }
 
 }
+@* <div>
+    <InputFile OnChange="FileUp"/>
+</div>
+<div>
+    File name: @FileSize
+</div>
+
+@code{
+    public string FileName { get; set; } = "";
+    public long FileSize { get; set; }
+    public async Task FileUp(InputFileChangeEventArgs e)
+    {
+        var b = e.File;
+        if (b!= null)
+        {
+            FileSize = b.Size;
+            FileName = b.Name;
+
+            try
+            {
+                await Service.UploadFile(b);
+            }
+            catch
+            {
+
+            }
+        }
+
+    }
+} *@

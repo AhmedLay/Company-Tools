@@ -47,19 +47,21 @@ public class Endpoints : CarterModule
                 // saves the file to the final path
                 await File.WriteAllBytesAsync(filePath, file.FileContent);
 
-                ////were using dapper to put it to to database
-                //string connectionstring = "filedbconnectstring";
-                //using (var connection = new NpgsqlConnection(connectionstring))
-                //{ // for build the connection with the db 
-                //    var fileUpload = new FileRecord
-                //    {
-                //        FilePath = filePath,
-                //        Status = "pending"
-                //    };
-                //    var insertquery = "INSERT INTO FileUploads (FilePath, Status) VALUES (@FilePath, @Status)";
-                //    // queryasync / executeasync ? 
-                //    await connection.ExecuteAsync(insertquery, fileUpload);
-                //}
+                //were using dapper to put it to to database
+                string connectionstring = "Host=localhost;Port=5432;Username=postgres;Password=dein_passwort;Database=ctbx-events-db;";
+
+                using (var connection = new NpgsqlConnection(connectionstring))
+                { // for build the connection with the db 
+                    var fileUpload = new FileRecord
+                    {
+                        FileName = fileName,
+                        FilePath = filePath,
+                        Status = "Pending"
+                    };
+                    var insertquery = "INSERT INTO FileUploads (name, path, status) VALUES (@FileName, @FilePath, @Status)";
+                    // queryasync / executeasync ? 
+                    await connection.ExecuteAsync(insertquery, fileUpload);
+                }
 
                 return Results.Ok(new { Message = "File uploaded successfully ", FilePath = filePath });
 

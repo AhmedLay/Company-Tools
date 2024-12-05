@@ -15,10 +15,12 @@ var demoUserPassword = builder.AddParameter("DemoUserPassword", secret: true);
 // this is only to make it easy to manage the dbs in one PgAdmin
 // in prod each service will have its own db container 
 var postgresDbResource = builder.AddPostgres("ctbx-db")
+                                .WithDataVolume("ctbx-volume")
                                  .WithPgAdmin(options =>
                                  {
                                      options.WithHostPort(port: 49100);                                     
                                  });
+
 
 var readStore = builder.AddMongoDB("ctbx-readstore")
                        .WithMongoExpress(opts=> opts.WithHostPort(port: 49200));
@@ -28,6 +30,8 @@ var readDb = readStore.AddDatabase("ctbx-read-db");
 var eventsDb = postgresDbResource
                     .WithEnvironment("POSTGRES_DB", "ctbx-events-db") // setting this will create a db
                     .AddDatabase("ctbx-events-db");
+
+
 
 var idpDb = postgresDbResource
             .AddDatabase("idpDb");
