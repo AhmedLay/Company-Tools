@@ -11,7 +11,7 @@
         Each file must follow the required format.
     </MudText>
 
-    <MudFileUpload Accept=".txt, .csv"
+    <MudFileUpload
     T="IReadOnlyList<IBrowserFile>"
     FilesChanged="UploadFiles">
         <ActivatorContent>
@@ -22,17 +22,52 @@
             </MudButton>
         </ActivatorContent>
     </MudFileUpload>
+
+    @if (files != null)
+    {
+        <MudList T="string">
+            @foreach (var file in files)
+            {
+                <MudListItem Icon="@Icons.Material.Filled.AttachFile">
+                    @file.Name <code>@file.Size bytes</code>
+                </MudListItem>
+            }
+        </MudList>
+    }
+
+
+
 </MudPaper>
 
 
 @code {
+    // private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
+    // {
+    //     // List<Task> tasks = [];
+    //     foreach (var file in files)
+    //     {
+    //         try
+    //         {
+    //             await Service.UploadFile(file);
+    //             Snackbar.Add("Upload succedded", Severity.Success);
+    //         }
+    //         catch
+    //         {
+    //             Snackbar.Add("something went wrong, try again.", Severity.Error);
+    //         }
+    //     }
+
+    // }
+
+    IList<IBrowserFile> files = new List<IBrowserFile>();
     private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
     {
-        // List<Task> tasks = [];
         foreach (var file in files)
         {
+            Console.WriteLine($"Uploading file: {file.Name}, Size: {file.Size} bytes");
             try
             {
+                this.files.Add(file); 
                 await Service.UploadFile(file);
                 Snackbar.Add("Upload succedded", Severity.Success);
             }
@@ -40,10 +75,9 @@
             {
                 Snackbar.Add("something went wrong, try again.", Severity.Error);
             }
-        }
 
     }
-
-
+        
+    }
 
 }

@@ -17,20 +17,52 @@ public class UploadEmployeesService
 
     public async Task UploadFile(IBrowserFile file)
     {
-        using var stream = file.OpenReadStream();
-        var ms = new MemoryStream();
-        await stream.CopyToAsync(ms);
-        stream.Close();
+        try
+        {
+            // Maximale Dateigröße: 10MB
+            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
 
-        var uploadedFile = new FileData();
-        uploadedFile.FileName = file.Name;
-        uploadedFile.FileContent = ms.ToArray();
-        Console.WriteLine($"Uploading File {file.Name} ...");
+            // Erstellen eines Puffers für die Dateidaten
+            var fileContent = new byte[file.Size];
 
-        ms.Close();
-        await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
+            // Erstellen eines Puffers, der während des Lesevorgangs verwendet wird
+            var buffer = new byte[8192]; // 8 KB Puffergröße
+            int bytesRead;
+            int totalBytesRead = 0;
 
+            // Lesen der Datei in Blöcken
+            while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            {
+                // Die gelesenen Bytes in das fileContent-Array kopieren
+                Array.Copy(buffer, 0, fileContent, totalBytesRead, bytesRead);
+                totalBytesRead += bytesRead;
+            }
+
+            // Überprüfen, ob die Datei korrekt gelesen wurde
+            Console.WriteLine($"FileContent Length: {fileContent.Length}");
+
+            // Erstellen des FileData-Objekts
+            var uploadedFile = new FileData
+            {
+                FileName = file.Name,
+                FileContent = fileContent
+            };
+
+            // Den Inhalt an den Server senden
+            await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
+
+        }
+        catch (Exception ex)
+        {
+            // Fehlerbehandlung
+            Console.WriteLine($"Error uploading file: {ex.Message}");
+            throw;
+        }
     }
+
+
+
+
 }
 
 

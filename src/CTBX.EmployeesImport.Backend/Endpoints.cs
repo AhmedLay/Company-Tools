@@ -15,17 +15,18 @@ public class Endpoints : CarterModule
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
         AddUploadEmployeesFilesEndpoint(app);
-        AddTestEndpoint(app);
+        //AddTestEndpoint(app);
     }
     public static void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
     {
 
         app.MapPost(BackendRoutes.FILEUPLOAD, async (FileData file) =>
         {
+            Console.WriteLine("POST-Endpoint got reached");
+
+
             //just for testing, for now we have temp as folder 
             var folderpath = @"C:\Users\User\Desktop\TEST FOLDER";
-            Console.WriteLine("hello world");
-
             try
             {
                 // Ensure the folder exists
@@ -68,15 +69,10 @@ public class Endpoints : CarterModule
                 return Results.Problem($"An error occurred while uploading the file: {ex.Message}");
             }
         });
-
-        
-
-
-
     }
 
-    public static void AddTestEndpoint(IEndpointRouteBuilder app)
-    {
-        app.MapGet(BackendRoutes.FILEUPLOAD, () => "HI from Employee Registration module.");
-    }
+    //public static void AddTestEndpoint(IEndpointRouteBuilder app)
+    //{
+    //    app.MapGet(BackendRoutes.FILEUPLOAD, () => "HI from Employee Registration module.");
+    //}
 }
