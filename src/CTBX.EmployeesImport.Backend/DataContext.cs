@@ -14,8 +14,9 @@ public class DataContext
 
     public IDbConnection CreateConnection()
     {
-        //return new NpgsqlConnection(Configuration.GetConnectionString("FileUploadDB"));
-        return new NpgsqlConnection("Server=localhost;Port=5432;Database=employee-db;User Id=admin;Password=admin;");
+        return new NpgsqlConnection(Configuration.GetConnectionString("ctbx-events-db"));
+
+
     }
 
     public async Task ExecuteAsync(string sql, object? parameters = null)

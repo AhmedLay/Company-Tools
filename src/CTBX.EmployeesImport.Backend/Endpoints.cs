@@ -23,8 +23,6 @@ public class Endpoints : CarterModule
         app.MapPost(BackendRoutes.FILEUPLOAD, async (FileData file) =>
         {
             Console.WriteLine("POST-Endpoint got reached");
-
-
             //just for testing, for now we have temp as folder 
             var folderpath = @"C:\Users\User\Desktop\TEST FOLDER";
             try
