@@ -32,10 +32,13 @@ var eventsDb = postgresDbResource
                     .AddDatabase("ctbx-events-db");
 
 
+var commonDb = postgresDbResource
+                    .WithEnvironment("POSTGRES_DB", "ctbx-common-db") // setting this will create a db
+                    .AddDatabase("ctbx-common-db");
+
+
 var idpDb = postgresDbResource
             .AddDatabase("idpDb");
-
-var employeeDb = postgresDbResource.AddDatabase("employee-db");
 
 var idpService = builder.AddProject<Projects.IDP>("idp")
              .WithEnvironment("IdentityDataConfig__BackendClientId", backendClientId)
@@ -57,10 +60,10 @@ var backend = builder.AddProject<Projects.CTBX_Backend>("ctbx-backend")
                      .WithEnvironment("IdentityOptions__Authority", idpUrl)
                      .WithReference(eventsDb)
                      .WithReference(readDb)
-                     .WithReference(employeeDb) 
+                     .WithReference(commonDb) 
                      .WaitFor(eventsDb)
                      .WaitFor(readDb)
-                     .WaitFor(employeeDb); 
+                     .WaitFor(commonDb); 
 
 var portal = builder.AddProject<Projects.CTBX_WebPortal>("ctbx-webportal")
                     .WithEnvironment("IdentityOptions__Authority", idpUrl)
