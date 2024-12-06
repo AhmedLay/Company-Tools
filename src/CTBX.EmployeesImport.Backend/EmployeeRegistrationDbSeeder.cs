@@ -52,7 +52,7 @@ public class EmployeeRegistrationDbSeeder : IHostedService
 public static class DbScripts
 {
     public static string CreateEmployeesDbIfNotExists => """
-            CREATE TABLE IF NOT EXISTS public.FileImports (
+            CREATE TABLE IF NOT EXISTS public.fileimports (
                 Id SERIAL PRIMARY KEY,
                 FileName TEXT,
                 FilePath TEXT,
