@@ -31,10 +31,17 @@ var eventsDb = postgresDbResource
                     .WithEnvironment("POSTGRES_DB", "ctbx-events-db") // setting this will create a db
                     .AddDatabase("ctbx-events-db");
 
+var postgresCommonDbResource = builder.AddPostgres("ctbx-common-db")
+                                 .WithPgAdmin(options =>
+                                 {
+                                     options.WithHostPort(port: 49100);
+                                 });
 
-var commonDb = postgresDbResource
+var commonDb = postgresCommonDbResource
                     .WithEnvironment("POSTGRES_DB", "ctbx-common-db") // setting this will create a db
                     .AddDatabase("ctbx-common-db");
+
+
 
 
 var idpDb = postgresDbResource
