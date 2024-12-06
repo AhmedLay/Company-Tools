@@ -4,6 +4,7 @@ using Dapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
 
@@ -11,13 +12,21 @@ namespace CTBX.EmployeesImport.Backend;
 
 public class Endpoints : CarterModule
 {
-    
+    private readonly IConfiguration _configuration;
+
+    // Constructor to accept IConfiguration
+    public Endpoints(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
+
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
         AddUploadEmployeesFilesEndpoint(app);
         //AddTestEndpoint(app);
     }
-    public static void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
+    public void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
     {
 
         app.MapPost(BackendRoutes.FILEUPLOAD, async (FileData file) =>
@@ -46,18 +55,17 @@ public class Endpoints : CarterModule
                 await File.WriteAllBytesAsync(filePath, file.FileContent);
 
                 //were using dapper to put it to to database
-                string connectionstring = "wip";
+                var connectionString = _configuration.GetConnectionString("ctbx-events-db");
 
-                using (var connection = new NpgsqlConnection(connectionstring))
+                using (var connection = new NpgsqlConnection(connectionString))
                 { // for build the connection with the db 
                     var fileUpload = new FileRecord
                     {
                         FileName = fileName,
                         FilePath = filePath,
-                        Status = "Pending"
+                        FileStatus = "Pending"
                     };
-                    var insertquery = "INSERT INTO FileUploads (name, path, status) VALUES (@FileName, @FilePath, @Status)";
-                    // queryasync / executeasync ? 
+                    var insertquery = "INSERT INTO EmployeeFile (FileName, FilePath, FileStatus) VALUES (@FileName, @FilePath, @FileStatus)";
                     await connection.ExecuteAsync(insertquery, fileUpload);
                 }
 

@@ -1,7 +1,7 @@
-﻿using System.Data;
-using Dapper;
-using Npgsql;
+﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
+using System.Data;
 
 public class DataContext
 {
@@ -15,34 +15,28 @@ public class DataContext
     public IDbConnection CreateConnection()
     {
         return new NpgsqlConnection(Configuration.GetConnectionString("ctbx-events-db"));
-
-
     }
-
-    public async Task ExecuteAsync(string sql, object? parameters = null)
-    {
-        using var connection = CreateConnection();
-        await connection.ExecuteAsync(sql, parameters);
-    }
-
     public async Task Init()
     {
-        // create database tables if they don't exist
-        using var connection = CreateConnection();
+        // Initialize the users table
         await _initUsers();
+    }
 
-        async Task _initUsers()
-        {
-            var sql = """
-                CREATE TABLE IF NOT EXISTS 
-                Users (
-                    Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                    FileName TEXT,
-                    FilePath TEXT,
-                    FileStatus TEXT,
-                );
-            """;
-            await connection.ExecuteAsync(sql);
-        }
+    private async Task _initUsers()
+    {
+        var sql = """
+            CREATE TABLE IF NOT EXISTS public.EmployeeFile (
+                Id SERIAL PRIMARY KEY,
+                FileName TEXT,
+                FilePath TEXT,
+                FileStatus TEXT
+            );
+        """;
+
+        using var connection = CreateConnection();
+        await connection.ExecuteAsync(sql);
+        Console.WriteLine("The table 'EmployeeFile' has been successfully created or already exists.");
+        Console.WriteLine($"Using Connection String: {Configuration.GetConnectionString("ctbx-events-db")}");
+
     }
 }
