@@ -24,7 +24,7 @@ public class Endpoints : CarterModule
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
         AddUploadEmployeesFilesEndpoint(app);
-        //AddTestEndpoint(app);
+
     }
     public void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
     {
@@ -55,7 +55,7 @@ public class Endpoints : CarterModule
                 await File.WriteAllBytesAsync(filePath, file.FileContent);
 
                 //were using dapper to put it to to database
-                var connectionString = _configuration.GetConnectionString("ctbx-events-db");
+                var connectionString = _configuration.GetConnectionString("employee-db");
 
                 using (var connection = new NpgsqlConnection(connectionString))
                 { // for build the connection with the db 
@@ -79,8 +79,4 @@ public class Endpoints : CarterModule
         });
     }
 
-    //public static void AddTestEndpoint(IEndpointRouteBuilder app)
-    //{
-    //    app.MapGet(BackendRoutes.FILEUPLOAD, () => "HI from Employee Registration module.");
-    //}
 }

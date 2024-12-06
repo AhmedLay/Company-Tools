@@ -16,7 +16,6 @@ var demoUserPassword = builder.AddParameter("DemoUserPassword", secret: true);
 // this is only to make it easy to manage the dbs in one PgAdmin
 // in prod each service will have its own db container 
 var postgresDbResource = builder.AddPostgres("ctbx-db")
-                                .WithDataVolume("ctbx-volume")
                                  .WithPgAdmin(options =>
                                  {
                                      options.WithHostPort(port: 49100);                                     
@@ -35,6 +34,8 @@ var eventsDb = postgresDbResource
 
 var idpDb = postgresDbResource
             .AddDatabase("idpDb");
+
+var employeeDb = postgresDbResource.AddDatabase("employee-db");
 
 var idpService = builder.AddProject<Projects.IDP>("idp")
              .WithEnvironment("IdentityDataConfig__BackendClientId", backendClientId)
@@ -56,8 +57,10 @@ var backend = builder.AddProject<Projects.CTBX_Backend>("ctbx-backend")
                      .WithEnvironment("IdentityOptions__Authority", idpUrl)
                      .WithReference(eventsDb)
                      .WithReference(readDb)
+                     .WithReference(employeeDb) 
                      .WaitFor(eventsDb)
-                     .WaitFor(readDb);
+                     .WaitFor(readDb)
+                     .WaitFor(employeeDb); 
 
 var portal = builder.AddProject<Projects.CTBX_WebPortal>("ctbx-webportal")
                     .WithEnvironment("IdentityOptions__Authority", idpUrl)
