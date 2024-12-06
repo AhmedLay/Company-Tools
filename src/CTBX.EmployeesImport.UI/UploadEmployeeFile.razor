@@ -65,33 +65,3 @@
     }
 
 }
-@* <div>
-    <InputFile OnChange="FileUp"/>
-</div>
-<div>
-    File name: @FileSize
-</div>
-
-@code{
-    public string FileName { get; set; } = "";
-    public long FileSize { get; set; }
-    public async Task FileUp(InputFileChangeEventArgs e)
-    {
-        var b = e.File;
-        if (b!= null)
-        {
-            FileSize = b.Size;
-            FileName = b.Name;
-
-            try
-            {
-                await Service.UploadFile(b);
-            }
-            catch
-            {
-
-            }
-        }
-
-    }
-} *@

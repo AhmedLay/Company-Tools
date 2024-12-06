@@ -8,11 +8,11 @@ namespace CTBX.EmployeesImport.Backend;
 
 public class Endpoints : CarterModule
 {
-    private readonly QueryService _QueryService;
+    private readonly EmployeeQueryService _QueryService;
 
     public Endpoints(IConfiguration configuration)
     {
-        _QueryService = new QueryService(configuration);
+        _QueryService = new EmployeeQueryService(configuration);
     }
 
     public override void AddRoutes(IEndpointRouteBuilder app)
@@ -54,7 +54,8 @@ public class Endpoints : CarterModule
                 {
                     FileName = fileName,
                     FilePath = filePath,
-                    FileStatus = "Pending"
+                    FileStatus = "Pending",
+                    UploadDate = DateTime.Now
                 };
 
                 await _QueryService.InsertFileRecordAsync(fileRecord);

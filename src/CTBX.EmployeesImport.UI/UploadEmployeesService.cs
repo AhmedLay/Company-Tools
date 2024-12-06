@@ -45,7 +45,9 @@ public class UploadEmployeesService
             var uploadedFile = new FileData
             {
                 FileName = file.Name,
-                FileContent = fileContent
+                FileContent = fileContent,
+                UploadTime = DateTime.Now
+               
             };
 
             // Den Inhalt an den Server senden

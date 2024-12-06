@@ -10,7 +10,6 @@ public class EmployeeRegistrationDbSeeder : IHostedService
 {
     private readonly ILogger<EmployeeRegistrationDbSeeder> _logger;
     private readonly IConfiguration _configuration;
-
     public EmployeeRegistrationDbSeeder(ILogger<EmployeeRegistrationDbSeeder> logger, IConfiguration configuration)
     {
         _logger = logger;
@@ -20,7 +19,6 @@ public class EmployeeRegistrationDbSeeder : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         var adminConnectionString = _configuration.GetConnectionString("ctbx-common-db")!.GuardAgainstNullOrEmpty("adminConnectionString");
-
         try
         {
             using var connection = new NpgsqlConnection(adminConnectionString);
@@ -34,13 +32,11 @@ public class EmployeeRegistrationDbSeeder : IHostedService
             _logger.LogError(ex, "An error occurred while initializing the database.");
         }
     }
-
     public Task StopAsync(CancellationToken cancellationToken)
     {
         // Clean-up if needed
         return Task.CompletedTask;
     }
-
     private static async Task CreateEmployeesTable(NpgsqlConnection connection, CancellationToken cancellationToken)
     {
         string createDbQuery = DbScripts.CreateEmployeesDbIfNotExists;
@@ -48,7 +44,6 @@ public class EmployeeRegistrationDbSeeder : IHostedService
         await command.ExecuteNonQueryAsync(cancellationToken);
     }
 }
-
 public static class DbScripts
 {
     public static string CreateEmployeesDbIfNotExists => """
@@ -56,7 +51,9 @@ public static class DbScripts
                 Id SERIAL PRIMARY KEY,
                 FileName TEXT,
                 FilePath TEXT,
-                FileStatus TEXT
+                FileStatus TEXT,
+                UploadDate TIMESTAMP DEFAULT NOW()
+                
             );
         """;
 }
