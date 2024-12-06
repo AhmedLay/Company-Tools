@@ -1,6 +1,7 @@
 using Aspire.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -30,7 +31,6 @@ var readDb = readStore.AddDatabase("ctbx-read-db");
 var eventsDb = postgresDbResource
                     .WithEnvironment("POSTGRES_DB", "ctbx-events-db") // setting this will create a db
                     .AddDatabase("ctbx-events-db");
-
 
 
 var idpDb = postgresDbResource

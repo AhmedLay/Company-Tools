@@ -48,7 +48,7 @@ public class Endpoints : CarterModule
                 await File.WriteAllBytesAsync(filePath, file.FileContent);
 
                 //were using dapper to put it to to database
-                string connectionstring = "Host=localhost;Port=5432;Username=postgres;Password=dein_passwort;Database=ctbx-events-db;";
+                string connectionstring = "wip";
 
                 using (var connection = new NpgsqlConnection(connectionstring))
                 { // for build the connection with the db 

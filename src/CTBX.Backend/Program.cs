@@ -10,8 +10,11 @@ builder.AddServiceDefaults();
 builder.Services.AddCors(opts=>opts.AddPolicy("all",p=> p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
 builder.Services.RegisterJWTBearerAuthNService(builder.Configuration);
 builder.Services.RegisterEventuousStores(builder.Configuration);
-builder.Services.AddHostedService<DbInitService>(); // added by duy 
+
+builder.Services.AddSingleton<DataContext>();
+
 var app = builder.Build();
+
 app.UseCors("all");
 app.MapDefaultEndpoints();
 app.MapCarter();
