@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using System.Xml.Linq;
+using Carter;
 using CTBX.EmployeesImport.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -8,11 +9,11 @@ namespace CTBX.EmployeesImport.Backend;
 
 public class Endpoints : CarterModule
 {
-    private readonly EmployeeQueryService _QueryService;
+    private readonly FileUploadService _service;
 
     public Endpoints(IConfiguration configuration)
     {
-        _QueryService = new EmployeeQueryService(configuration);
+        _service = new FileUploadService(configuration);
     }
 
     public override void AddRoutes(IEndpointRouteBuilder app)
@@ -22,45 +23,28 @@ public class Endpoints : CarterModule
 
     public void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
     {
+        // validate via fluent validation
         app.MapPost(BackendRoutes.FILEUPLOAD, async (FileData file) =>
         {
             Console.WriteLine("POST-Endpoint got reached");
-
+            //TODO handle exception globally 
+            //configure the folderpath here 
             var folderPath = @"C:\Users\User\Desktop\TEST FOLDER";
-
+            var filename = file.FileName!.GuardAgainstNullOrEmpty("fileName");
             try
             {
-                // Ensure the folder exists
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
-
-                // Set the name of the file and create the final path
-                var fileName = file.FileName!.GuardAgainstNullOrEmpty("fileName");
-                var filePath = Path.Combine(folderPath, fileName);
-
-                // Check if the file is empty
-                if (file.FileContent == null || file.FileContent.Length == 0)
-                {
-                    return Results.BadRequest(new { Message = "File content is empty." });
-                }
-
-                // Save the file to the final path
-                await File.WriteAllBytesAsync(filePath, file.FileContent);
-
-                // Create a file record and delegate DB interaction to service clas 
                 var fileRecord = new FileRecord
                 {
-                    FileName = fileName,
-                    FilePath = filePath,
-                    FileStatus = "Pending",
+                    FileName = filename,
+                    FilePath = Path.Combine(folderPath, filename),
+                    FileStatus = "pending",
                     UploadDate = DateTime.Now
                 };
+                //do it here;
+                await _service.SaveFileToFolder(folderPath, file);           
+                await _service.PersistToDb(fileRecord); 
 
-                await _QueryService.InsertFileRecordAsync(fileRecord);
-
-                return Results.Ok(new { Message = "File uploaded successfully", FilePath = filePath });
+                return Results.Ok(new { Message = "File uploaded successfully"});
             }
             catch (Exception ex)
             {

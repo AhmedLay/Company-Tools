@@ -48,6 +48,11 @@
                 Snackbar.Add("The file try to upload is empty, try again", Severity.Error);
                 break;
             }
+            if (file.Size == 1000000)
+            {
+                Snackbar.Add("The file try to upload is too big, try again", Severity.Error);
+                break;
+            }
             Console.WriteLine($"Uploading file: {file.Name}, Size: {file.Size} bytes");
             try
             {
