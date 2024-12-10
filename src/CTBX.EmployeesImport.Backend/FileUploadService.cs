@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace CTBX.EmployeesImport.Backend
 {
-    public class FileUploadService
+    public class FileUploadService : IFileUploadHandler
     {
         private readonly string _connectionString;
 
@@ -24,7 +24,7 @@ namespace CTBX.EmployeesImport.Backend
             await connection.ExecuteAsync(insertQuery, fileRecord);
         }
 
-        public async Task<string> SaveFileToFolder(string folderPath,FileData file)
+        public async Task<string> SaveFileToFolder(string folderPath, FileData file)
         {
             // Ensure the folder exists
             if (!Directory.Exists(folderPath))
@@ -42,8 +42,8 @@ namespace CTBX.EmployeesImport.Backend
             {
                 throw new ArgumentException("The uploaded file is empty.");
             }
-                await File.WriteAllBytesAsync(filePath, file.FileContent);
-                return filePath;
+            await File.WriteAllBytesAsync(filePath, file.FileContent);
+            return filePath;
         }
     }
 }

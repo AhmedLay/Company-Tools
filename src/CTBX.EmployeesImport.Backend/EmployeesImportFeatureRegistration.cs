@@ -10,5 +10,6 @@ public static class EmployeesImportFeatureRegistration
     public static void RegisterServices(IServiceCollection services,IConfiguration configuration)
     {
         services.AddHostedService<EmployeeRegistrationDbSeeder>();
+        services.AddScoped<IFileUploadHandler,FileUploadService>();
     }
 }
