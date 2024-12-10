@@ -1,6 +1,5 @@
 ﻿@page "/file-upload"
-@inject ISnackbar Snackbar
-@inject UploadEmployeesService Service
+@inherits UploadEmployeeFileBase
 
 <MudPaper Class="d-flex flex-column align-center py-4">
     <MudText Typo="Typo.h4" GutterBottom="true">Employee File Upload</MudText>
@@ -23,43 +22,3 @@
         </ActivatorContent>
     </MudFileUpload>
 </MudPaper>
-
-@code {
-    IList<IBrowserFile> files = new List<IBrowserFile>();
-    private HashSet<string> uploadedFileNames = new HashSet<string>(); 
-
-    private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
-    {
-        foreach (var file in files)
-        {
-            if (uploadedFileNames.Contains(file.Name))
-            {
-                Console.WriteLine($"File {file.Name} has already been uploaded.");
-                Snackbar.Add("This file has already been uploaded. Please try a different file.", Severity.Error);
-                continue;
-            }
-            if (file.Size == 0)
-            {
-                Snackbar.Add("The file you are trying to upload is empty. Please try again.", Severity.Error);
-                continue; 
-            }
-            if (file.Size > 1000000)  
-            {
-                Snackbar.Add("The file you are trying to upload is too big. Please try again.", Severity.Error);
-                continue; 
-            }
-            Console.WriteLine($"Uploading file: {file.Name}, Size: {file.Size} bytes");
-            try
-            {
-                uploadedFileNames.Add(file.Name);
-                this.files.Add(file);
-                await Service.UploadFile(file);
-                Snackbar.Add("Upload succeeded", Severity.Success);
-            }
-            catch (Exception ex)
-            {
-                Snackbar.Add($"Something went wrong with your file! Error: {ex.Message}. Please check the format and try again.", Severity.Error);
-            }
-        }
-    }
-}
