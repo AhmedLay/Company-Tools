@@ -8,8 +8,8 @@ namespace CTBX.EmployeesImport.Shared;
 
 public class FileData
 {
-    public string? FileName { get; set; }
+    public string FileName { get; set; } = string.Empty;
     public byte[]? FileContent { get; set; }
-    public DateTime UploadTime { get; set; }
+    public DateTimeOffset UploadTime { get; set; }
 }
 

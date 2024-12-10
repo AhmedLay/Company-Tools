@@ -1,5 +1,6 @@
 using Carter;
 using CTBX.Backend;
+using Microsoft.Extensions.Configuration;
 using MinimalApiArchitecture.Application;
 
 var builder = WebApplication.CreateBuilder(args);

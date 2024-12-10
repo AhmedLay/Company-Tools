@@ -1,72 +1,58 @@
-﻿using CTBX.EmployeesImport.Shared;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.Extensions.Configuration;
-using System.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.Components.Forms;
 using System.Net.Http.Json;
-
-namespace CTBX.EmployeesImport.UI;
-
-public class UploadEmployeesService
+using CTBX.EmployeesImport.Shared;
+using System.Text;
+namespace CTBX.EmployeesImport.UI
 {
-
-    private readonly HttpClient _httpClient;
-    public UploadEmployeesService(HttpClient httpClient)
+    public class UploadEmployeesService
     {
-        _httpClient = httpClient;
-    }
+        private readonly HttpClient _httpClient;
 
-    public async Task UploadFile(IBrowserFile file)
-    {
-        try
+        public UploadEmployeesService(HttpClient httpClient)
         {
-            // maximum size 10 mb 
-            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
-
-            // create a buffer 
-            var fileContent = new byte[file.Size];
-
-         
-            var buffer = new byte[8192]; // 8 KB Puffergröße
-            int bytesRead;
-            int totalBytesRead = 0;
-
-
-            while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            _httpClient = httpClient;
+        }
+        public async Task UploadFile(IBrowserFile file)
+        {
+            try
             {
-            
-                Array.Copy(buffer, 0, fileContent, totalBytesRead, bytesRead);
-                totalBytesRead += bytesRead;
+                // maximum size 1 MB
+                using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+                // Read file content as a stream
+                var reader = new StreamReader(stream);
+                var lines = await reader.ReadToEndAsync();
+
+                // Split lines
+                var dataRows = lines.Split(Environment.NewLine)
+                                     .Where(line => !string.IsNullOrWhiteSpace(line))
+                                     .ToList();
+                foreach (var line in dataRows)
+                {
+                  
+                    var columns = line.Split(';');
+
+                    if (columns.Length != 6)
+                    {
+                        throw new Exception("The file content is not valid. Make sure that your file has excatly 6 columns");
+                    }
+                }
+                var uploadedFile = new FileData
+                {
+                    FileName = file.Name,
+                    FileContent = Encoding.UTF8.GetBytes(lines),
+                    UploadTime = DateTimeOffset.UtcNow
+                };
+                await _httpClient.PostAsJsonAsync("BackendRoutes.FILEUPLOAD", uploadedFile);
             }
-
-         
-            Console.WriteLine($"FileContent Length: {fileContent.Length}");
-
-          
-            var uploadedFile = new FileData
+            catch (Exception ex)
             {
-                FileName = file.Name,
-                FileContent = fileContent,
-                UploadTime = DateTime.Now
-               
-            };
-
-            // Den Inhalt an den Server senden
-            await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
-
-        }
-        catch (Exception ex)
-        {
-            // Fehlerbehandlung
-            Console.WriteLine($"Error uploading file: {ex.Message}");
-            throw;
+                Console.WriteLine($"Error uploading file: {ex.Message}");
+                throw;
+            }
         }
     }
-
-
-
-
 }
-
 
 
 

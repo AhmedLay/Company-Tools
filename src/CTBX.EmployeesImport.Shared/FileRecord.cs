@@ -13,6 +13,6 @@ namespace CTBX.EmployeesImport.Shared
         public string FileName { get; set; } = string.Empty;
         public string FilePath { get; set; } = string.Empty;
         public string FileStatus { get; set; } = string.Empty;
-        public DateTime UploadDate { get; set; }
+        public DateTimeOffset UploadDate { get; set; }
     }
 }

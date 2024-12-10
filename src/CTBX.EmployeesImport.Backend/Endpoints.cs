@@ -1,6 +1,6 @@
-﻿using System.Xml.Linq;
-using Carter;
+﻿using Carter;
 using CTBX.EmployeesImport.Shared;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -10,46 +10,35 @@ namespace CTBX.EmployeesImport.Backend;
 public class Endpoints : CarterModule
 {
     private readonly FileUploadService _service;
+    private readonly string _folderPath;
 
     public Endpoints(IConfiguration configuration)
     {
         _service = new FileUploadService(configuration);
+        //not working rn 
+        _folderPath = configuration["FileUploadConfiguration:FolderPath"] ?? "default/path";
     }
-
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
         AddUploadEmployeesFilesEndpoint(app);
     }
-
     public void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
     {
-        // validate via fluent validation
         app.MapPost(BackendRoutes.FILEUPLOAD, async (FileData file) =>
-        {
-            Console.WriteLine("POST-Endpoint got reached");
-            //TODO handle exception globally 
-            //configure the folderpath here 
-            var folderPath = @"C:\Users\User\Desktop\TEST FOLDER";
-            var filename = file.FileName!.GuardAgainstNullOrEmpty("fileName");
-            try
-            {
+        {        
+                var filename = file.FileName;
+                var folderpath = _folderPath;
                 var fileRecord = new FileRecord
                 {
                     FileName = filename,
-                    FilePath = Path.Combine(folderPath, filename),
-                    FileStatus = "pending",
-                    UploadDate = DateTime.Now
+                    FilePath = Path.Combine(folderpath, filename),
+                    FileStatus = "Pending",
+                    UploadDate = DateTimeOffset.Now
                 };
-                //do it here;
-                await _service.SaveFileToFolder(folderPath, file);           
-                await _service.PersistToDb(fileRecord); 
-
-                return Results.Ok(new { Message = "File uploaded successfully"});
-            }
-            catch (Exception ex)
-            {
-                return Results.Problem($"An error occurred while uploading the file: {ex.Message}");
-            }
+                await _service.SaveFileToFolder(folderpath, file);
+                await _service.PersistToDb(fileRecord);
+                return Results.Ok(new { Message = "File uploaded successfully" });
+            
         });
     }
 }

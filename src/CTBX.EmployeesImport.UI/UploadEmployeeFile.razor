@@ -11,62 +11,55 @@
         Each file must follow the required format.
     </MudText>
 
-    <MudFileUpload
-    T="IReadOnlyList<IBrowserFile>"
-    Accept=".txt, .csv"
-    FilesChanged="UploadFiles">
+    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
+                   Accept=".txt, .csv"
+                   FilesChanged="UploadFiles">
         <ActivatorContent>
             <MudButton Variant="Variant.Filled"
-            Color="Color.Success"
-            StartIcon="@Icons.Material.Filled.UploadFile">
+                       Color="Color.Success"
+                       StartIcon="@Icons.Material.Filled.UploadFile">
                 Upload Files
             </MudButton>
         </ActivatorContent>
     </MudFileUpload>
-
-    @if (files != null)
-    {
-        <MudList T="string">
-            @foreach (var file in files)
-            {
-                <MudListItem Icon="@Icons.Material.Filled.AttachFile">
-                    @file.Name <code>@file.Size bytes</code>
-                </MudListItem>
-            }
-        </MudList>
-    }
 </MudPaper>
 
 @code {
     IList<IBrowserFile> files = new List<IBrowserFile>();
+    private HashSet<string> uploadedFileNames = new HashSet<string>(); 
+
     private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
     {
         foreach (var file in files)
         {
+            if (uploadedFileNames.Contains(file.Name))
+            {
+                Console.WriteLine($"File {file.Name} has already been uploaded.");
+                Snackbar.Add("This file has already been uploaded. Please try a different file.", Severity.Error);
+                continue;
+            }
             if (file.Size == 0)
             {
-                Snackbar.Add("The file try to upload is empty, try again", Severity.Error);
-                break;
+                Snackbar.Add("The file you are trying to upload is empty. Please try again.", Severity.Error);
+                continue; 
             }
-            if (file.Size == 1000000)
+            if (file.Size > 1000000)  
             {
-                Snackbar.Add("The file try to upload is too big, try again", Severity.Error);
-                break;
+                Snackbar.Add("The file you are trying to upload is too big. Please try again.", Severity.Error);
+                continue; 
             }
             Console.WriteLine($"Uploading file: {file.Name}, Size: {file.Size} bytes");
             try
             {
-                this.files.Add(file); 
+                uploadedFileNames.Add(file.Name);
+                this.files.Add(file);
                 await Service.UploadFile(file);
-                Snackbar.Add("Upload succedded", Severity.Success);
+                Snackbar.Add("Upload succeeded", Severity.Success);
             }
-            catch
+            catch (Exception ex)
             {
-                Snackbar.Add("something went wrong, try again.", Severity.Error);
+                Snackbar.Add($"Something went wrong with your file! Error: {ex.Message}. Please check the format and try again.", Severity.Error);
             }
-
+        }
     }
-
-    }
-
 }
