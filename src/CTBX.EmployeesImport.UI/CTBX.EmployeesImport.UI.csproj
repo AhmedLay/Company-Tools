@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CTBX.CommonMudComponents\CTBX.CommonMudComponents.csproj" />
     <ProjectReference Include="..\CTBX.EmployeesImport.Shared\CTBX.EmployeesImport.Shared.csproj" />
   </ItemGroup>
 

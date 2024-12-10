@@ -14,42 +14,34 @@ namespace CTBX.EmployeesImport.UI
         }
         public async Task UploadFile(IBrowserFile file)
         {
-            try
+            // maximum size 1 MB
+            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+            // Read file content as a stream
+            var reader = new StreamReader(stream);
+            var lines = await reader.ReadToEndAsync();
+
+            // Split lines
+            var dataRows = lines.Split(Environment.NewLine)
+                                 .Where(line => !string.IsNullOrWhiteSpace(line))
+                                 .ToList();
+            foreach (var line in dataRows)
             {
-                // maximum size 1 MB
-                using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
 
-                // Read file content as a stream
-                var reader = new StreamReader(stream);
-                var lines = await reader.ReadToEndAsync();
+                var columns = line.Split(';');
 
-                // Split lines
-                var dataRows = lines.Split(Environment.NewLine)
-                                     .Where(line => !string.IsNullOrWhiteSpace(line))
-                                     .ToList();
-                foreach (var line in dataRows)
+                if (columns.Length != 6)
                 {
-                  
-                    var columns = line.Split(';');
-
-                    if (columns.Length != 6)
-                    {
-                        throw new Exception("The file content is not valid. Make sure that your file has excatly 6 columns");
-                    }
+                    throw new Exception("The file content is not valid. Make sure that your file has excatly 6 columns");
                 }
-                var uploadedFile = new FileData
-                {
-                    FileName = file.Name,
-                    FileContent = Encoding.UTF8.GetBytes(lines),
-                    UploadTime = DateTimeOffset.UtcNow
-                };
-                await _httpClient.PostAsJsonAsync("BackendRoutes.FILEUPLOAD", uploadedFile);
             }
-            catch (Exception ex)
+            var uploadedFile = new FileData
             {
-                Console.WriteLine($"Error uploading file: {ex.Message}");
-                throw;
-            }
+                FileName = file.Name,
+                FileContent = Encoding.UTF8.GetBytes(lines),
+                UploadTime = DateTimeOffset.UtcNow
+            };
+            await _httpClient.PostAsJsonAsync("BackendRoutes.FILEUPLOAD", uploadedFile);
         }
     }
 }
