@@ -94,6 +94,20 @@ public class BaseMudComponent : ComponentBase
         }
     }
 
+    protected async Task OnHandleOperation(Func<Task> operation, string errMessage, string? successMssage = null)
+    {
+        try
+        {
+            await operation();
+            await NotifySuccess(successMssage!);
+        }
+        catch (Exception ex)
+        {
+            await NotifyError(errMessage);
+            Logger.LogError(ex, ex.Message);
+        }
+    }
+
     protected async Task OnHandleOperation<T>(Func<T, bool> condition,
                                               Func<Task<T>> operation,
                                               Action? OnFailure = null,
