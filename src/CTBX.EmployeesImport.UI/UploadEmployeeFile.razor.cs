@@ -1,42 +1,53 @@
 ﻿using CTBX.CommonMudComponents;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using MudBlazor;
 
 namespace CTBX.EmployeesImport.UI;
 
 public class UploadEmployeeFileBase : BaseMudComponent
 {
-    private readonly UploadEmployeesService _service;
+    [Inject]
+    public required UploadEmployeesService Service { get; set; }
 
-    public UploadEmployeeFileBase(UploadEmployeesService Service)
-    {
-        _service = Service;
-    }
+    [Inject]
+    public new required ISnackbar Snackbar { get; set; }
 
-    protected async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
+    private readonly FileUploadValidator _validator = new();
+
+    public List<IBrowserFile> UploadedFiles { get; set; } = new();
+
+    protected Task LoadFiles(IReadOnlyList<IBrowserFile> files)
     {
         foreach (var file in files)
         {
-            // TODO: use fluent validation
-            //if (uploadedFileNames.Contains(file.Name))
-            //{
-            //    Console.WriteLine($"File {file.Name} has already been uploaded.");
-            //    Snackbar.Add("This file has already been uploaded. Please try a different file.", Severity.Error);
-            //    continue;
-            //}
-            //if (file.Size == 0)
-            //{
-            //    Snackbar.Add("The file you are trying to upload is empty. Please try again.", Severity.Error);
-            //    continue;
-            //}
-            //if (file.Size > 1000000)
-            //{
-            //    Snackbar.Add("The file you are trying to upload is too big. Please try again.", Severity.Error);
-            //    continue;
-            //}
+            var validationResult = _validator.Validate(file);
 
-            await OnHandleOperation(operation    : ()=> _service.UploadFile(file),
-                                    successMssage: "Upload succeeded",
-                                    errMessage   : "File upload failed");
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    NotifyError(error.ErrorMessage);
+                }
+                continue;
+            }
+
+            UploadedFiles.Add(file);
+            NotifySuccess($"File {file.Name} is registered an is ready to be uploaded!");
         }
+
+        return Task.CompletedTask;
+    }
+    protected async Task SubmitFiles()
+    {
+        foreach (var file in UploadedFiles)
+        {
+            await OnHandleOperation(
+                operation: () => Service.UploadFile(file),
+                successMssage: $"Upload succeeded for {file.Name}",
+                errMessage: $"Something went wrong with {file.Name}! make sure to have to right Formation."
+            );
+        }
+        UploadedFiles.Clear();
     }
 }

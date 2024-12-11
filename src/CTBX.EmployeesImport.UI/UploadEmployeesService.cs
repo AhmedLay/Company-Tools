@@ -8,6 +8,7 @@ namespace CTBX.EmployeesImport.UI
     {
         private readonly HttpClient _httpClient;
 
+
         public UploadEmployeesService(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -15,7 +16,7 @@ namespace CTBX.EmployeesImport.UI
         public async Task UploadFile(IBrowserFile file)
         {
             // maximum size 1 MB
-            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+            using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024);
 
             // Read file content as a stream
             var reader = new StreamReader(stream);
@@ -41,7 +42,9 @@ namespace CTBX.EmployeesImport.UI
                 FileContent = Encoding.UTF8.GetBytes(lines),
                 UploadTime = DateTimeOffset.UtcNow
             };
-            await _httpClient.PostAsJsonAsync("BackendRoutes.FILEUPLOAD", uploadedFile);
+            
+            var result = await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
+            result.EnsureSuccessStatusCode();
         }
     }
 }

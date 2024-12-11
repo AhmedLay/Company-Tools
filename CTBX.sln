@@ -42,6 +42,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.EmployeesImport.Backen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.EmployeesImportTests", "tests\CTBX.EmployeesImportTests\CTBX.EmployeesImportTests.csproj", "{A02391D7-E084-4102-9F3A-57B92922E99D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common.Utils", "Common.Utils", "{8D240F83-9F9B-4771-9474-C87C05F3186B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.CommonUtils", "src\CTBX.CommonUtils\CTBX.CommonUtils.csproj", "{114C35D8-2654-424D-B199-C30008DB9746}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +104,10 @@ Global
 		{A02391D7-E084-4102-9F3A-57B92922E99D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A02391D7-E084-4102-9F3A-57B92922E99D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A02391D7-E084-4102-9F3A-57B92922E99D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{114C35D8-2654-424D-B199-C30008DB9746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{114C35D8-2654-424D-B199-C30008DB9746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{114C35D8-2654-424D-B199-C30008DB9746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{114C35D8-2654-424D-B199-C30008DB9746}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +126,7 @@ Global
 		{98B06BAA-12A6-4304-8C69-9A92573F2963} = {9FA5B9C1-C402-4C8F-A804-6D5BD55DDF91}
 		{280818AA-FB40-4295-BAC4-8D5FE49F88D8} = {9FA5B9C1-C402-4C8F-A804-6D5BD55DDF91}
 		{A02391D7-E084-4102-9F3A-57B92922E99D} = {9FA5B9C1-C402-4C8F-A804-6D5BD55DDF91}
+		{114C35D8-2654-424D-B199-C30008DB9746} = {8D240F83-9F9B-4771-9474-C87C05F3186B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D9A5A77E-C524-4362-8482-9F518DC4C82F}

@@ -1,6 +1,6 @@
 ﻿using Carter;
+using CTBX.CommonUtils;
 using CTBX.EmployeesImport.Shared;
-using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,13 +8,10 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 namespace CTBX.EmployeesImport.Backend;
-
-
 public class FileUploadOptions
 {
     public string UploadDirectory { get; set; } = string.Empty;
 }
-
 public class Endpoints : CarterModule
 {
     public override void AddRoutes(IEndpointRouteBuilder app)
@@ -24,7 +21,11 @@ public class Endpoints : CarterModule
 
     public void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost(BackendRoutes.FILEUPLOAD, async ([FromServices] IFileUploadHandler service, [FromServices] IOptions<FileUploadOptions> options, FileData file) =>
+        app.MapPost(BackendRoutes.FILEUPLOAD, async (
+            [FromServices] IFileUploadHandler service,
+            [FromServices] IOptions<FileUploadOptions> options,
+            [FromServices] IDateTimeProvider dateTimeProvider,
+            FileData file) =>
         {
             service.GuardAgainstNull(nameof(service));
             var filename = file.FileName;
@@ -35,7 +36,7 @@ public class Endpoints : CarterModule
                 FileName = filename,
                 FilePath = Path.Combine(folderpath, filename),
                 FileStatus = "Pending",
-                UploadDate = DateTimeOffset.Now
+                UploadDate = dateTimeProvider.UtcNow
             };
 
             await service.SaveFileToFolder(folderpath, file);

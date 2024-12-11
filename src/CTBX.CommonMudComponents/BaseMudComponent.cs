@@ -72,6 +72,20 @@ public class BaseMudComponent : ComponentBase
         }
     }
 
+    protected async Task OnHandleOperation(Func<Task> operation, string errMessage, string? successMssage = null)
+    {
+        try
+        {
+            await operation();
+            await NotifySuccess(successMssage!);
+        }
+        catch (Exception ex)
+        {
+            await NotifyError(errMessage);
+            Logger.LogError(ex, ex.Message);
+        }
+    }
+
     protected async Task OnHandleOperation(Func<bool> condition, Func<Task> operation, string errMessage, string? successMssage = null)
     {
         try
@@ -86,20 +100,6 @@ public class BaseMudComponent : ComponentBase
             if (!success)
                 await NotifyError(errMessage);
 
-        }
-        catch (Exception ex)
-        {
-            await NotifyError(errMessage);
-            Logger.LogError(ex, ex.Message);
-        }
-    }
-
-    protected async Task OnHandleOperation(Func<Task> operation, string errMessage, string? successMssage = null)
-    {
-        try
-        {
-            await operation();
-            await NotifySuccess(successMssage!);
         }
         catch (Exception ex)
         {

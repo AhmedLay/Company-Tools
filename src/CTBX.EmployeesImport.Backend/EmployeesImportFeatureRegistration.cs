@@ -11,6 +11,6 @@ public static class EmployeesImportFeatureRegistration
     {
         services.AddHostedService<EmployeeRegistrationDbSeeder>();
         services.AddScoped<IFileUploadHandler,FileUploadService>();
-        services.Configure<FileUploadOptions>(nameof(FileUploadOptions), configuration);
+        services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
     }
 }

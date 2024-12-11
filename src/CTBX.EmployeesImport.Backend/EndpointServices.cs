@@ -36,16 +36,9 @@ namespace CTBX.EmployeesImport.Backend
             var fileName = file.FileName!.GuardAgainstNullOrEmpty("fileName");
             var filePath = Path.Combine(folderPath, fileName);
 
-
-
-            if (file.FileContent == null || file.FileContent.Length == 0)
-            {
-                throw new ArgumentException("The uploaded file is empty.");
-            }
-                await File.WriteAllBytesAsync(filePath, file.FileContent);
+            await File.WriteAllBytesAsync(filePath, file.FileContent);
                 return filePath;
         }
-
         public FileRecord CreateRecord(FileData file,string filepath)
         {
             var name = file.FileName!.GuardAgainstNullOrEmpty("fileName");
