@@ -5,8 +5,8 @@ using MinimalApiArchitecture.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(); // Add this
-builder.Services.AddEndpointsApiExplorer(); // Add this
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddProblemDetails(options =>
 {
     options.IncludeExceptionDetails = (ctx, ex) =>
