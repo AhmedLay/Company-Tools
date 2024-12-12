@@ -6,8 +6,20 @@ using MinimalApiArchitecture.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddTransient<GlobalExceptionMiddleware>();
+builder.Services.AddProblemDetails(options =>
+{
+    options.IncludeExceptionDetails = (ctx, ex) =>
+    {
+        return builder.Environment.IsDevelopment();
+    };
+    options.Map<UnauthorizedAccessException>(ex => new StatusCodeProblemDetails(StatusCodes.Status401Unauthorized));
+    options.Map<NotImplementedException>(ex => new StatusCodeProblemDetails(StatusCodes.Status501NotImplemented));
+    options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+});
+
+
 builder.Services.AddCarter();
+
 builder.AddMongoDBClient("ctbx-read-db");
 builder.AddServiceDefaults();
 builder.Services.AddCors(opts=>opts.AddPolicy("all",p=> p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
@@ -18,7 +30,7 @@ AbsenceManagementFeatureRegistration.RegisterServices(builder.Services, builder.
 CommonUtilRegistration.RegisterServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
-app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseProblemDetails();
 app.UseCors("all");
 app.MapDefaultEndpoints();
 app.MapCarter();

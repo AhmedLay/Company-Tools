@@ -32,16 +32,18 @@
         Submit Files
     </MudButton>  
 
-   @*  optional text, dont know if its better tbh *@
-    <MudText Typo="@Typo.h6">@UploadedFiles.Count() File@(UploadedFiles.Count() == 1 ? "" : "s"):</MudText>
+    <MudText Typo="@Typo.h6">Your Files:</MudText>
     <MudList T="string">
         @foreach (var file in UploadedFiles)
         {
             <MudListItem Icon="@Icons.Material.Filled.AttachFile" @key="@file">
-                @file.Name <code>@file.Name bytes</code>
+                <MudText>@file.Name  </MudText>
+                <MudButton Variant="Variant.Outlined"
+                           StartIcon="@Icons.Material.Filled.Delete"
+                           Size="Size.Small"
+                           OnClick="() => RemoveFile(file)">
+                </MudButton>
             </MudListItem>
         }
     </MudList>
-
-
 </MudPaper>

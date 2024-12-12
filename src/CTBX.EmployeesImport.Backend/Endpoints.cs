@@ -25,9 +25,19 @@ public class Endpoints : CarterModule
             [FromServices] IFileUploadHandler service,
             [FromServices] IOptions<FileUploadOptions> options,
             [FromServices] IDateTimeProvider dateTimeProvider,
+            [FromServices] FluentValidator validator,
             FileData file) =>
         {
             service.GuardAgainstNull(nameof(service));
+            var validationResult = validator.Validate(file);
+            if (!validationResult.IsValid)
+            {
+                return Results.BadRequest(new
+                {
+                    Message = "Validation failed.",
+                    Errors = validationResult.Errors.Select(e => e.ErrorMessage)
+                });
+            }
             var filename = file.FileName;
             var folderpath = options.GuardAgainstNull(nameof(options))
                                     .Value.UploadDirectory;
