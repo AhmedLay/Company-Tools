@@ -28,27 +28,29 @@ public class BaseMudComponent : ComponentBase
 
     protected Task NotifyError(string message)
     {
-        Snackbar?.Add(message, Severity.Error);
+        Snackbar?.Add(message, Severity.Error, config => config.VisibleStateDuration = 3000);
         return Task.CompletedTask;
     }
 
     protected Task NotifyWarning(string message)
     {
-        Snackbar?.Add(message, Severity.Warning);
+        Snackbar?.Add(message, Severity.Warning, config => config.VisibleStateDuration = 3000);
         return Task.CompletedTask;
     }
 
     protected Task NotifyInfo(string message)
     {
-        Snackbar?.Add(message, Severity.Info);
+        Snackbar?.Add(message, Severity.Info, config => config.VisibleStateDuration = 3000);
         return Task.CompletedTask;
     }
 
     protected Task NotifySuccess(string message)
     {
-        Snackbar?.Add(message, Severity.Success);
+        Snackbar?.Add(message, Severity.Success, config => config.VisibleStateDuration = 3000);
         return Task.CompletedTask;
     }
+
+
 
     protected async Task OnHandleOperation<T>(Func<T, bool> condition, Func<Task<T>> operation, string errMessage, string? successMssage = null)
     {
