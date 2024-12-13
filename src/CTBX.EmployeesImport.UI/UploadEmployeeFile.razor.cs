@@ -56,7 +56,7 @@ public class UploadEmployeeFileBase : BaseMudComponent
             await OnHandleOperation(
                 operation: () => Service.UploadFile(file),
                 successMssage: $"Upload succeeded for {file.Name}",
-                errMessage: $"Something went wrong with {file.Name}! make sure to have to right Formation."
+                errMessage: $"Something went wrong with {file.Name}!"
             );
         }
         UploadedFiles.Clear();
