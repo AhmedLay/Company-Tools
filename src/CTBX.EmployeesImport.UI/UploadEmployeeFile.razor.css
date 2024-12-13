@@ -28,3 +28,13 @@
     .upload-description .text-primary {
         color: #1976d2; /* Blue color for primary text */
     }
+
+.custom-flex-layout {
+    display: flex;
+    align-items: center; /* Vertically center the items */
+    justify-content: space-between; /* Push the icon to the right */
+}
+
+    .custom-flex-layout .mud-icon-button {
+        margin-left: 8px; /* Abstand zwischen Text und Icon */
+    }

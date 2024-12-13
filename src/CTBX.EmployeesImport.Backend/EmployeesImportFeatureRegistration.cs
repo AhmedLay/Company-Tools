@@ -1,4 +1,5 @@
 ﻿using CTBX.EmployeesImport.Backend;
+using CTBX.EmployeesImport.UI;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,10 +8,10 @@ namespace MinimalApiArchitecture.Application;
 
 public static class EmployeesImportFeatureRegistration
 {
-    public static void RegisterServices(IServiceCollection services,IConfiguration configuration)
+    public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddHostedService<EmployeeRegistrationDbSeeder>();
-        services.AddScoped<IFileUploadHandler,FileUploadService>();
+        services.AddScoped<IFileUploadHandler, FileUploadService>();
         services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
         services.AddScoped<FluentValidator>();
     }

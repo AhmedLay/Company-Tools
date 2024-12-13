@@ -1,4 +1,5 @@
 ﻿using CTBX.CommonMudComponents;
+using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
@@ -12,16 +13,19 @@ public class UploadEmployeeFileBase : BaseMudComponent
 
     [Inject]
     public new required ISnackbar Snackbar { get; set; }
-
-    private readonly FileUploadValidator _validator = new();
+    [Inject]
+    public required IValidator<IBrowserFile> FileUploadValidator { get; set; }
 
     public List<IBrowserFile> UploadedFiles { get; set; } = new();
+    public bool _visible = false;
 
     protected async Task LoadFiles(IReadOnlyList<IBrowserFile> files)
     {
+        _visible = true;
         foreach (var file in files)
         {
-            var validationResult = _validator.Validate(file);
+           
+            var validationResult = await FileUploadValidator.ValidateAsync(file);
 
             if (!validationResult.IsValid)
             {
@@ -31,17 +35,11 @@ public class UploadEmployeeFileBase : BaseMudComponent
                 }
                 continue;
             }
-
-            bool isValid = await Service.ValidateFileContent(file);
-            if (!isValid)
-            {
-                await NotifyError("The file's content does not meet the required format. Each line must contain 6 columns separated by semicolons (;).");
-                continue;
-            }
-
             UploadedFiles.Add(file);
             await NotifySuccess($"File {file.Name} is registered an is ready to be uploaded!");
+            
         }
+        _visible = false;
 
     }
     public void RemoveFile(IBrowserFile file)
@@ -51,15 +49,17 @@ public class UploadEmployeeFileBase : BaseMudComponent
 
     protected async Task SubmitFiles()
     {
+        _visible = true;
         foreach (var file in UploadedFiles)
         {
             await OnHandleOperation(
                 operation: () => Service.UploadFile(file),
                 successMssage: $"Upload succeeded for {file.Name}",
-                errMessage: $"Something went wrong with {file.Name}!"
+                errMessage: $"Something went wrong with!"
             );
         }
         UploadedFiles.Clear();
+         _visible = false;
     }
 
 

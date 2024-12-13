@@ -23,7 +23,7 @@ namespace CTBX.EmployeesImport.Backend
                 .WithMessage("File content must not be empty.");
 
             RuleFor(file => file.FileContent.Length)
-                .LessThanOrEqualTo(1024 * 1024) // 1 MB limit
+                .LessThanOrEqualTo(1_024_000) // 1 MB limit
                 .WithMessage("File size must not exceed 1 MB.");
         }
     }

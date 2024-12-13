@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CTBX.CommonUtils\CTBX.CommonUtils.csproj" />
     <ProjectReference Include="..\CTBX.EmployeesImport.Shared\CTBX.EmployeesImport.Shared.csproj" />
+    <ProjectReference Include="..\CTBX.EmployeesImport.UI\CTBX.EmployeesImport.UI.csproj" />
   </ItemGroup>
 
 </Project>

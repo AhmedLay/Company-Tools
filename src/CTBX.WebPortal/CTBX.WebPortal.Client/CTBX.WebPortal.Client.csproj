@@ -6,21 +6,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Settings\**" />
+    <Content Remove="Pages\Settings\**" />
+    <EmbeddedResource Remove="Pages\Settings\**" />
+    <None Remove="Pages\Settings\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <PackageReference Include="Heron.MudCalendar" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.0" />
     <PackageReference Include="MudBlazor" Version="7.15.0" />
-    <PackageReference Include="MudBlazor.Translations" Version="1.4.0" />
+    <PackageReference Include="MudBlazor.Translations" Version="1.5.1" />
+    
   </ItemGroup>
+  
   <ItemGroup>
     <Content Update="Layout\NavMenu.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Settings\" />
   </ItemGroup>
 
   <ItemGroup>

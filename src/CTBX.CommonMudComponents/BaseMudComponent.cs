@@ -21,32 +21,32 @@ public class BaseMudComponent : ComponentBase
         Snackbar.Configuration.ShowTransitionDuration = 500;
         Snackbar.Configuration.HideTransitionDuration = 200;
         Snackbar.Configuration.MaxDisplayedSnackbars = 10;
-        Snackbar.Configuration.VisibleStateDuration = 2000;
+        Snackbar.Configuration.VisibleStateDuration = 3500;
 
         base.OnInitialized();
     }
-
+    //config entfernen 
     protected Task NotifyError(string message)
     {
-        Snackbar?.Add(message, Severity.Error, config => config.VisibleStateDuration = 2500);
+        Snackbar?.Add(message, Severity.Error);
         return Task.CompletedTask;
     }
 
     protected Task NotifyWarning(string message)
     {
-        Snackbar?.Add(message, Severity.Warning, config => config.VisibleStateDuration = 2500);
+        Snackbar?.Add(message, Severity.Warning);
         return Task.CompletedTask;
     }
 
     protected Task NotifyInfo(string message)
     {
-        Snackbar?.Add(message, Severity.Info, config => config.VisibleStateDuration = 2500);
+        Snackbar?.Add(message, Severity.Info);
         return Task.CompletedTask;
     }
 
     protected Task NotifySuccess(string message)
     {
-        Snackbar?.Add(message, Severity.Success, config => config.VisibleStateDuration = 2500);
+        Snackbar?.Add(message, Severity.Success);
         return Task.CompletedTask;
     }
 
