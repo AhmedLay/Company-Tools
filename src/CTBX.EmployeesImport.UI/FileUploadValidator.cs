@@ -25,13 +25,12 @@ public class FileUploadValidator : AbstractValidator<IBrowserFile>
     {
         try
         {
-            // Dateiinhalt lesen
+
             using var stream = file.OpenReadStream(maxAllowedSize: 10_000_000);
             using var reader = new StreamReader(stream);
 
             var lines = await reader.ReadToEndAsync();
 
-            // Split lines und Filterung
             var dataRows = lines.Split(Environment.NewLine)
                                  .Where(line => !string.IsNullOrWhiteSpace(line))
                                  .ToList();
@@ -42,15 +41,15 @@ public class FileUploadValidator : AbstractValidator<IBrowserFile>
                 var columns = line.Split(';');
                 if (columns.Length != 6)
                 {
-                    return false; // Ungültige Zeile gefunden
+                    return false; 
                 }
             }
 
-            return true; // Dateiinhalt ist gültig
+            return true; 
         }
         catch
         {
-            return false; // Fehler beim Lesen der Datei
+            return false; 
         }
     }
 

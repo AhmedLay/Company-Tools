@@ -30,17 +30,23 @@
                OnClick="SubmitFiles"
                StartIcon="@Icons.Material.Filled.CloudUpload">
         Submit Files
-    </MudButton>  
+    </MudButton>
 
     <MudText Typo="@Typo.h6">Ready files:</MudText>
     <MudList T="string">
         @foreach (var file in UploadedFiles)
         {
-            <MudListItem Icon="@Icons.Material.Filled.Close" @key="@file"
-                         OnClick="() => RemoveFile(file)">
-                <MudText>@file.Name  </MudText>
-               
+            <MudListItem @key="@file" OnClick="() => RemoveFile(file)">
+                <MudItem Class="custom-flex-layout">
+                    @file.Name
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => RemoveFile(file)" />
+                </MudItem>
             </MudListItem>
         }
     </MudList>
 </MudPaper>
+
+<MudOverlay @bind-Visible="_visible" DarkBackground>
+    <MudProgressCircular Color="Color.Success" Indeterminate="true" />
+</MudOverlay>
+
