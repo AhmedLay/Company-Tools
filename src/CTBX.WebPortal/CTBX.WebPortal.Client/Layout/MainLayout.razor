@@ -1,8 +1,15 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
 <MudThemeProvider @bind-IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
-<MudDialogProvider />
+<MudDialogProvider FullWidth="true"
+                   MaxWidth="MaxWidth.ExtraSmall"
+                   CloseButton="true"
+                   BackdropClick="false"
+                   NoHeader="true"
+                   Position="DialogPosition.Center"
+                   CloseOnEscapeKey="true"
+                   BackgroundClass="my-custom-class" />
 <MudSnackbarProvider />
 
 <MudLayout>
@@ -29,7 +36,7 @@
         <MudIconButton Icon="@Icons.Material.Filled.Language" Color="Color.Inherit" />
 
         <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Inherit" />
-
+@*         <LoginOrLogoutIconButton CurrentUrl="_currentUrl" /> *@
         <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
         Color="Color.Inherit" OnClick="@ToggleDarkMode" />
         <LoginOrLogoutIconButton />
@@ -37,7 +44,7 @@
     </MudAppBar>
 
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavRebuild />
+        <NavMenu />
     </MudDrawer>
 
     <div class="content-wrapper">
@@ -48,12 +55,12 @@
                 </ChildContent>
                 <ErrorContent>
 
-                 <MudContainer MaxWidth="MaxWidth.Large" Class="text-center">
-                   <MudPaper Elevation="4" Class="p-4">
-                      <MudText Typo="Typo.h4" Class="mb-3">Oops! Something went wrong.</MudText>
-                     <MudText Class="mb-4">We encountered an error while processing your request. Please try again later.</MudText>
-                   </MudPaper>
-                  </MudContainer>
+                    <MudContainer MaxWidth="MaxWidth.Large" Class="text-center">
+                        <MudPaper Elevation="4" Class="p-4">
+                            <MudText Typo="Typo.h4" Class="mb-3">Oops! Something went wrong.</MudText>
+                            <MudText Class="mb-4">We encountered an error while processing your request. Please try again later.</MudText>
+                        </MudPaper>
+                    </MudContainer>
 
                 </ErrorContent>
             </ErrorBoundary>

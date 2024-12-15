@@ -1,6 +1,7 @@
 using Aspire.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ var postgresDbResource = builder.AddPostgres("ctbx-db")
                                      options.WithHostPort(port: 49100);                                     
                                  });
 
+
 var readStore = builder.AddMongoDB("ctbx-readstore")
                        .WithMongoExpress(opts=> opts.WithHostPort(port: 49200));
 
@@ -28,6 +30,19 @@ var readDb = readStore.AddDatabase("ctbx-read-db");
 var eventsDb = postgresDbResource
                     .WithEnvironment("POSTGRES_DB", "ctbx-events-db") // setting this will create a db
                     .AddDatabase("ctbx-events-db");
+
+var postgresCommonDbResource = builder.AddPostgres("ctbx-common")
+                                 .WithPgAdmin(options =>
+                                 {
+                                     options.WithHostPort(port: 49100);
+                                 });
+
+var commonDb = postgresCommonDbResource
+                    .WithEnvironment("POSTGRES_DB", "ctbx-common-db") // setting this will create a db
+                    .AddDatabase("ctbx-common-db");
+
+
+
 
 var idpDb = postgresDbResource
             .AddDatabase("idpDb");
@@ -50,10 +65,13 @@ var backend = builder.AddProject<Projects.CTBX_Backend>("ctbx-backend")
                      .WithEnvironment("IdentityOptions__MetadataAddress", $"{idpUrl}/.well-known/openid-configuration")
                      .WithEnvironment("IdentityOptions__Audience", backendClientId)
                      .WithEnvironment("IdentityOptions__Authority", idpUrl)
+                     .WithEnvironment("FileUploadOptions__UploadDirectory", "upload")
                      .WithReference(eventsDb)
                      .WithReference(readDb)
+                     .WithReference(commonDb) 
                      .WaitFor(eventsDb)
-                     .WaitFor(readDb);
+                     .WaitFor(readDb)
+                     .WaitFor(commonDb); 
 
 var portal = builder.AddProject<Projects.CTBX_WebPortal>("ctbx-webportal")
                     .WithEnvironment("IdentityOptions__Authority", idpUrl)

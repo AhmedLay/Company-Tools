@@ -21,11 +21,11 @@ public class BaseMudComponent : ComponentBase
         Snackbar.Configuration.ShowTransitionDuration = 500;
         Snackbar.Configuration.HideTransitionDuration = 200;
         Snackbar.Configuration.MaxDisplayedSnackbars = 10;
-        Snackbar.Configuration.VisibleStateDuration = 2000;
+        Snackbar.Configuration.VisibleStateDuration = 3500;
 
         base.OnInitialized();
     }
-
+    //config entfernen 
     protected Task NotifyError(string message)
     {
         Snackbar?.Add(message, Severity.Error);
@@ -50,6 +50,8 @@ public class BaseMudComponent : ComponentBase
         return Task.CompletedTask;
     }
 
+
+
     protected async Task OnHandleOperation<T>(Func<T, bool> condition, Func<Task<T>> operation, string errMessage, string? successMssage = null)
     {
         try
@@ -64,6 +66,20 @@ public class BaseMudComponent : ComponentBase
             if (!success)
                 await NotifyError(errMessage);
 
+        }
+        catch (Exception ex)
+        {
+            await NotifyError(errMessage);
+            Logger.LogError(ex, ex.Message);
+        }
+    }
+
+    protected async Task OnHandleOperation(Func<Task> operation, string errMessage, string? successMssage = null)
+    {
+        try
+        {
+            await operation();
+            await NotifySuccess(successMssage!);
         }
         catch (Exception ex)
         {

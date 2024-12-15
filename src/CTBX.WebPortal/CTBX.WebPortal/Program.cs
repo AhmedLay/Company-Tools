@@ -3,9 +3,6 @@ using CTBX.WebPortal.Components;
 using CTBX.WebPortal.Utils;
 using MudBlazor.Services;
 
-
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
