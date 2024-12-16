@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CTBX.AbsenceManagement.UI\CTBX.AbsenceManagement.UI.csproj" />
+    <ProjectReference Include="..\..\CTBX.ImportHoliday.UI\CTBX.ImportHoliday.UI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
