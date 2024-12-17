@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -26,7 +26,10 @@ public static class Registrations
                     accessToken
                 );
             });
-        }).RequireAuthorization();
+        })
+            .RequireAuthorization()
+            ;
+
         return app;
     }
 

@@ -10,7 +10,7 @@ namespace MinimalApiArchitecture.Application;
 
 public static class AbsenceManagementFeatureRegistration
 {
-    public static void RegisterServices(IServiceCollection services,IConfiguration configuration)
+    public static void RegisterServices(this IServiceCollection services,IConfiguration configuration)
     {
         // add service registrations here
     }

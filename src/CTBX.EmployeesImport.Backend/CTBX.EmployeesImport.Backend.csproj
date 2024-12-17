@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Carter" Version="9.0.0" />
+    <PackageReference Include="Carter.Analyzers" Version="9.0.0" />
+    <PackageReference Include="Npgsql" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CTBX.CommonUtils\CTBX.CommonUtils.csproj" />
+    <ProjectReference Include="..\CTBX.EmployeesImport.Shared\CTBX.EmployeesImport.Shared.csproj" />
+    <ProjectReference Include="..\CTBX.EmployeesImport.UI\CTBX.EmployeesImport.UI.csproj" />
+  </ItemGroup>
+
+</Project>

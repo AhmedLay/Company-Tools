@@ -15,10 +15,16 @@
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
     <PackageReference Include="Aspire.Hosting.MongoDB" Version="9.0.0" />
     <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CTBX.AbsenceManagement\CTBX.AbsenceManagement.Backend.csproj" />
     <ProjectReference Include="..\CTBX.Backend\CTBX.Backend.csproj" />
+    <ProjectReference Include="..\CTBX.EmployeesImport.Backend\CTBX.EmployeesImport.Backend.csproj" />
     <ProjectReference Include="..\CTBX.WebPortal\CTBX.WebPortal\CTBX.WebPortal.csproj" />
     <ProjectReference Include="..\IDP\IDP.csproj" />
   </ItemGroup>

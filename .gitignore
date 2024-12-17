@@ -403,3 +403,4 @@ FodyWeavers.xsd
 # Dv settings
 *.designtime.json
 *.development.json
+/src/CTBX.Backend/upload
