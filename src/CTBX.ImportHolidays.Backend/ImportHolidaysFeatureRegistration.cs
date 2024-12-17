@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CTBX.ImportHolidays.Backend;
 
-    class ImportHolidaysFeatureRegistration
+    public static class ImportHolidaysFeatureRegistration
     {
         public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {

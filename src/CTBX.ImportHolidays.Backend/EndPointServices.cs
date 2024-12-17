@@ -10,11 +10,11 @@ using CTBX.ImportHolidays.Shared;
 
 namespace CTBX.ImportHolidays.Backend
 {
-    class EndPointServices
+    public class EndPointServices
     {
         private readonly string _connectionString;
 
-        public EndpointServices(IConfiguration configuration)
+        public EndPointServices(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("ctbx-common-db")!;
         }
