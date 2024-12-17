@@ -6,45 +6,36 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Forms;
 using CTBX.ImportHolidays.Shared;
+using System.Net.Http.Json;
 
 namespace CTBX.ImportHoliday.UI
 {
     public class ImportHolidaysService
     {
+        private readonly HttpClient _httpClient;
         public ImportHolidaysService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
+
         public async Task UploadFile(IBrowserFile file)
         {
-            // maximum size 1 MB
-            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
 
-            // Read file content as a stream
-            var reader = new StreamReader(stream);
-            var lines = await reader.ReadToEndAsync();
+            using var stream = file.OpenReadStream(maxAllowedSize: 10_000_000);
+            using var memoryStream = new MemoryStream();
 
-            // Split lines
-            var dataRows = lines.Split(Environment.NewLine)
-                                 .Where(line => !string.IsNullOrWhiteSpace(line))
-                                 .ToList();
-            foreach (var line in dataRows)
-            {
+            await stream.CopyToAsync(memoryStream);
 
-                var columns = line.Split(';');
+            var fileContent = memoryStream.ToArray();
 
-                if (columns.Length != 6)
-                {
-                    throw new Exception("The file content is not valid. Make sure that your file has excatly 6 columns");
-                }
-            }
             var uploadedFile = new FileData
             {
                 FileName = file.Name,
-                FileContent = Encoding.UTF8.GetBytes(lines),
-                UploadTime = DateTimeOffset.UtcNow
+                FileContent = fileContent,
             };
-            await _httpClient.PostAsJsonAsync("BackendRoutes.FILEUPLOAD", uploadedFile);
+
+            var result = await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
+            result.EnsureSuccessStatusCode();
         }
     }
 }

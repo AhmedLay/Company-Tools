@@ -1,0 +1,20 @@
+﻿using CTBX.ImportHolidays.Backend;
+using CTBX.ImportHolidays.UI;
+using FluentValidation;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace CTBX.ImportHolidays.Backend;
+
+    class ImportHolidaysFeatureRegistration
+    {
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHostedService<ImportHolidaysDbSeeder>();
+            services.AddScoped<IFileUploadHandler, FileUploadService>();
+            services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
+            services.AddScoped<FluentValidator>();
+
+    }
+    }
+
