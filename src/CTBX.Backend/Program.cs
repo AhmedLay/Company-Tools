@@ -1,10 +1,16 @@
 using Carter;
 using CTBX.Backend;
+using CTBX.EmployeesImport.Backend;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Hellang.Middleware.ProblemDetails;
+
 using MinimalApiArchitecture.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHangfire(x => x.UsePostgreSqlStorage(options => options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("ctbx-common-db"))));
+builder.Services.AddHangfireServer();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddProblemDetails(options =>
@@ -17,7 +23,6 @@ builder.Services.AddProblemDetails(options =>
     options.Map<NotImplementedException>(ex => new StatusCodeProblemDetails(StatusCodes.Status501NotImplemented));
     options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
 });
-
 
 builder.Services.AddCarter();
 
@@ -35,6 +40,9 @@ app.UseProblemDetails();
 app.UseCors("all");
 app.MapDefaultEndpoints();
 app.MapCarter();
+app.UseHangfireDashboard();
+
+
 app.Run();
 
 

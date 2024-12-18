@@ -2,8 +2,6 @@
 using Npgsql;
 using Microsoft.Extensions.Configuration;
 using CTBX.EmployeesImport.Shared;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Http;
 
 namespace CTBX.EmployeesImport.Backend
 {

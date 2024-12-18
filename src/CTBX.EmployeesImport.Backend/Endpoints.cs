@@ -1,11 +1,11 @@
 ﻿using Carter;
 using CTBX.CommonUtils;
 using CTBX.EmployeesImport.Shared;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 namespace CTBX.EmployeesImport.Backend;
 public class FileUploadOptions
@@ -25,6 +25,7 @@ public class Endpoints : CarterModule
             [FromServices] IFileUploadHandler service,
             [FromServices] IOptions<FileUploadOptions> options,
             [FromServices] IDateTimeProvider dateTimeProvider,
+            [FromServices] FileImporter fileImporter,
             FileData file) =>
         {
             service.GuardAgainstNull(nameof(service));
@@ -43,9 +44,15 @@ public class Endpoints : CarterModule
             await service.SaveFileToFolder(folderpath, file);
             await service.PersistToDb(fileRecord);
 
+
+
+            BackgroundJob.Enqueue(() => fileImporter.ImportEmployeeFromFile());
             return Results.Ok(new { Message = "File uploaded successfully" });
             
         });
+
+
     }
+
 }
 

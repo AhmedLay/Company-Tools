@@ -32,7 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.AbsenceManagement.Back
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.AbsenceManagement.UI", "src\CTBX.AbsenceManagement.UI\CTBX.AbsenceManagement.UI.csproj", "{DACF86C6-DDE1-4802-A0AF-A5CB58FEC7FD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Feature", "Feature", "{9FA5B9C1-C402-4C8F-A804-6D5BD55DDF91}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Feature.EmployeesImport", "Feature.EmployeesImport", "{9FA5B9C1-C402-4C8F-A804-6D5BD55DDF91}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.EmployeesImport.UI", "src\CTBX.EmployeesImport.UI\CTBX.EmployeesImport.UI.csproj", "{F15D5CD4-0542-47C9-B192-27D89C452CDA}"
 EndProject

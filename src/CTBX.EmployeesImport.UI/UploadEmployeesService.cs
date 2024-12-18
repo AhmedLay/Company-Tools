@@ -29,38 +29,7 @@ namespace CTBX.EmployeesImport.UI
             var result = await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
             result.EnsureSuccessStatusCode();
         }
-        //public async Task<bool> ValidateFileContent(IBrowserFile file)
-        //{
-        //    try
-        //    {
-        //        using var stream = file.OpenReadStream();
-        //        using var reader = new StreamReader(stream);
-
-        //        var lines = await reader.ReadToEndAsync();
-
-        //        // Split lines
-        //        var dataRows = lines.Split(Environment.NewLine)
-        //                             .Where(line => !string.IsNullOrWhiteSpace(line))
-        //                             .ToList();
-        //        foreach (var line in dataRows)
-        //        {
-
-        //            var columns = line.Split(';');
-
-        //            if (columns.Length != 6)
-        //            {
-        //                return false;
-        //            }
-        //        }
-
-        //        return true;
-        //    }
-        //    catch
-        //    {
-        //        return false;
-        //    }
-        //}
-
+        
     }
 }
 
