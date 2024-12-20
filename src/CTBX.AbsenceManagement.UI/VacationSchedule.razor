@@ -1,0 +1,34 @@
+﻿@page "/vacation-schedule"
+@inherits VacationScheduleFileBase
+
+<PageTitle>Vacation Request</PageTitle>
+
+<MudCard>
+    <MudCardContent>
+        <MudText Align="Align.Center">Vacation Request</MudText>
+        <MudForm Spacing="2">
+            <MudTextField T="string" Label="Personal ID" />
+
+            <!-- Bind MudDatePicker to the properties in the component -->
+            <MudDatePicker Label="From"/>
+
+            <MudDatePicker Label="To"/>
+
+            <MudForm Spacing="2">
+                <MudTextField T="string" Label="Comment" />
+            </MudForm>
+
+            <MudTextField T="int" Label="Current Remaining Vacation Days" Value="10" ReadOnly="true" Disabled="true" />
+
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudButton OnClick="SaveDraft" Variant="Variant.Outlined" Color="Color.Secondary" FullWidth="true">Save Draft</MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudButton OnClick="SubmitRequest" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Submit Request</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </MudCardContent>
+</MudCard>
+
