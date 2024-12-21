@@ -2,6 +2,7 @@
 using Npgsql;
 using Microsoft.Extensions.Configuration;
 using CTBX.EmployeesImport.Shared;
+using System.Data;
 
 namespace CTBX.EmployeesImport.Backend
 {
@@ -43,6 +44,15 @@ namespace CTBX.EmployeesImport.Backend
             await File.WriteAllBytesAsync(filePath, file.FileContent);
             return filePath;
         }
+
+        public async Task<List<FileRecord>> GetAllFileRecordsAsync()
+        {
+            await using var connection = new NpgsqlConnection(_connectionString);
+            const string query = "SELECT Id, FileName, FilePath, FileStatus, UploadDate FROM public.fileimports";
+            var result = await connection.QueryAsync<FileRecord>(query);
+            return result.ToList();
+        }
+
     }
 }
 

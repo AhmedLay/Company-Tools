@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CTBX.AbsenceManagement\CTBX.AbsenceManagement.Backend.csproj" />
+    <ProjectReference Include="..\CTBX.CommonUtils\CTBX.CommonUtils.csproj" />
     <ProjectReference Include="..\CTBX.EmployeesImport.Backend\CTBX.EmployeesImport.Backend.csproj" />
     <ProjectReference Include="..\CTBX.ServiceDefaults\CTBX.ServiceDefaults.csproj" />
   </ItemGroup>

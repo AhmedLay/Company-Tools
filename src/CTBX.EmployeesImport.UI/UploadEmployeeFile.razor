@@ -1,52 +1,79 @@
 ﻿@page "/file-upload"
+@using CTBX.EmployeesImport.Shared
 @inherits UploadEmployeeFileBase
 
 <MudPaper Class="d-flex flex-column align-center py-4">
-    <MudText Typo="Typo.h4" GutterBottom="true">Employee File Upload</MudText>
-    <MudText Typo="Typo.body1" Class="mb-4 text-center">
-        Please upload a CSV or TXT file to import your employees into the database.
-        Maximum 10 at once per upload.
-        Supported formats: .csv or .txt.
-        Each file must follow the required format.
-
+    <div Class="d-flex align-items-center mb-2">
+        <MudText Typo="Typo.h3" Class="mr-2">
+            Welcome to the Employee File Uploader!
+        </MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Info" Class="info-button" OnClick="@(() => OpenDrawer())" />
+    </div>
+    <MudText Typo="Typo.subtitle1" Class="text-secondary">
+        Streamline your employee data uploads with ease and efficiency.
     </MudText>
+    <MudSpacer/>
+    <div Class="d-flex align-items-center mb-2 gap-3">
+        <MudFileUpload T="IReadOnlyList<IBrowserFile>"
+                       Accept=".txt, .csv"
+                       FilesChanged="LoadFiles">
+            <ActivatorContent>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Warning"
 
-    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
-                   Accept=".txt, .csv"
-                   FilesChanged="LoadFiles">
-        <ActivatorContent>
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Warning"
-                       Class="mb-2"
-                       StartIcon="@Icons.Material.Filled.UploadFile">
-                Load Files
-            </MudButton>
-        </ActivatorContent>
-    </MudFileUpload>
+                           StartIcon="@Icons.Material.Filled.UploadFile">
+                    Load Files
+                </MudButton>
+            </ActivatorContent>
+        </MudFileUpload>
 
-    <MudButton Variant="Variant.Filled"
-               Color="Color.Success"
-               Class="mb-4"
-               OnClick="SubmitFiles"
-               StartIcon="@Icons.Material.Filled.CloudUpload">
-        Submit Files
-    </MudButton>
-
-    <MudText Typo="@Typo.h6">Ready files:</MudText>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Success"
+                   OnClick="SubmitFiles"
+                   StartIcon="@Icons.Material.Filled.CloudUpload">
+            Submit Files
+        </MudButton>
+    </div>
     <MudList T="string">
         @foreach (var file in UploadedFiles)
         {
             <MudListItem @key="@file" OnClick="() => RemoveFile(file)">
                 <MudItem Class="custom-flex-layout">
                     @file.Name
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => RemoveFile(file)" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"  Color="Color.Error" OnClick="() => RemoveFile(file)" />
                 </MudItem>
             </MudListItem>
         }
     </MudList>
 </MudPaper>
 
+<MudDataGrid Items="fileRecodsList" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+    <Columns>
+        <PropertyColumn Property="x => x.Id" Title="ID" />
+        <PropertyColumn Property="x => x.FileName" Title="Name" />
+        <PropertyColumn Property="x => x.FilePath" Title="Path" />
+        <PropertyColumn Property="x => x.FileStatus" Title="Status" />
+        <PropertyColumn Property="x => x.UploadDate" Title="Upload Date" Format="yyyy-MM-dd HH:mm" />
+    </Columns>
+</MudDataGrid>
+
 <MudOverlay @bind-Visible="_visible" DarkBackground>
     <MudProgressCircular Color="Color.Success" Indeterminate="true" />
 </MudOverlay>
+
+
+<MudDrawer @bind-Open="@_open" Width="600px" Height="100%" Elevation="1" Anchor="Anchor.End" Variant="@DrawerVariant.Temporary">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h5" Align="Align.Center" >How to upload an Employee File</MudText>
+    </MudDrawerHeader>
+    <MudText Typo="Typo.body2" Align="Align.Center">
+        1. Click "Load Files" to choose files.<br />
+        2. Select CSV or TXT files that follow the required format.<br />
+        3. Once the files are loaded, click "Submit Files" to upload.
+
+        * Make sure one Employee Entry is built like this:
+        Email;Firstname;Name;PersonalId;AnualVacaitionDays;RemaningVacationDays
+        max.mustermann@ctbx.de;max;mustermann;123;30;21
+    </MudText>
+</MudDrawer>
 
