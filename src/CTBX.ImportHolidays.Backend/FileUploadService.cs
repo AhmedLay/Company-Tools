@@ -16,7 +16,7 @@ namespace CTBX.ImportHolidays.Backend
 
         public async Task PersistToDb(FileRecord fileRecord)
         {
-            var insertQuery = "INSERT INTO fileimports (FileName, FilePath, FileStatus,UploadDate) VALUES (@FileName, @FilePath, @FileStatus,@UploadDate)";
+            var insertQuery = "INSERT INTO holidayimports (FileName, FilePath, FileStatus,UploadDate) VALUES (@FileName, @FilePath, @FileStatus,@UploadDate)";
 
             await using var connection = new NpgsqlConnection(_connectionString);
             await connection.ExecuteAsync(insertQuery, fileRecord);

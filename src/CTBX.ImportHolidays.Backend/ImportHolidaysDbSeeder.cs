@@ -52,7 +52,7 @@ namespace CTBX.ImportHolidays.Backend;
 public static class DbScripts
 {
     public static string CreateHolidaysDbIfNotExists => """
-            CREATE TABLE IF NOT EXISTS public.fileimports (
+            CREATE TABLE IF NOT EXISTS public.holidayimports (
                 Id SERIAL PRIMARY KEY,
                 FileName TEXT,
                 FilePath TEXT,
