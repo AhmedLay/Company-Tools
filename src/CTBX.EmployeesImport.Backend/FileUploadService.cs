@@ -2,7 +2,6 @@
 using Npgsql;
 using Microsoft.Extensions.Configuration;
 using CTBX.EmployeesImport.Shared;
-using System.Data;
 
 namespace CTBX.EmployeesImport.Backend
 {
@@ -25,17 +24,14 @@ namespace CTBX.EmployeesImport.Backend
 
         public async Task<string> SaveFileToFolder(string folderPath, FileData file)
         {
-            // Ensure the folder exists
+
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
-            // Set the name of the file and create the final path
             var fileName = file.FileName!.GuardAgainstNullOrEmpty("fileName");
             var filePath = Path.Combine(folderPath, fileName);
-
-
 
             if (file.FileContent == null || file.FileContent.Length == 0)
             {
@@ -44,7 +40,6 @@ namespace CTBX.EmployeesImport.Backend
             await File.WriteAllBytesAsync(filePath, file.FileContent);
             return filePath;
         }
-
         public async Task<List<FileRecord>> GetAllFileRecordsAsync()
         {
             await using var connection = new NpgsqlConnection(_connectionString);
@@ -53,6 +48,14 @@ namespace CTBX.EmployeesImport.Backend
             return result.ToList();
         }
 
+
+        public async Task<List<Employee>> GetEmployeesDataAsync()
+        {
+            await using var connection = new NpgsqlConnection(_connectionString);
+            const string query = "SELECT Id, Surname, Name, Email, EmployeeID, AnualVacationDays, RemainingVacationDays FROM public.Employees";
+            var result = await connection.QueryAsync<Employee>(query);
+            return result.ToList();
+        }
     }
 }
 

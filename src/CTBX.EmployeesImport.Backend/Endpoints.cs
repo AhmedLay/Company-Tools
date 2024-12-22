@@ -62,6 +62,15 @@ public class Endpoints : CarterModule
             var records = await service.GetAllFileRecordsAsync();
             return Results.Ok(records);
         });
+
+        app.MapGet(BackendRoutes.GETEMPLOYEES, async (
+          [FromServices] IFileUploadHandler service) =>
+        {
+            service.GuardAgainstNull(nameof(service));
+            var records = await service.GetEmployeesDataAsync();
+            return Results.Ok(records);
+        });
+
     }
 
 

@@ -36,6 +36,11 @@ namespace CTBX.EmployeesImport.UI
                 return fileRecords ?? new List<FileRecord>();
         }
 
+        public async Task<List<Employee>> GetEmployeesAsync()
+        {
+            var employeeview = await _httpClient.GetFromJsonAsync<List<Employee>>(BackendRoutes.GETEMPLOYEES);
+            return employeeview ?? new List<Employee>();
+        }
 
     }
 }
