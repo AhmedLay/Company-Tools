@@ -17,6 +17,7 @@ public class Endpoints : CarterModule
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
         AddUploadEmployeesFilesEndpoint(app);
+        AddGetFileRecordsEndpoint(app);
     }
 
     public void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
@@ -50,9 +51,28 @@ public class Endpoints : CarterModule
             return Results.Ok(new { Message = "File uploaded successfully" });
             
         });
+    }
 
+    public void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapGet(BackendRoutes.GETFILERECORDS, async (
+            [FromServices] IFileUploadHandler service) =>
+        {
+            service.GuardAgainstNull(nameof(service));
+            var records = await service.GetAllFileRecordsAsync();
+            return Results.Ok(records);
+        });
+
+        app.MapGet(BackendRoutes.GETEMPLOYEES, async (
+          [FromServices] IFileUploadHandler service) =>
+        {
+            service.GuardAgainstNull(nameof(service));
+            var records = await service.GetEmployeesDataAsync();
+            return Results.Ok(records);
+        });
 
     }
+
 
 }
 

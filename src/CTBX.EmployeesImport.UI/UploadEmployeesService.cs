@@ -29,7 +29,19 @@ namespace CTBX.EmployeesImport.UI
             var result = await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
             result.EnsureSuccessStatusCode();
         }
-        
+
+        public async Task<List<FileRecord>> GetFileRecordsAsync()
+        {
+                var fileRecords = await _httpClient.GetFromJsonAsync<List<FileRecord>>(BackendRoutes.GETFILERECORDS);
+                return fileRecords ?? new List<FileRecord>();
+        }
+
+        public async Task<List<Employee>> GetEmployeesAsync()
+        {
+            var employeeview = await _httpClient.GetFromJsonAsync<List<Employee>>(BackendRoutes.GETEMPLOYEES);
+            return employeeview ?? new List<Employee>();
+        }
+
     }
 }
 
