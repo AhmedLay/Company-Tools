@@ -18,6 +18,7 @@ public class Endpoints : CarterModule
     {
         AddUploadEmployeesFilesEndpoint(app);
         AddGetFileRecordsEndpoint(app);
+        AddGetEmployeesEndpoint(app);
     }
 
     public void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
@@ -62,7 +63,10 @@ public class Endpoints : CarterModule
             var records = await service.GetAllFileRecordsAsync();
             return Results.Ok(records);
         });
+    }
 
+    public void AddGetEmployeesEndpoint(IEndpointRouteBuilder app)
+    {
         app.MapGet(BackendRoutes.GETEMPLOYEES, async (
           [FromServices] IFileUploadHandler service) =>
         {
@@ -72,7 +76,6 @@ public class Endpoints : CarterModule
         });
 
     }
-
 
 }
 
