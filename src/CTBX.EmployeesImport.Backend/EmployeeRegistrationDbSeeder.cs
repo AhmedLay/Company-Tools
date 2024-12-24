@@ -15,34 +15,42 @@ public class EmployeeRegistrationDbSeeder : IHostedService
         _logger = logger;
         _configuration = configuration;
     }
-
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         var adminConnectionString = _configuration.GetConnectionString("ctbx-common-db")!.GuardAgainstNullOrEmpty("adminConnectionString");
-        try
-        {
+        //try
+        //{
             using var connection = new NpgsqlConnection(adminConnectionString);
             await connection.OpenAsync(cancellationToken);
 
+            await CreateEmployeesFileTable(connection, cancellationToken);
             await CreateEmployeesTable(connection, cancellationToken);
             _logger.LogInformation("Table created");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while initializing the database.");
-        }
+        //}
+        //catch (Exception ex)
+        //{
+        //    _logger.LogError(ex, "An error occurred while initializing the database.");
+        //}
     }
     public Task StopAsync(CancellationToken cancellationToken)
     {
         // Clean-up if needed
         return Task.CompletedTask;
     }
-    private static async Task CreateEmployeesTable(NpgsqlConnection connection, CancellationToken cancellationToken)
+    private static async Task CreateEmployeesFileTable(NpgsqlConnection connection, CancellationToken cancellationToken)
     {
         string createDbQuery = DbScripts.CreateEmployeesDbIfNotExists;
         using var command = new NpgsqlCommand(createDbQuery, connection);
         await command.ExecuteNonQueryAsync(cancellationToken);
     }
+    private static async Task CreateEmployeesTable(NpgsqlConnection connection, CancellationToken cancellationToken)
+    {
+        string createDbQuery = DbScripts.CreateEmployeesListDbIfNotExists;
+        using var command = new NpgsqlCommand(createDbQuery, connection);
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+
 }
 public static class DbScripts
 {
@@ -56,4 +64,17 @@ public static class DbScripts
                 
             );
         """;
+
+    public static string CreateEmployeesListDbIfNotExists => """
+            CREATE TABLE IF NOT EXISTS public.Employees (
+                Id SERIAL PRIMARY KEY,
+                Surname TEXT,
+                Name TEXT,
+                Email TEXT UNIQUE,
+                EmployeeID INTEGER,
+                AnualVacationDays INTEGER,
+                RemainingVacationDays INTEGER               
+            );
+        """;
+
 }

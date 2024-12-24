@@ -1,0 +1,25 @@
+@page "/employees-view"
+@using CTBX.EmployeesImport.Shared
+@inherits EmployeeViewBase
+
+<MudDataGrid Items="EmployeeList" Filterable="false" Groupable="false" Class="mt-4" QuickFilter="@_quickFilter">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Employees</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="ReloadData" />
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+        <PropertyColumn Property="x => x.ID" Title="ID" />
+        <PropertyColumn Property="x => x.Surname" Title="Firstname" />
+        <PropertyColumn Property="x => x.Name" Title="Name" />
+        <PropertyColumn Property="x => x.Email" Title="Email" />
+        <PropertyColumn Property="x => x.EmployeeID" Title="PersonalID" />
+        <PropertyColumn Property="x => x.AnualVacationDays" Title="Anual VacationDays" />
+        <PropertyColumn Property="x => x.RemainingVacationDays" Title="RemainingVacationDays" />
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager />
+    </PagerContent>
+</MudDataGrid>
