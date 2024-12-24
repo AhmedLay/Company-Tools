@@ -1,4 +1,5 @@
 using Aspire.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Projects;
@@ -42,8 +43,6 @@ var commonDb = postgresCommonDbResource
                     .AddDatabase("ctbx-common-db");
 
 
-
-
 var idpDb = postgresDbResource
             .AddDatabase("idpDb");
 
@@ -66,6 +65,7 @@ var backend = builder.AddProject<Projects.CTBX_Backend>("ctbx-backend")
                      .WithEnvironment("IdentityOptions__Audience", backendClientId)
                      .WithEnvironment("IdentityOptions__Authority", idpUrl)
                      .WithEnvironment("FileUploadOptions__UploadDirectory", "upload")
+                     //.WithEnvironment("SkillManagerOptions__ConnectionString", builder.Configuration.GetConnectionString("ctbx-common"))
                      .WithReference(eventsDb)
                      .WithReference(readDb)
                      .WithReference(commonDb) 
