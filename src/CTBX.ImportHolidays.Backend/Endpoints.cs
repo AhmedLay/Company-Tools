@@ -18,12 +18,15 @@ public class Endpoints : CarterModule
     {
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
+
         AddImportHolidaysFilesEndpoint(app);
+        AddGetFileRecordsEndpoint(app);
+        AddGetHolidaysEndpoint(app);
     }
 
     public void AddImportHolidaysFilesEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost(BackendRoutes.FILEUPLOAD, async (
+        app.MapPost(BackendRoutes.HOLIDAYSFILES, async (
             [FromServices] IFileUploadHandler service,
             [FromServices] IOptions<FileUploadOptions> options,
             [FromServices] IDateTimeProvider dateTimeProvider,
@@ -51,18 +54,9 @@ public class Endpoints : CarterModule
 
     }
 
-    public void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
+    public void AddGetHolidaysEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(BackendRoutes.GETFILERECORDS, async (
-            [FromServices] IFileUploadHandler service) =>
-        {
-            service.GuardAgainstNull(nameof(service));
-            var records = await service.GetAllFileRecordsAsync();
-            return Results.Ok(records);
-        });
-
-        app.MapGet(BackendRoutes.GETFILERECORDS, async(
-            [FromServices] IFileUploadHandler service) =>
+        app.MapGet(BackendRoutes.HOLIDAYS, async([FromServices] IFileUploadHandler service) =>
         {
             service.GuardAgainstNull(nameof(service));
             var records = await service.GetHolidaysDataAsync();
@@ -71,5 +65,15 @@ public class Endpoints : CarterModule
             
     }
 
+    public void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapGet(BackendRoutes.HOLIDAYSFILES, async (
+            [FromServices] IFileUploadHandler service) =>
+        {
+            service.GuardAgainstNull(nameof(service));
+            var records = await service.GetAllFileRecordsAsync();
+            return Results.Ok(records);
+        });
+    }
 }
 

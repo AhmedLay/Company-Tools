@@ -1,54 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Forms;
+﻿using CTBX.EmployeesImport.Shared;
 using CTBX.ImportHolidays.Shared;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Collections.Immutable;
 using System.Net.Http.Json;
-using CTBX.EmployeesImport.Shared;
 
-namespace CTBX.ImportHoliday.UI
+namespace CTBX.ImportHoliday.UI;
+
+public class ImportHolidaysService
 {
-    public class ImportHolidaysService
+    private readonly HttpClient _httpClient;
+    public ImportHolidaysService(HttpClient httpClient)
     {
-        private readonly HttpClient _httpClient;
-        public ImportHolidaysService(HttpClient httpClient)
+        _httpClient = httpClient;
+    }
+
+    public async Task UploadFile(IBrowserFile file)
+    {
+
+        using var stream = file.OpenReadStream(maxAllowedSize: 10_000_000);
+        using var memoryStream = new MemoryStream();
+
+        await stream.CopyToAsync(memoryStream);
+
+        var fileContent = memoryStream.ToArray();
+
+        var uploadedFile = new FileData
         {
-            _httpClient = httpClient;
-        }
+            FileName = file.Name,
+            FileContent = fileContent,
+        };
 
-        public async Task UploadFile(IBrowserFile file)
-        {
+        var result = await _httpClient.PostAsJsonAsync(BackendRoutes.HOLIDAYSFILES, uploadedFile);
+        result.EnsureSuccessStatusCode();
+    }
 
-            using var stream = file.OpenReadStream(maxAllowedSize: 10_000_000);
-            using var memoryStream = new MemoryStream();
+    public async Task<ImmutableList<FileRecord>> GetFileRecordsAsync()
+    {
+        var fileRecords = await _httpClient.GetFromJsonAsync<ImmutableList<FileRecord>>(BackendRoutes.HOLIDAYSFILES);
+        return fileRecords ?? [];
+    }
 
-            await stream.CopyToAsync(memoryStream);
-
-            var fileContent = memoryStream.ToArray();
-
-            var uploadedFile = new FileData
-            {
-                FileName = file.Name,
-                FileContent = fileContent,
-            };
-
-            var result = await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
-            result.EnsureSuccessStatusCode();
-        }
-
-        public async Task<List<FileRecord>> GetFileRecordsAsync()
-        {
-            var fileRecords = await _httpClient.GetFromJsonAsync<List<FileRecord>>(BackendRoutes.GETFILERECORDS);
-            return fileRecords ?? new List<FileRecord>();
-        }
-
-        public async Task<List<Holiday>> GetHolidaysAsync()
-        {
-            var employeeview = await _httpClient.GetFromJsonAsync<List<Holiday>>(BackendRoutes.GETEMPLOYEES);
-            return employeeview ?? new List<Holiday>();
-        }
+    public async Task<ImmutableList<Holiday>> GetHolidaysAsync()
+    {
+        var employeeview = await _httpClient.GetFromJsonAsync<ImmutableList<Holiday>>(BackendRoutes.HOLIDAYS);
+        return employeeview ?? [];
     }
 }

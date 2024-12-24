@@ -13,15 +13,18 @@ public class ImportHolidayFileBase : BaseMudComponent
     public required ImportHolidaysService Service { get; set; }
 
     [Inject]
-    public new required ISnackbar Snackbar { get; set; }
-    [Inject]
     public required IValidator<IBrowserFile> FileUploadValidator { get; set; }
 
-    public List<IBrowserFile> UploadedFiles { get; set; } = new();
-    public bool _visible = false;
-    public List<FileRecord> fileRecodsList = new();
-    public required string _width, _height;
-    public bool _open;
+    protected List<IBrowserFile> UploadedFiles { get; set; } = [];
+    protected bool Visible { get; set; }
+    protected List<FileRecord> FileRecodsList { get; set; } = [];
+
+    protected string Width { get; set; } = string.Empty;
+
+    protected string Height { get; set; } = string.Empty;
+
+
+    public bool _open; // fix the naming
 
     public void OpenDrawer()
     {
@@ -29,7 +32,7 @@ public class ImportHolidayFileBase : BaseMudComponent
     }
     protected async Task LoadFiles(IReadOnlyList<IBrowserFile> files)
     {
-        _visible = true;
+        Visible = true;
         foreach (var file in files)
         {
 
@@ -47,7 +50,7 @@ public class ImportHolidayFileBase : BaseMudComponent
             await NotifySuccess($"File {file.Name} is registered an is ready to be uploaded!");
 
         }
-        _visible = false;
+        Visible = false;
     }
     public void RemoveFile(IBrowserFile file)
     {
@@ -56,7 +59,7 @@ public class ImportHolidayFileBase : BaseMudComponent
 
     protected async Task SubmitFiles()
     {
-        _visible = true;
+        Visible = true;
         foreach (var file in UploadedFiles)
         {
             await OnHandleOperation(
@@ -67,7 +70,7 @@ public class ImportHolidayFileBase : BaseMudComponent
         }
         await ReloadData();
         UploadedFiles.Clear();
-        _visible = false;
+        Visible = false;
     }
 
     protected override async Task OnInitializedAsync()
@@ -77,9 +80,10 @@ public class ImportHolidayFileBase : BaseMudComponent
 
     public async Task ReloadData()
     {
-        _visible = true;
-        fileRecodsList = await Service.GetFileRecordsAsync() ?? new List<FileRecord>();
-        _visible = false;
+        Visible = true;
+        var result = await Service.GetFileRecordsAsync();
+        FileRecodsList = [.. result];
+        Visible = false;
     }
 
 }

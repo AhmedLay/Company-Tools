@@ -1,12 +1,11 @@
 ﻿
-namespace CTBX.EmployeesImport.Shared
+namespace CTBX.EmployeesImport.Shared;
+
+public class Holiday
 {
-    public class Holiday
-    {
-        public string Country { get; set; } = string.Empty;
-        public string State { get; set; } = string.Empty;
-        public string HolidayName { get; set; } = string.Empty;
-        public DateOnly HolidayDate { get; set; } 
-        public bool IsGlobal { get; set; }
-    }
+    public string Country { get; set; } = string.Empty;
+    public string State { get; set; } = string.Empty;
+    public string HolidayName { get; set; } = string.Empty;
+    public DateOnly HolidayDate { get; set; } 
+    public bool IsGlobal { get; set; }
 }

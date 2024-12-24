@@ -2,8 +2,7 @@
 {
     public class BackendRoutes
     {
-        public const string FILEUPLOAD = "api/ctbx/ImportHolidays";
-        public const string GETFILERECORDS = "api/ctbx/holidayrecords";
-        public const string GETEMPLOYEES = "api/ctbx/holidays";
+        public const string HOLIDAYSFILES = "api/ctbx/holidays/files";
+        public const string HOLIDAYS = "api/ctbx/holidays";        
     }
 }

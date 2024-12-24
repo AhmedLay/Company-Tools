@@ -54,7 +54,8 @@ namespace CTBX.ImportHolidays.UI
 
         public async Task ReloadData()
         {
-            HolidaysList = await Service.GetHolidaysAsync() ?? new List<Holiday>();
+            var result = await Service.GetHolidaysAsync();
+            HolidaysList = [.. result];
         }
 
     }
