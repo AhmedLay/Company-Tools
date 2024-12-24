@@ -1,37 +1,39 @@
 ﻿using Carter;
 using CTBX.CommonUtils;
-using CTBX.EmployeesImport.Shared;
-using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
-namespace CTBX.EmployeesImport.Backend;
+using CTBX.ImportHolidays.Shared;
+
+
+namespace CTBX.ImportHolidays.Backend;
 public class FileUploadOptions
 {
     public string UploadDirectory { get; set; } = string.Empty;
 }
+
 public class Endpoints : CarterModule
-{
+    {
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        AddUploadEmployeesFilesEndpoint(app);
+
+        AddImportHolidaysFilesEndpoint(app);
         AddGetFileRecordsEndpoint(app);
-        AddGetEmployeesEndpoint(app);
+        AddGetHolidaysEndpoint(app);
     }
 
-    public void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
+    public void AddImportHolidaysFilesEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost(BackendRoutes.FILEUPLOAD, async (
+        app.MapPost(BackendRoutes.HOLIDAYSFILES, async (
             [FromServices] IFileUploadHandler service,
             [FromServices] IOptions<FileUploadOptions> options,
             [FromServices] IDateTimeProvider dateTimeProvider,
-            [FromServices] FileImporter fileImporter,
             FileData file) =>
         {
             service.GuardAgainstNull(nameof(service));
-         
+
             var filename = file.FileName;
             var folderpath = options.GuardAgainstNull(nameof(options))
                                     .Value.UploadDirectory;
@@ -46,17 +48,26 @@ public class Endpoints : CarterModule
             await service.SaveFileToFolder(folderpath, file);
             await service.PersistToDb(fileRecord);
 
-
-
-            BackgroundJob.Enqueue(() => fileImporter.ImportEmployeeFromFile());
             return Results.Ok(new { Message = "File uploaded successfully" });
-            
+
         });
+
+    }
+
+    public void AddGetHolidaysEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapGet(BackendRoutes.HOLIDAYS, async([FromServices] IFileUploadHandler service) =>
+        {
+            service.GuardAgainstNull(nameof(service));
+            var records = await service.GetHolidaysDataAsync();
+            return Results.Ok(records);
+        });
+            
     }
 
     public void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(BackendRoutes.GETFILERECORDS, async (
+        app.MapGet(BackendRoutes.HOLIDAYSFILES, async (
             [FromServices] IFileUploadHandler service) =>
         {
             service.GuardAgainstNull(nameof(service));
@@ -64,18 +75,5 @@ public class Endpoints : CarterModule
             return Results.Ok(records);
         });
     }
-
-    public void AddGetEmployeesEndpoint(IEndpointRouteBuilder app)
-    {
-        app.MapGet(BackendRoutes.GETEMPLOYEES, async (
-          [FromServices] IFileUploadHandler service) =>
-        {
-            service.GuardAgainstNull(nameof(service));
-            var records = await service.GetEmployeesDataAsync();
-            return Results.Ok(records);
-        });
-
-    }
-
 }
 
