@@ -14,6 +14,9 @@ namespace CTBX.ImportHolidays.Backend;
             services.AddScoped<IFileUploadHandler, FileUploadService>();
             services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
             services.AddScoped<FluentValidator>();
+            services.AddScoped<FileImportService>();
+            services.AddScoped<FileImporter>();
+
 
     }
     }

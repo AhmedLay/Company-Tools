@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Forms;
 using CTBX.ImportHolidays.Shared;
 using System.Net.Http.Json;
+using CTBX.EmployeesImport.Shared;
 
 namespace CTBX.ImportHoliday.UI
 {
@@ -36,6 +37,18 @@ namespace CTBX.ImportHoliday.UI
 
             var result = await _httpClient.PostAsJsonAsync(BackendRoutes.FILEUPLOAD, uploadedFile);
             result.EnsureSuccessStatusCode();
+        }
+
+        public async Task<List<FileRecord>> GetFileRecordsAsync()
+        {
+            var fileRecords = await _httpClient.GetFromJsonAsync<List<FileRecord>>(BackendRoutes.GETFILERECORDS);
+            return fileRecords ?? new List<FileRecord>();
+        }
+
+        public async Task<List<Holiday>> GetHolidaysAsync()
+        {
+            var employeeview = await _httpClient.GetFromJsonAsync<List<Holiday>>(BackendRoutes.GETEMPLOYEES);
+            return employeeview ?? new List<Holiday>();
         }
     }
 }

@@ -51,5 +51,25 @@ public class Endpoints : CarterModule
 
     }
 
+    public void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapGet(BackendRoutes.GETFILERECORDS, async (
+            [FromServices] IFileUploadHandler service) =>
+        {
+            service.GuardAgainstNull(nameof(service));
+            var records = await service.GetAllFileRecordsAsync();
+            return Results.Ok(records);
+        });
+
+        app.MapGet(BackendRoutes.GETFILERECORDS, async(
+            [FromServices] IFileUploadHandler service) =>
+        {
+            service.GuardAgainstNull(nameof(service));
+            var records = await service.GetHolidaysDataAsync();
+            return Results.Ok(records);
+        });
+            
+    }
+
 }
 
