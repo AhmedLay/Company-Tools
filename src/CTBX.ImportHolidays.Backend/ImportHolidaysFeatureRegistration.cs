@@ -6,18 +6,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CTBX.ImportHolidays.Backend;
 
-    public static class ImportHolidaysFeatureRegistration
+public static class ImportHolidaysFeatureRegistration
+{
+    public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
     {
-        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddHostedService<ImportHolidaysDbSeeder>();
-            services.AddScoped<IFileUploadHandler, FileUploadService>();
-            services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
-            services.AddScoped<FluentValidator>();
-            services.AddScoped<FileImportService>();
-            services.AddScoped<FileImporter>();
+        services.AddScoped<HolidaysImporter>();
+        services.AddHostedService<ImportHolidaysDbSeeder>();
+        services.AddScoped<IFileUploadHandler, FileUploadService>();
+        services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
+        services.Configure<FileUploadOptions>(configuration.GetSection(nameof(HolidayImporterOptions)));
+        services.AddScoped<FluentValidator>();
+        services.AddScoped<FileImportService>();
+        services.AddScoped<FileImporter>();
 
 
     }
-    }
+}
 

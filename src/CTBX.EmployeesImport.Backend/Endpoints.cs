@@ -8,10 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 namespace CTBX.EmployeesImport.Backend;
-public class FileUploadOptions
-{
-    public string UploadDirectory { get; set; } = string.Empty;
-}
 public class Endpoints : CarterModule
 {
     public override void AddRoutes(IEndpointRouteBuilder app)
@@ -21,7 +17,7 @@ public class Endpoints : CarterModule
         AddGetEmployeesEndpoint(app);
     }
 
-    public void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
+    private void AddUploadEmployeesFilesEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.FILEUPLOAD, async (
             [FromServices] IFileUploadHandler service,
@@ -54,7 +50,7 @@ public class Endpoints : CarterModule
         });
     }
 
-    public void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
+    private void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(BackendRoutes.GETFILERECORDS, async (
             [FromServices] IFileUploadHandler service) =>
@@ -65,7 +61,7 @@ public class Endpoints : CarterModule
         });
     }
 
-    public void AddGetEmployeesEndpoint(IEndpointRouteBuilder app)
+    private void AddGetEmployeesEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(BackendRoutes.GETEMPLOYEES, async (
           [FromServices] IFileUploadHandler service) =>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using CTBX.ImportHolidays.Shared;
+using NCommandBus.Core.Abstractions;
 
 
 namespace CTBX.ImportHolidays.Backend;
@@ -27,30 +28,44 @@ public class Endpoints : CarterModule
     public void AddImportHolidaysFilesEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.HOLIDAYSFILES, async (
-            [FromServices] IFileUploadHandler service,
-            [FromServices] IOptions<FileUploadOptions> options,
-            [FromServices] IDateTimeProvider dateTimeProvider,
-            FileData file) =>
+            [FromServices] HolidaysImporter service,
+            FileData file,
+            CancellationToken cancellationToken) =>
         {
-            service.GuardAgainstNull(nameof(service));
+            var result = await service.Handle<OperationResult>(new UploadHolidayFile(file.FileName, file.FileContent),cancellationToken);
 
-            var filename = file.FileName;
-            var folderpath = options.GuardAgainstNull(nameof(options))
-                                    .Value.UploadDirectory;
-            var fileRecord = new FileRecord
+            return result switch
             {
-                FileName = filename,
-                FilePath = Path.Combine(folderpath, filename),
-                FileStatus = "Pending",
-                UploadDate = dateTimeProvider.UtcNow
+                _ when result.IsSuccess => Results.Ok(new { result.Message }),
+                _ when result.IsFailure => Results.BadRequest(new { result.Message }),
+                _ => Results.NotFound()
             };
-
-            await service.SaveFileToFolder(folderpath, file);
-            await service.PersistToDb(fileRecord);
-
-            return Results.Ok(new { Message = "File uploaded successfully" });
-
         });
+        //app.MapPost(BackendRoutes.HOLIDAYSFILES, async (
+        //    [FromServices] IFileUploadHandler service,
+        //    [FromServices] IOptions<FileUploadOptions> options,
+        //    [FromServices] IDateTimeProvider dateTimeProvider,
+        //    FileData file) =>
+        //{
+        //    service.GuardAgainstNull(nameof(service));
+
+        //    var filename = file.FileName;
+        //    var folderpath = options.GuardAgainstNull(nameof(options))
+        //                            .Value.UploadDirectory;
+        //    var fileRecord = new FileRecord
+        //    {
+        //        FileName = filename,
+        //        FilePath = Path.Combine(folderpath, filename),
+        //        FileStatus = "Pending",
+        //        UploadDate = dateTimeProvider.UtcNow
+        //    };
+
+        //    await service.SaveFileToFolder(folderpath, file);
+        //    await service.PersistToDb(fileRecord);
+
+        //    return Results.Ok(new { Message = "File uploaded successfully" });
+
+        //});
 
     }
 
