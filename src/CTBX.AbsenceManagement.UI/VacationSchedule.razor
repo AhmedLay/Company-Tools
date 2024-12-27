@@ -20,8 +20,12 @@
                     <TemplateColumn CellClass="d-flex justify-end">
                         <CellTemplate>
                             <MudStack Row>
-                                <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Warning">Edit Request</MudButton>
-                                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Success">Send Request</MudButton>
+                                <MudMenu Icon="@Icons.Material.Filled.MoreVert"
+                                         AriaLabel="Open user menu">
+                                    <MudMenuItem>Profile</MudMenuItem>
+                                    <MudMenuItem>My account</MudMenuItem>
+                                    <MudMenuItem>Logout</MudMenuItem>
+                                </MudMenu>
                             </MudStack>
                         </CellTemplate>
                     </TemplateColumn>
