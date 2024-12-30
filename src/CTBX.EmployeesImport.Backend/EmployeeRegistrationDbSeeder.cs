@@ -18,23 +18,17 @@ public class EmployeeRegistrationDbSeeder : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         var adminConnectionString = _configuration.GetConnectionString("ctbx-common-db")!.GuardAgainstNullOrEmpty("adminConnectionString");
-        //try
-        //{
+
             using var connection = new NpgsqlConnection(adminConnectionString);
             await connection.OpenAsync(cancellationToken);
 
             await CreateEmployeesFileTable(connection, cancellationToken);
             await CreateEmployeesTable(connection, cancellationToken);
             _logger.LogInformation("Table created");
-        //}
-        //catch (Exception ex)
-        //{
-        //    _logger.LogError(ex, "An error occurred while initializing the database.");
-        //}
+
     }
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        // Clean-up if needed
         return Task.CompletedTask;
     }
     private static async Task CreateEmployeesFileTable(NpgsqlConnection connection, CancellationToken cancellationToken)

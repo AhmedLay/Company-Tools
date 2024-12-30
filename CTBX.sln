@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.AbsenceManagement.UI",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Feature", "Feature", "{9FA5B9C1-C402-4C8F-A804-6D5BD55DDF91}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8D240F83-9F9B-4771-9474-C87C05F3186B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common (2)", "Common (2)", "{8D240F83-9F9B-4771-9474-C87C05F3186B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.CommonUtils", "src\CTBX.CommonUtils\CTBX.CommonUtils.csproj", "{114C35D8-2654-424D-B199-C30008DB9746}"
 EndProject
@@ -42,6 +42,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.EmployeesImport.Shared", "src\CTBX.EmployeesImport.Shared\CTBX.EmployeesImport.Shared.csproj", "{C4AC1C4D-31AE-4A11-97EB-CA1C8B5FB7FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.EmployeesImport.Backend", "src\CTBX.EmployeesImport.Backend\CTBX.EmployeesImport.Backend.csproj", "{CAA47225-AFC6-4BB6-B081-2747D3F6E182}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.AbsenceManagement.Shared", "src\CTBX.AbsenceManagement.Shared\CTBX.AbsenceManagement.Shared.csproj", "{294994D7-DDEA-4FA0-986C-2A74BBCF1DD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,10 @@ Global
 		{CAA47225-AFC6-4BB6-B081-2747D3F6E182}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAA47225-AFC6-4BB6-B081-2747D3F6E182}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAA47225-AFC6-4BB6-B081-2747D3F6E182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{294994D7-DDEA-4FA0-986C-2A74BBCF1DD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{294994D7-DDEA-4FA0-986C-2A74BBCF1DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{294994D7-DDEA-4FA0-986C-2A74BBCF1DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{294994D7-DDEA-4FA0-986C-2A74BBCF1DD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +120,7 @@ Global
 		{0FD3A5D5-1DE1-4FF4-9DDB-E9C77CCFF944} = {9FA5B9C1-C402-4C8F-A804-6D5BD55DDF91}
 		{C4AC1C4D-31AE-4A11-97EB-CA1C8B5FB7FA} = {9FA5B9C1-C402-4C8F-A804-6D5BD55DDF91}
 		{CAA47225-AFC6-4BB6-B081-2747D3F6E182} = {9FA5B9C1-C402-4C8F-A804-6D5BD55DDF91}
+		{294994D7-DDEA-4FA0-986C-2A74BBCF1DD4} = {A231E683-AE15-4E58-8C55-391AC12E5916}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D9A5A77E-C524-4362-8482-9F518DC4C82F}

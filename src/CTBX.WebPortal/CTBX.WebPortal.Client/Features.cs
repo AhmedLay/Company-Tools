@@ -10,6 +10,6 @@ public static class Features
     => [
         typeof(Program).Assembly,
         typeof(EmployeesImportRegistrations).Assembly,
-        typeof(VacationSchedule).Assembly
+        typeof(AbsenceManagementRegistration).Assembly
        ];
 }

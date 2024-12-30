@@ -37,17 +37,18 @@
                     <MudCardContent Class="drawer-card-content">
                         <MudText Align="Align.Center">Vacation Request</MudText>
                         <MudForm Spacing="2" Class="form-container">
-                            <MudTextField T="string" Label="Draftname" @bind-Text="Draftname" />
-                            <MudDatePicker Label="From" />
-                            <MudDatePicker Label="To" />
-                            <MudTextField T="string" Label="Comment" />
-                            <MudTextField T="int" Label="Current Remaining Vacation Days" Value="10" ReadOnly="true" Disabled="true" />
-                            <MudRadioGroup @bind-Value="Dense_Radio" Class="radio-group">
-                                <MudRadio Value="true" Color="Color.Primary" Dense="true">Vacation</MudRadio>
-                                <MudRadio Value="false" Color="Color.Secondary" Dense="false">Sick Leave</MudRadio>
-                            </MudRadioGroup>
+                            <MudTextField T="string" Label="Draftname" @bind-Text="CurrentRequest.Draftname" />
+                            <MudTextField T="int" Label="EmployeeID" @bind-value="CurrentRequest.EmployeeId" />
+                            <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
+                            <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
+                            <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
+                            <MudSelect T="bool" Label="Request Type" @bind-Value="CurrentRequest.RequestType" Required="true" Class="radio-group">
+                                <MudSelectItem Value="true">Vacation</MudSelectItem>
+                                <MudSelectItem Value="false">Sick Leave</MudSelectItem>
+                            </MudSelect>
                             <MudButton OnClick="SaveDraft" Variant="Variant.Outlined" Color="Color.Secondary" FullWidth="true">Save Draft</MudButton>
                             <MudButton OnClick="SubmitRequest" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Submit Request</MudButton>
+
                         </MudForm>
                     </MudCardContent>
                 </MudCard>

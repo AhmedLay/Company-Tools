@@ -2,13 +2,13 @@
 
 namespace MinimalApiArchitecture.Application
 {
-    public class VacationScheduleAggregate : Aggregate<VacationState>
+    public class AbsenceManagementAggregate : Aggregate<AbsenceState>
     {
         public void ScheduleVacation(int id,DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledat)
         {
             EnsureDoesntExist();
             Apply(
-                new VacationSchedule
+                new VacationScheduled
                 {
                     EmployeeID = id,
                     From = from,
@@ -77,7 +77,7 @@ namespace MinimalApiArchitecture.Application
 
 
 
-    public record VacationSchedule
+    public record VacationScheduled
     {
         public int EmployeeID { get; set; }
         public DateTimeOffset From { get; set; }

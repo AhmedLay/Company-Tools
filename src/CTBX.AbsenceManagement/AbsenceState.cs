@@ -7,7 +7,7 @@ using Eventuous;
 
 namespace MinimalApiArchitecture.Application
 {
-    public record VacationState : State<VacationState>
+    public record AbsenceState : State<AbsenceState>
     {
         public string Title { get; set; } = string.Empty;
     }

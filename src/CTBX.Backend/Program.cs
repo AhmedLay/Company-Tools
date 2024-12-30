@@ -1,5 +1,6 @@
 using Carter;
 using CTBX.Backend;
+using Eventuous.Postgresql.Subscriptions;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Hellang.Middleware.ProblemDetails;
@@ -30,8 +31,22 @@ builder.AddServiceDefaults();
 builder.Services.AddCors(opts=>opts.AddPolicy("all",p=> p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
 builder.Services.RegisterJWTBearerAuthNService(builder.Configuration);
 builder.Services.RegisterEventuousStores(builder.Configuration);
+builder.Services.AddSubscription<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions>(
+    "AbsenceManagementSubscription",
+    subscriptionBuilder => AbsenceManagementFeatureRegistration.RegisterSubscriptions(subscriptionBuilder)
+);
 EmployeesImportFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
-AbsenceManagementFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
+AbsenceManagementFeatureRegistration.RegisterServices(
+    builder.Services,
+    builder.Configuration,
+    options =>
+    {
+        options.ConnectionString = builder.Configuration.GetConnectionString("ctbx-events-db")
+    ?? "DefaultConnectionString";
+        options.Schema = "absencemanagement"; 
+        options.InitializeDatabase = true;  
+    }
+);
 CommonUtilRegistration.RegisterServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();

@@ -13,6 +13,14 @@
     <PackageReference Include="Eventuous.Application" Version="0.15.1" />
     <PackageReference Include="Eventuous.Postgresql" Version="0.15.1" />
     <PackageReference Include="Eventuous.Projections.MongoDB" Version="0.15.1" />
+    <PackageReference Include="Eventuous.Extensions.DependencyInjection" Version="0.15.1" />
+    <PackageReference Include="Npgsql" Version="9.0.2" />
 
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CTBX.AbsenceManagement.Shared\CTBX.AbsenceManagement.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="yaep" Version="2.0.9" />
   </ItemGroup>
 </Project>
