@@ -24,7 +24,6 @@ public class AbsenceManagementEndpoints : CarterModule
         CancellationToken token,
         [FromServices] AbsenceManagementApplicationService service) =>
         {
-            Console.WriteLine("test");
             var result = await service.Handle(command, token);
             return result.Success ? Results.Ok("Sucess") : Results.BadRequest("Something went wrong");
             

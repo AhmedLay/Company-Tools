@@ -76,7 +76,7 @@ namespace MinimalApiArchitecture.Application
     }
 
 
-
+    [EventType("V1.VacationScheduled")]
     public record VacationScheduled
     {
         public int EmployeeID { get; set; }
@@ -85,7 +85,7 @@ namespace MinimalApiArchitecture.Application
         public string Comment { get; set; } = string.Empty;
         public DateTimeOffset ScheduledAt { get; set; }
     }
-
+    [EventType("V1.VacationRequest")]
     public record VacationRequest
     {
         public int EmployeeID { get; set; } 
@@ -95,14 +95,14 @@ namespace MinimalApiArchitecture.Application
         public string Comment { get; set; } = string.Empty;
         public DateTimeOffset ScheduledAt { get; set; }
     }
-
+    [EventType("V1.VacationApproved")]
     public record VacationApproved
     {
         public int SupervisorID { get; set; }
         public DateTimeOffset ApprovedAt { get; set; }
 
     }
-
+    [EventType("V1.VacationRejected")]
     public record VacationRejected
     {
         public int SupervisorID { get; set; }
@@ -111,7 +111,7 @@ namespace MinimalApiArchitecture.Application
         public string Reason { get; set; } = string.Empty;
 
     }
-
+    [EventType("V1.VacationAbondon")]
     public record VacationAbondon
     {
         public int EmployeeID { get; set; }

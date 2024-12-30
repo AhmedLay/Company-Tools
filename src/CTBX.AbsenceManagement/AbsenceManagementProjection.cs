@@ -9,46 +9,13 @@ using Npgsql;
 using System.Reflection.Metadata;
 using System;
 
-public class AbsenceManagementProjection : PostgresProjector
+public class AbsenceManagementProjection : MongoProjector<VacationDocument>
 {
-    readonly ILogger<AbsenceManagementProjection> _logger;
-    public AbsenceManagementProjection(NpgsqlDataSource dataSource, ILogger<AbsenceManagementProjection> logger, ITypeMapper? mapper = null) : base(dataSource, mapper)
+    public AbsenceManagementProjection(IMongoDatabase client) : base(client)
     {
-        _logger = logger;
-        On<VacationScheduled>(Handle);
+        
     }
 
-    NpgsqlCommand Handle(NpgsqlConnection connection, MessageConsumeContext<VacationScheduled> consumeContext)
-    {
-        var sql = @"
-        INSERT INTO absencemanagement.vacationrequests(
-        id,
-        employeeid,
-        from,
-        to,
-        comment,
-        scheduledat)
-        VALUES(
-        @id,
-        @employeeid,
-        @from,
-        @to,
-        @comment,
-        @scheduledat);";
-
-        var @event = consumeContext.Message;
-        NpgsqlParameter[] parameters =
-        {
-            new NpgsqlParameter("id",consumeContext.Stream.GetId()),
-            new NpgsqlParameter("employeeid", @event.EmployeeID),
-            new NpgsqlParameter("from", @event.From),
-            new NpgsqlParameter("to", @event.To),
-            new NpgsqlParameter("comment", @event.Comment),
-            new NpgsqlParameter("scheduledat", @event.ScheduledAt),
-        };
-        _logger.LogInformation("Projection handler registered SQL: {0}", sql);
-        return Project(connection, sql, parameters);
-    }
 }
 
 

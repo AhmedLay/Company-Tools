@@ -1,35 +1,47 @@
 ﻿using DnsClient.Internal;
 using Eventuous.Postgresql;
 using Eventuous.Postgresql.Subscriptions;
+using Eventuous.Projections.MongoDB;
 using Eventuous.Subscriptions.Registrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
-using MicrosoftLoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 namespace MinimalApiArchitecture.Application;
 public static class AbsenceManagementFeatureRegistration
 {
-    public static void RegisterServices(this IServiceCollection services, IConfiguration configuration, Action<PostgresStoreOptions> configure)
+    public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var options = new PostgresStoreOptions();
-        services.AddHostedService<AbsenceManagementDataSeeder>();
-        services.Configure<PostgresCheckpointStoreOptions>(opt => opt.Schema = options.Schema);
-        services.AddEventuousPostgres(options.ConnectionString, options.Schema, options.InitializeDatabase);
+        var connectionString = configuration.GetConnectionString("ctbx-events-db")!.GuardAgainstNullOrEmpty("connectionstring");
+        services.AddEventuousPostgres(connectionString, "ctbx",true);
         services.AddEventStore<PostgresStore>();
-        services.AddCheckpointStore(sp => new PostgresCheckpointStore(
-            sp.GetRequiredService<NpgsqlDataSource>(),
-            options.Schema,
-            sp.GetRequiredService<MicrosoftLoggerFactory>() 
-));
-
         services.AddCommandService<AbsenceManagementApplicationService, AbsenceState>();
+        services.AddCheckpointStore<MongoCheckpointStore>();
+        services.AddSubscription<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions>(
+            "AbsenceProjections",
+            builder => builder
+                .AddEventHandler<AbsenceManagementProjection>()
+                );
     }
     public static SubscriptionBuilder RegisterSubscriptions(this SubscriptionBuilder<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions> builder)
     {
-        builder
-            .AddEventHandler<AbsenceManagementProjection>(); 
+        ////builder
+        ////    .AddEventHandler<AbsenceManagementProjection>();
+        //builder.AddSubscription<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions>(
+        //"TodoProjections",
+        //builder =>
+        //{
+        //    builder
+        //    .Configure(ops =>
+        //    {
+        //        ops.Schema = options.Schema; // is must have otherwise the schema will not be sets
+        //        ops.ThrowOnError = true;
+        //    })
+        //   .UseCheckpointStore<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions, PostgresCheckpointStore>()
+        //   .AddEventHandler<TodoProjection>();
+        //});
         return builder;
     }
+
 }
 
 
