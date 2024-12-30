@@ -12,7 +12,7 @@ public static class ImportHolidaysFeatureRegistration
     {
         services.AddScoped<HolidaysImporter>();
         services.AddHostedService<ImportHolidaysDbSeeder>();
-        services.AddScoped<IFileUploadHandler, FileUploadService>();
+        //services.AddScoped<IFileUploadHandler, FileUploadService>();
         services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
         services.Configure<FileUploadOptions>(configuration.GetSection(nameof(HolidayImporterOptions)));
         services.AddScoped<FluentValidator>();

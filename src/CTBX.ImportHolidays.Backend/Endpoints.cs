@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Options;
 using CTBX.ImportHolidays.Shared;
 using NCommandBus.Core.Abstractions;
 
@@ -25,7 +24,7 @@ public class Endpoints : CarterModule
         AddGetHolidaysEndpoint(app);
     }
 
-    public void AddImportHolidaysFilesEndpoint(IEndpointRouteBuilder app)
+    private void AddImportHolidaysFilesEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.HOLIDAYSFILES, async (
             [FromServices] HolidaysImporter service,
@@ -69,25 +68,52 @@ public class Endpoints : CarterModule
 
     }
 
-    public void AddGetHolidaysEndpoint(IEndpointRouteBuilder app)
+
+
+    private void AddGetHolidaysEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(BackendRoutes.HOLIDAYS, async([FromServices] IFileUploadHandler service) =>
+        app.MapGet(BackendRoutes.HOLIDAYS, async (
+            [FromServices] FileUploadCommandHandler service,
+            CancellationToken cancellationToken) =>
         {
-            service.GuardAgainstNull(nameof(service));
-            var records = await service.GetHolidaysDataAsync();
-            return Results.Ok(records);
+            var result = await service.Handle(new GetHolidaysDataQuery(), cancellationToken);
+
+            return result switch
+            {
+                _ when result.IsSuccess => Results.Ok(result.Value),
+                _ when result.IsFailure => Results.BadRequest(new { result.ErrorMessage }),
+                _ => Results.NotFound()
+            };
         });
-            
     }
 
-    public void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
+
+
+    //private void AddGetHolidaysEndpoint(IEndpointRouteBuilder app)
+    //{
+    //    app.MapGet(BackendRoutes.HOLIDAYS, async([FromServices] IFileUploadHandler service) =>
+    //    {
+    //        service.GuardAgainstNull(nameof(service));
+    //        var records = await service.GetHolidaysDataAsync();
+    //        return Results.Ok(records);
+    //    });
+
+    //}
+
+    private void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(BackendRoutes.HOLIDAYSFILES, async (
-            [FromServices] IFileUploadHandler service) =>
+        app.MapGet(BackendRoutes.HOLIDAY, async (
+            [FromServices] FileUploadCommandHandler service,
+            CancellationToken cancellationToken) =>
         {
-            service.GuardAgainstNull(nameof(service));
-            var records = await service.GetAllFileRecordsAsync();
-            return Results.Ok(records);
+            var result = await service.Handle(new GetAllFileRecordsQuery(), cancellationToken);
+
+            return result switch
+            {
+                _ when result.IsSuccess => Results.Ok(result.Value),
+                _ when result.IsFailure => Results.BadRequest(new { result.ErrorMessage }),
+                _ => Results.NotFound()
+            };
         });
     }
 }

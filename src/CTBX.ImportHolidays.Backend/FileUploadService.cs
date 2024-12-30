@@ -3,63 +3,161 @@ using Npgsql;
 using Microsoft.Extensions.Configuration;
 using CTBX.ImportHolidays.Shared;
 using CTBX.EmployeesImport.Shared;
+using NCommandBus.Core.Abstractions;
+using YAEP.Utils;
 
-namespace CTBX.ImportHolidays.Backend
+namespace CTBX.ImportHolidays.Backend;
+
+public record PersistFileRecordCommand(FileRecord FileRecord);
+public record SaveFileToFolderCommand(string FolderPath, FileData File);
+public record GetAllFileRecordsQuery();
+public record GetHolidaysDataQuery();
+
+public class FileUploadCommandHandler : CommandBusBase
 {
-    public class FileUploadService : IFileUploadHandler
+    private readonly string _connectionString;
+
+    public FileUploadCommandHandler(IConfiguration configuration)
     {
-        private readonly string _connectionString;
+        _connectionString = configuration.GetConnectionString("ctbx-common-db")!;
 
-        public FileUploadService(IConfiguration configuration)
-        {
-            _connectionString = configuration.GetConnectionString("ctbx-common-db")!;
-        }
+     
+        On<PersistFileRecordCommand, OperationResult>(HandlePersistFileRecord);
+        On<SaveFileToFolderCommand, OperationResult<string>>(HandleSaveFileToFolder);
+        On<GetAllFileRecordsQuery, OperationResult<List<FileRecord>>>(HandleGetAllFileRecords);
+        On<GetHolidaysDataQuery, OperationResult<List<Holiday>>>(HandleGetHolidaysData);
+    }
 
-        public async Task PersistToDb(FileRecord fileRecord)
+    private async ValueTask<OperationResult> HandlePersistFileRecord(PersistFileRecordCommand command, CancellationToken cancellationToken)
+    {
+        try
         {
-            var insertQuery = "INSERT INTO holidayimports (FileName, FilePath, FileStatus,UploadDate) VALUES (@FileName, @FilePath, @FileStatus,@UploadDate)";
+            const string insertQuery = "INSERT INTO holidayimports (FileName, FilePath, FileStatus, UploadDate) VALUES (@FileName, @FilePath, @FileStatus, @UploadDate)";
 
             await using var connection = new NpgsqlConnection(_connectionString);
-            await connection.ExecuteAsync(insertQuery, fileRecord);
+            await connection.ExecuteAsync(insertQuery, command.FileRecord);
+
+            return OperationResult.Success("File record persisted successfully.");
         }
-
-        public async Task<string> SaveFileToFolder(string folderPath, FileData file)
+        catch (Exception ex)
         {
-            // Ensure the folder exists
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
-
-            // Set the name of the file and create the final path
-            var fileName = file.FileName!.GuardAgainstNullOrEmpty("fileName");
-            var filePath = Path.Combine(folderPath, fileName);
-
-
-
-            if (file.FileContent == null || file.FileContent.Length == 0)
-            {
-                throw new ArgumentException("The uploaded file is empty.");
-            }
-            await File.WriteAllBytesAsync(filePath, file.FileContent);
-            return filePath;
-        }
-
-        public async Task<List<FileRecord>> GetAllFileRecordsAsync()
-        {
-            await using var connection = new NpgsqlConnection(_connectionString);
-            const string query = "SELECT Id, FileName, FilePath, FileStatus, UploadDate FROM public.fileimports";
-            var result = await connection.QueryAsync<FileRecord>(query);
-            return result.ToList();
-        }
-
-        public async Task<List<Holiday>> GetHolidaysDataAsync()
-        {
-            await using var connection = new NpgsqlConnection(_connectionString);
-            const string query = "SELECT Country, State, HolidayName, HolidayDate, IsGlobalFROM public.Holidays";
-            var result = await connection.QueryAsync<Holiday>(query);
-            return result.ToList();
+            return OperationResult.Failure($"Failed to persist file record: {ex.Message}");
         }
     }
 
+    private async ValueTask<OperationResult<string>> HandleSaveFileToFolder(SaveFileToFolderCommand command, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // Ensure the folder exists
+            if (!Directory.Exists(command.FolderPath))
+            {
+                Directory.CreateDirectory(command.FolderPath);
+            }
+
+            // Set the file name and create the final path
+            var fileName = command.File.FileName.GuardAgainstNullOrEmpty("fileName");
+            var filePath = Path.Combine(command.FolderPath, fileName);
+
+            if (command.File.FileContent == null || command.File.FileContent.Length == 0)
+            {
+                throw new ArgumentException("The uploaded file is empty.");
+            }
+
+            await File.WriteAllBytesAsync(filePath, command.File.FileContent, cancellationToken);
+            return OperationResult<string>.Success(filePath);
+        }
+        catch (Exception ex)
+        {
+            return OperationResult<string>.Failure($"Failed to save file to folder: {ex.Message}");
+        }
+    }
+
+    private async ValueTask<OperationResult<List<FileRecord>>> HandleGetAllFileRecords(GetAllFileRecordsQuery query, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await using var connection = new NpgsqlConnection(_connectionString);
+            const string selectQuery = "SELECT Id, FileName, FilePath, FileStatus, UploadDate FROM public.fileimports";
+            var result = await connection.QueryAsync<FileRecord>(selectQuery);
+
+            return OperationResult<List<FileRecord>>.Success(result.ToList());
+        }
+        catch (Exception ex)
+        {
+            return OperationResult<List<FileRecord>>.Failure($"Failed to retrieve file records: {ex.Message}");
+        }
+    }
+
+    private async ValueTask<OperationResult<List<Holiday>>> HandleGetHolidaysData(GetHolidaysDataQuery query, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await using var connection = new NpgsqlConnection(_connectionString);
+            const string selectQuery = "SELECT Country, State, HolidayName, HolidayDate, IsGlobal FROM public.Holidays";
+            var result = await connection.QueryAsync<Holiday>(selectQuery);
+
+            return OperationResult<List<Holiday>>.Success(result.ToList());
+        }
+        catch (Exception ex)
+        {
+            return OperationResult<List<Holiday>>.Failure($"Failed to retrieve holiday data: {ex.Message}");
+        }
+    }
 }
+
+//public class FileUploadService : IFileUploadHandler
+//{
+//    private readonly string _connectionString;
+
+//    public FileUploadService(IConfiguration configuration)
+//    {
+//        _connectionString = configuration.GetConnectionString("ctbx-common-db")!;
+//    }
+
+//    public async Task PersistToDb(FileRecord fileRecord)
+//    {
+//        var insertQuery = "INSERT INTO holidayimports (FileName, FilePath, FileStatus,UploadDate) VALUES (@FileName, @FilePath, @FileStatus,@UploadDate)";
+
+//        await using var connection = new NpgsqlConnection(_connectionString);
+//        await connection.ExecuteAsync(insertQuery, fileRecord);
+//    }
+
+//    public async Task<string> SaveFileToFolder(string folderPath, FileData file)
+//    {
+//        // Ensure the folder exists
+//        if (!Directory.Exists(folderPath))
+//        {
+//            Directory.CreateDirectory(folderPath);
+//        }
+
+//        // Set the name of the file and create the final path
+//        var fileName = file.FileName!.GuardAgainstNullOrEmpty("fileName");
+//        var filePath = Path.Combine(folderPath, fileName);
+
+
+
+//        if (file.FileContent == null || file.FileContent.Length == 0)
+//        {
+//            throw new ArgumentException("The uploaded file is empty.");
+//        }
+//        await File.WriteAllBytesAsync(filePath, file.FileContent);
+//        return filePath;
+//    }
+
+//    public async Task<List<FileRecord>> GetAllFileRecordsAsync()
+//    {
+//        await using var connection = new NpgsqlConnection(_connectionString);
+//        const string query = "SELECT Id, FileName, FilePath, FileStatus, UploadDate FROM public.fileimports";
+//        var result = await connection.QueryAsync<FileRecord>(query);
+//        return result.ToList();
+//    }
+
+//    public async Task<List<Holiday>> GetHolidaysDataAsync()
+//    {
+//        await using var connection = new NpgsqlConnection(_connectionString);
+//        const string query = "SELECT Country, State, HolidayName, HolidayDate, IsGlobalFROM public.Holidays";
+//        var result = await connection.QueryAsync<Holiday>(query);
+//        return result.ToList();
+//    }
+//}
