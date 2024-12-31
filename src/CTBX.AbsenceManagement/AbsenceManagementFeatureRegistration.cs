@@ -14,6 +14,7 @@ public static class AbsenceManagementFeatureRegistration
         var connectionString = configuration.GetConnectionString("ctbx-events-db")!.GuardAgainstNullOrEmpty("connectionstring");
         services.AddEventuousPostgres(connectionString, "ctbx",true);
         services.AddEventStore<PostgresStore>();
+        services.AddScoped<AbsenceManagementService>();
         services.AddCommandService<AbsenceManagementApplicationService, AbsenceState>();
         services.AddCheckpointStore<MongoCheckpointStore>();
         services.AddSubscription<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions>(

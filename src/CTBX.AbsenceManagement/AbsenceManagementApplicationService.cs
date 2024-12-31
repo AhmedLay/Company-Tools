@@ -10,7 +10,7 @@ namespace MinimalApiArchitecture.Application
             On<VacationScheduleCommand>()
                 .InState(ExpectedState.New)
                 .GetId(cmd => new AbsenceId(cmd.Id))
-                .Act((aggregate, cmd) => aggregate.ScheduleVacation(cmd.EmployeeID, cmd.From, cmd.To, cmd.Comment, cmd.ScheduledAt));
+                .Act((aggregate, cmd) => aggregate.ScheduleVacation(cmd.EmployeeId, cmd.From, cmd.To, cmd.Comment, cmd.ScheduledAt));
         }
     }
 

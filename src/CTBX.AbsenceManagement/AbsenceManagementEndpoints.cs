@@ -1,4 +1,5 @@
 ﻿using Carter;
+using DnsClient.Protocol;
 using Eventuous;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +15,6 @@ public class AbsenceManagementEndpoints : CarterModule
     {
         app.MapGet("/absences", () => "Absence list here");
         AddVacationsEndpoints(app);
-        AddSickLeavesEndpoints(app);
     }
 
     private static void AddVacationsEndpoints(IEndpointRouteBuilder app)
@@ -25,12 +25,16 @@ public class AbsenceManagementEndpoints : CarterModule
         [FromServices] AbsenceManagementApplicationService service) =>
         {
             var result = await service.Handle(command, token);
-            return result.Success ? Results.Ok("Sucess") : Results.BadRequest("Something went wrong");
-            
+            return Results.Ok(result);
+
         });
-    }
-    private static void AddSickLeavesEndpoints(IEndpointRouteBuilder app)
-    {
-        app.MapPost("/sick-leaves/", () => "Hello from Carter!");
+
+        app.MapGet(BackendRoutes.VacationDatagridURL, async (
+        [FromServices] AbsenceManagementService service) =>
+        {
+            var vacationSchedules = await service.GetAllVacationSchedules();
+            return Results.Ok(vacationSchedules);
+        });
+
     }
 }

@@ -29,8 +29,4 @@
     <ProjectReference Include="..\CTBX.ServiceDefaults\CTBX.ServiceDefaults.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="upload\" />
-  </ItemGroup>
-
 </Project>
