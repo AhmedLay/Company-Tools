@@ -27,6 +27,7 @@ namespace CTBX.AbsenceManagement.UI
             }
             var from = new DateTimeOffset(CurrentRequest.From.Value, TimeSpan.Zero);
             var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
+            //later timspan configuable ? 
             var scheduledat = DateTimeOffset.UtcNow;
 
             if (CurrentRequest.RequestType == true)

@@ -24,21 +24,6 @@ public static class AbsenceManagementFeatureRegistration
     }
     public static SubscriptionBuilder RegisterSubscriptions(this SubscriptionBuilder<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions> builder)
     {
-        ////builder
-        ////    .AddEventHandler<AbsenceManagementProjection>();
-        //builder.AddSubscription<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions>(
-        //"TodoProjections",
-        //builder =>
-        //{
-        //    builder
-        //    .Configure(ops =>
-        //    {
-        //        ops.Schema = options.Schema; // is must have otherwise the schema will not be sets
-        //        ops.ThrowOnError = true;
-        //    })
-        //   .UseCheckpointStore<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions, PostgresCheckpointStore>()
-        //   .AddEventHandler<TodoProjection>();
-        //});
         return builder;
     }
 
