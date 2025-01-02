@@ -76,12 +76,12 @@ public class Endpoints : CarterModule
             [FromServices] FileUploadCommandHandler service,
             CancellationToken cancellationToken) =>
         {
-            var result = await service.Handle(new GetHolidaysDataQuery(), cancellationToken);
+            var result = await service.Handle<OperationResult>(new GetHolidaysDataQuery(), cancellationToken);
 
             return result switch
             {
-                _ when result.IsSuccess => Results.Ok(result.Value),
-                _ when result.IsFailure => Results.BadRequest(new { result.ErrorMessage }),
+                _ when result.IsSuccess => Results.Ok(new { result.Message }),
+                _ when result.IsFailure => Results.BadRequest(new { result.Message }),
                 _ => Results.NotFound()
             };
         });
@@ -102,16 +102,16 @@ public class Endpoints : CarterModule
 
     private void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(BackendRoutes.HOLIDAY, async (
+        app.MapGet(BackendRoutes.HOLIDAYS, async (
             [FromServices] FileUploadCommandHandler service,
             CancellationToken cancellationToken) =>
         {
-            var result = await service.Handle(new GetAllFileRecordsQuery(), cancellationToken);
+            var result = await service.Handle<OperationResult>(new GetAllFileRecordsQuery(), cancellationToken);
 
             return result switch
             {
-                _ when result.IsSuccess => Results.Ok(result.Value),
-                _ when result.IsFailure => Results.BadRequest(new { result.ErrorMessage }),
+                _ when result.IsSuccess => Results.Ok(new { result.Message }),
+                _ when result.IsFailure => Results.BadRequest(new { result.Message }),
                 _ => Results.NotFound()
             };
         });

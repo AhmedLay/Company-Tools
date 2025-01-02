@@ -25,44 +25,20 @@ public class FileImporter
         {
             _logger.LogDebug("Processing file {FileName}.", file.FileName);
 
-            // Update file status to "In Progress"
-            var updateStatusResult = await _fileImportService.Handle(new UpdateFileStatus(file.Id, "In Progress"), cancellationToken);
-            if (!updateStatusResult.IsSuccess)
-            {
-                _logger.LogWarning("Failed to update status to 'In Progress' for file {FileName}: {Error}", file.FileName, updateStatusResult.ErrorMessage);
-                continue;
-            }
+            await _fileImportService.Handle(new UpdateFileStatus(file.Id, "In Progress"), cancellationToken);
 
             try
             {
-                // Import holidays from file
-                var importResult = await _fileImportService.Handle(new ImportHolidayFromFileCommand(file.FilePath), cancellationToken);
-                if (!importResult.IsSuccess)
-                {
-                    throw new InvalidOperationException(importResult.ErrorMessage);
-                }
-
-                // Delete the file after successful processing
-                var deleteResult = await _fileImportService.Handle(new DeleteFile(file.FilePath), cancellationToken);
-                if (!deleteResult.IsSuccess)
-                {
-                    throw new InvalidOperationException(deleteResult.ErrorMessage);
-                }
-
-                // Update file status to "Completed"
-                var completeStatusResult = await _fileImportService.Handle(new UpdateFileStatus(file.Id, "Completed"), cancellationToken);
-                if (!completeStatusResult.IsSuccess)
-                {
-                    throw new InvalidOperationException(completeStatusResult.ErrorMessage);
-                }
-
-                _logger.LogInformation("File {FileName} successfully processed.", file.FileName);
+            await _fileImportService.Handle(new ImportHolidayFromFileCommand(file.FilePath), cancellationToken);
+            await _fileImportService.Handle(new DeleteFile(file.FilePath), cancellationToken);
+            await _fileImportService.Handle(new UpdateFileStatus(file.Id, "Completed"), cancellationToken);
+            _logger.LogInformation("File {FileName} successfully processed.", file.FileName);
             }
+
             catch (Exception ex)
             {
-                // Update file status to "Failed"
                 await _fileImportService.Handle(new UpdateFileStatus(file.Id, "Failed"), cancellationToken);
-
+                await _fileImportService.Handle(new DeleteFile(file.FilePath), cancellationToken);
                 _logger.LogError(ex, "Failed to process file {FileName}.", file.FileName);
             }
         }

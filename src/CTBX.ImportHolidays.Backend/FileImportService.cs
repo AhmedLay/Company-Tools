@@ -163,7 +163,7 @@ public class FileImportService : CommandBusBase /*, IFileImportHandler*/
         {
             if (string.IsNullOrWhiteSpace(command.FilePath) || !File.Exists(command.FilePath))
             {
-                return OperationResult<List<Holiday>>.Failure($"Invalid or non-existent file path: {command.FilePath}");
+                return (OperationResult<List<Holiday>>) OperationResult.Failure($"Invalid or non-existent file path: {command.FilePath}");
             }
 
             var holidays = new List<Holiday>();
@@ -184,11 +184,11 @@ public class FileImportService : CommandBusBase /*, IFileImportHandler*/
                     });
                 }
             }
-            return OperationResult<List<Holiday>>.Success(holidays);
+            return (OperationResult<List<Holiday>>) OperationResult.Success("Holidays Imported Successfully");
         }
         catch (Exception ex)
         {
-            return OperationResult<List<Holiday>>.Failure($"Failed to convert file to holidays: {ex.Message}");
+            return (OperationResult<List<Holiday>>) OperationResult.Failure($"Failed to convert file to holidays: {ex.Message}");
         }
     }
 

@@ -23,9 +23,9 @@ public class FileUploadCommandHandler : CommandBusBase
 
      
         On<PersistFileRecordCommand, OperationResult>(HandlePersistFileRecord);
-        On<SaveFileToFolderCommand, OperationResult<string>>(HandleSaveFileToFolder);
-        On<GetAllFileRecordsQuery, OperationResult<List<FileRecord>>>(HandleGetAllFileRecords);
-        On<GetHolidaysDataQuery, OperationResult<List<Holiday>>>(HandleGetHolidaysData);
+        On<SaveFileToFolderCommand, OperationResult>(HandleSaveFileToFolder);
+        On<GetAllFileRecordsQuery, OperationResult<List<FileRecord>>>(HandleGetAllFileRecords); 
+        On<GetHolidaysDataQuery, OperationResult>(HandleGetHolidaysData);
     }
 
     private async ValueTask<OperationResult> HandlePersistFileRecord(PersistFileRecordCommand command, CancellationToken cancellationToken)
@@ -45,7 +45,7 @@ public class FileUploadCommandHandler : CommandBusBase
         }
     }
 
-    private async ValueTask<OperationResult<string>> HandleSaveFileToFolder(SaveFileToFolderCommand command, CancellationToken cancellationToken)
+    private async ValueTask<OperationResult> HandleSaveFileToFolder(SaveFileToFolderCommand command, CancellationToken cancellationToken)
     {
         try
         {
@@ -65,11 +65,11 @@ public class FileUploadCommandHandler : CommandBusBase
             }
 
             await File.WriteAllBytesAsync(filePath, command.File.FileContent, cancellationToken);
-            return OperationResult<string>.Success(filePath);
+            return OperationResult.Success(filePath);
         }
         catch (Exception ex)
         {
-            return OperationResult<string>.Failure($"Failed to save file to folder: {ex.Message}");
+            return OperationResult.Failure($"Failed to save file to folder: {ex.Message}");
         }
     }
 
@@ -80,28 +80,30 @@ public class FileUploadCommandHandler : CommandBusBase
             await using var connection = new NpgsqlConnection(_connectionString);
             const string selectQuery = "SELECT Id, FileName, FilePath, FileStatus, UploadDate FROM public.fileimports";
             var result = await connection.QueryAsync<FileRecord>(selectQuery);
+            var filerecords = result.ToList();
 
-            return OperationResult<List<FileRecord>>.Success(result.ToList());
+            return OperationResult.Success("Success", filerecords);
         }
         catch (Exception ex)
         {
-            return OperationResult<List<FileRecord>>.Failure($"Failed to retrieve file records: {ex.Message}");
+            return (OperationResult<List<FileRecord>>) OperationResult.Failure($"Failed to retrieve file records: {ex.Message}");
         }
     }
 
-    private async ValueTask<OperationResult<List<Holiday>>> HandleGetHolidaysData(GetHolidaysDataQuery query, CancellationToken cancellationToken)
+    private async ValueTask<OperationResult> HandleGetHolidaysData(GetHolidaysDataQuery query, CancellationToken cancellationToken)
     {
         try
         {
             await using var connection = new NpgsqlConnection(_connectionString);
             const string selectQuery = "SELECT Country, State, HolidayName, HolidayDate, IsGlobal FROM public.Holidays";
             var result = await connection.QueryAsync<Holiday>(selectQuery);
+            var filerecords = result.ToList();
 
-            return OperationResult<List<Holiday>>.Success(result.ToList());
+            return OperationResult.Success("Success", filerecords);
         }
         catch (Exception ex)
         {
-            return OperationResult<List<Holiday>>.Failure($"Failed to retrieve holiday data: {ex.Message}");
+            return OperationResult.Failure($"Failed to retrieve holiday data: {ex.Message}");
         }
     }
 }
@@ -160,4 +162,43 @@ public class FileUploadCommandHandler : CommandBusBase
 //        var result = await connection.QueryAsync<Holiday>(query);
 //        return result.ToList();
 //    }
+//}
+
+
+
+
+
+
+//    public FileImporter(FileImportService fileImportService, ILogger<FileImportService> logger)
+//    {
+//        _fileImportService = fileImportService;
+//        _logger = logger;
+//    }
+//    public async Task ImportHolidayFromFile()
+//    {
+//        _logger.LogInformation("Start processing files");
+//        var pendingFiles = await _fileImportService.GetPendingFiles();
+//        foreach (var file in pendingFiles)
+//        {
+//            await _fileImportService.UpdateFileStatus(file.Id, "In Progress");
+//            _logger.LogDebug("Processing file {fileName}.", file.FileName);
+
+//            try
+//            {
+//                await _fileImportService.ImportHolidayFromFile(file.FilePath);
+//                await _fileImportService.DeleteFileFromFolder(file.FilePath);
+//                await _fileImportService.UpdateFileStatus(file.Id, "In Progress");
+//                _logger.LogInformation("{fileName} successfully processed.", file.FileName);
+//            }
+//            catch (Exception ex)
+//            {
+//                await _fileImportService.UpdateFileStatus(file.Id, "Failed");
+//                await _fileImportService.DeleteFileFromFolder(file.FilePath);
+//                _logger.LogError(ex, "{fileName} failed.", file.FileName);
+//            }
+
+//        }
+
+//    }
+
 //}
