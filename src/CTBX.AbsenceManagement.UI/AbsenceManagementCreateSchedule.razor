@@ -12,16 +12,25 @@
                     <MudButton Size="@Size.Medium" Variant="@Variant.Outlined" Color="@Color.Tertiary" OnClick="OpenDrawer">Create a Request</MudButton>
                 </ToolBarContent>
                 <Columns>
-                    <PropertyColumn Property="x => x.EmployeeId" Title="Your ID" />
-                    <PropertyColumn Property="x => x.Comment" Title="To" />
+                    <PropertyColumn Property="x => x.Comment" Title="Comment" />
+                    <PropertyColumn Property="x => x.From" Title="From" Format="dd-MM-yyyy" />
+                    <PropertyColumn Property="x => x.To" Title="To" Format="dd-MM-yyyy" />
                     <TemplateColumn CellClass="d-flex justify-end">
                         <CellTemplate>
                             <MudStack Row>
-                                <MudMenu Icon="@Icons.Material.Filled.MoreVert"
-                                         AriaLabel="Open user menu">
-                                    <MudMenuItem>Profile</MudMenuItem>
-                                    <MudMenuItem>My account</MudMenuItem>
-                                    <MudMenuItem>Logout</MudMenuItem>
+                                <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Primary" Dense="true">
+                                    <MudMenuItem>
+                                        <MudIcon Icon="@Icons.Material.Filled.Delete" />
+                                        Delete
+                                    </MudMenuItem>
+                                    <MudMenuItem>
+                                        <MudIcon Icon="@Icons.Material.Filled.Edit" />
+                                        Edit Draft
+                                    </MudMenuItem>
+                                    <MudMenuItem>
+                                        <MudIcon Icon="@Icons.Material.Filled.Send" />
+                                        Send
+                                    </MudMenuItem>
                                 </MudMenu>
                             </MudStack>
                         </CellTemplate>

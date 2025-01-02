@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.Design;
+﻿using CTBX.AbsenceManagement.Shared.DTOs;
 using CTBX.CommonMudComponents;
 using Microsoft.AspNetCore.Components;
 using MinimalApiArchitecture.Application.Commands;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CTBX.AbsenceManagement.UI
 {
@@ -11,7 +10,7 @@ namespace CTBX.AbsenceManagement.UI
         [Inject]
         public required AbsenceManagementService Service { get; set; }
         public record Request(int Id, string Draftname, DateTimeOffset From, DateTimeOffset To, string AbsenceType);
-        public List<VacationScheduleCommand> List { get; set; } = new();
+        public List<VacationScheduleDTO> List { get; set; } = new();
         public List<Request> Requests { get; set; } = new();
         public bool _open = false;
         public VacationRequest CurrentRequest { get; set; } = new();
@@ -21,7 +20,7 @@ namespace CTBX.AbsenceManagement.UI
         }
         public async Task SaveDraft()
         {
-            if (CurrentRequest.From == null || CurrentRequest.To == null )
+            if (CurrentRequest.From == null || CurrentRequest.To == null)
             {
                 return;
             }
@@ -34,16 +33,22 @@ namespace CTBX.AbsenceManagement.UI
             {
                 var id = Guid.NewGuid().ToString();
                 var command = new VacationScheduleCommand(id, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment, scheduledat);
-                _open = false;
-                await LoadData();
-                await Service.SendCommand(command);
-                await NotifySuccess("Draft Saved");
+                var response = await Service.SendCommand(command);
+                if (response.IsSuccessStatusCode)
+                {
+                    await LoadData();
+                    Console.WriteLine("test");
+                    await NotifySuccess("Draft Saved");
+                    ResetForm();
+                    _open = false;
+                }
             }
         }
         public void SubmitRequest()
         {
             _open = false;
             NotifySuccess("Vacation Request sent");
+            ResetForm();
         }
         protected override async Task OnInitializedAsync()
         {
@@ -51,16 +56,31 @@ namespace CTBX.AbsenceManagement.UI
         }
         public async Task LoadData()
         {
-            List = await Service.GetVacationSchedulesAsync() ?? new List<VacationScheduleCommand>();
+            List = await Service.GetVacationSchedulesAsync();
         }
-    }
-    public class VacationRequest
-    {
-        public int EmployeeId { get; set; }
-        public DateTime? From { get; set; }
-        public DateTime? To { get; set; }
-        public DateTimeOffset Scheduledat { get; set; }
-        public string Comment { get; set; } = string.Empty;
-        public bool RequestType { get; set; } = true;
+
+        private void ResetForm()
+        {
+
+            CurrentRequest = new VacationRequest
+            {
+                EmployeeId = 0,
+                From = null,
+                To = null,
+                Scheduledat = DateTimeOffset.MinValue,
+                Comment = string.Empty,
+                RequestType = true
+            };
+
+        }
+        public class VacationRequest
+        {
+            public int EmployeeId { get; set; }
+            public DateTime? From { get; set; } 
+            public DateTime? To { get; set; }
+            public DateTimeOffset Scheduledat { get; set; }
+            public string Comment { get; set; } = string.Empty;
+            public bool RequestType { get; set; } = true;
+        }
     }
 }

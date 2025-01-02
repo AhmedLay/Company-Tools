@@ -32,7 +32,7 @@ public class AbsenceManagementEndpoints : CarterModule
         app.MapGet(BackendRoutes.VacationDatagridURL, async (
         [FromServices] AbsenceManagementService service) =>
         {
-            var vacationSchedules = await service.GetAllVacationSchedules();
+            var vacationSchedules = await service.GetData();
             return Results.Ok(vacationSchedules);
         });
 

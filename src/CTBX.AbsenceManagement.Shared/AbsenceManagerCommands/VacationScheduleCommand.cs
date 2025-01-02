@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-namespace MinimalApiArchitecture.Application.Commands
+﻿namespace MinimalApiArchitecture.Application.Commands
 {
     public record VacationScheduleCommand(
     string Id,
