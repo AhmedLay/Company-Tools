@@ -28,5 +28,19 @@ public class SkillsManager
         using var connection = new NpgsqlConnection(_options.ConnectionString);
         connection.Execute(sql, command);
     }
+
+    public void RemoveSkill(RemoveSkill command)
+    {
+        var sql = "DELETE From PUBLIC.Skills WHERE id =@Id";
+        using var connection = new NpgsqlConnection(_options.ConnectionString);
+        connection.Execute(sql, command);
+    }
+
+    public void EditSkill(EditSkill command)
+    {
+        var sql = "UPDATE PUBLIC.Skills  SET Name = @Name , Description = @Description , Type = @Type WHERE Id = @Id ";
+        using var connection = new NpgsqlConnection(_options.ConnectionString);
+        connection.Execute(sql, command);
+    }
 }
 

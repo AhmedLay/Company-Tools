@@ -26,8 +26,28 @@ public class Endpoints : CarterModule
         }
         );
 
+        app.MapDelete("api/ctbx/skills/{id}", ([FromServices] SkillsManager service,int id) =>
+        {
+            var command = new RemoveSkill(id);
+            service.RemoveSkill(command);
+
+            return Results.Ok();
+        }
+        );
+
+        app.MapPut("api/ctbx/skills/", ([FromServices] SkillsManager service,EditSkill command ) =>
+        {
+            
+            service.EditSkill(command);
+
+            return Results.Ok();
+        }
+       );
+
     }
 }
 public record CreateSkill(string Name, string Description, string Type);
-public record Skill(int id, string Name, string Description, string Type);
+public record RemoveSkill(int Id);
+public record EditSkill(int Id, string Name, string Description, string Type);
+public record Skill(int Id, string Name, string Description, string Type);
 
