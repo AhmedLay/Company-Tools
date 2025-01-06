@@ -36,5 +36,12 @@ public class AbsenceManagementEndpoints : CarterModule
             return Results.Ok(vacationSchedules);
         });
 
+        app.MapGet(BackendRoutes.VacationCalenderViewURL, async (
+        [FromServices] AbsenceManagementService service) =>
+        {
+            var vacationSchedules = await service.GetCalenderData();
+            return Results.Ok(vacationSchedules);
+        });
+
     }
 }

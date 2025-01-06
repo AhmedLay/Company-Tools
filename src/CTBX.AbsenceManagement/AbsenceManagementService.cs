@@ -1,4 +1,5 @@
-﻿using CTBX.AbsenceManagement.Shared.DTOs;
+﻿using System.Drawing;
+using CTBX.AbsenceManagement.Shared.DTOs;
 using MinimalApiArchitecture.Application.Commands;
 using MongoDB.Driver;
 
@@ -46,6 +47,30 @@ namespace MinimalApiArchitecture.Application
                 From = command.From,
                 To = command.To,
                 Comment = command.Comment,
+            }).ToList();
+
+            return listofdrafts;
+        }
+
+        public async Task<List<DraftsItems>> GetCalenderData()
+        {
+            var projection = Builders<VacationScheduleCommand>.Projection
+                .Include(e => e.Id)
+                .Include(e => e.From)
+                .Include(e => e.To)
+                .Include(e => e.Comment);
+
+            var vacationScheduleCommands = await _vacationSchedules
+                .Find(FilterDefinition<VacationScheduleCommand>.Empty)
+                .Project<VacationScheduleCommand>(projection)
+                .ToListAsync();
+
+            var listofdrafts = vacationScheduleCommands.Select(command => new DraftsItems
+            {
+                Start = command.From.DateTime,
+                End = command.To.DateTime,
+                Text = command.Comment,
+
             }).ToList();
 
             return listofdrafts;

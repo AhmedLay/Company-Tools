@@ -2,14 +2,15 @@
 @inherits VacationScheduleFileBase
 
 <PageTitle>Vacation Request</PageTitle>
-<MudTabs Elevation="0" Rounded="false" Outlined="true" Centered="true" PanelClass="p-0">
+<MudTabs Elevation="0" Rounded="false" Outlined="true" Centered="true" PanelClass="p-0" Position="Position.Top">
     <MudTabPanel Text="List View">
         <ChildContent>
             <MudDataGrid Items="@List" Filterable="false" SortMode="@SortMode.None" Groupable="false">
                 <ToolBarContent>
                     <MudText Typo="Typo.h6">Your Drafts</MudText>
+                    <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="LoadData" />
+                    <MudButton Size="@Size.Medium" Variant="@Variant.Filled" Color="@Color.Tertiary" OnClick="OpenDrawer">Create a Request</MudButton>
                     <MudSpacer />
-                    <MudButton Size="@Size.Medium" Variant="@Variant.Outlined" Color="@Color.Tertiary" OnClick="OpenDrawer">Create a Request</MudButton>
                 </ToolBarContent>
                 <Columns>
                     <PropertyColumn Property="x => x.Comment" Title="Comment" />
@@ -18,9 +19,9 @@
                     <TemplateColumn CellClass="d-flex justify-end">
                         <CellTemplate>
                             <MudStack Row>
-                                <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Primary" Dense="true">
+                                <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Dense="true">
                                     <MudMenuItem>
-                                        <MudIcon Icon="@Icons.Material.Filled.Delete" />
+                                        <MudIcon Icon="@Icons.Material.Filled.Delete"/>
                                         Delete
                                     </MudMenuItem>
                                     <MudMenuItem>
@@ -36,34 +37,40 @@
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>
-            </MudDataGrid>
-
-            <MudDrawer @bind-Open="@_open" Width="600px" Height="100%" Anchor="Anchor.Right" Variant="@DrawerVariant.Temporary">
-                <MudCard Class="drawer-card">
-                    <MudCardContent Class="drawer-card-content">
-                        <MudText Align="Align.Center">Vacation Request</MudText>
-                        <MudForm Spacing="2" Class="form-container">
-                            <MudTextField T="int" Label="EmployeeID" @bind-value="CurrentRequest.EmployeeId"/>
-                            <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
-                            <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
-                            <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
-                            <MudSelect T="bool" Label="Request Type" @bind-Value="CurrentRequest.RequestType" Required="true" Class="radio-group">
-                                <MudSelectItem Value="true">Vacation</MudSelectItem>
-                                <MudSelectItem Value="false">Sick Leave</MudSelectItem>
-                            </MudSelect>
-                            <MudButton OnClick="SaveDraft" Variant="Variant.Outlined" Color="Color.Secondary" FullWidth="true">Save Draft</MudButton>
-                            <MudButton OnClick="SubmitRequest" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Submit Request</MudButton>
-
-                        </MudForm>
-                    </MudCardContent>
-                </MudCard>
-            </MudDrawer>
+            </MudDataGrid>       
         </ChildContent>
     </MudTabPanel>
 
     <MudTabPanel Text="Calendar View">
         <ChildContent>
-            <MudCalendar Color="Color.Inherit" />
+            <MudCalendar Color="Color.Inherit" Items="_events" >
+                <ToolbarContent>
+                    <MudButton Size="@Size.Medium" Variant="@Variant.Filled" Color="@Color.Tertiary" OnClick="OpenDrawer">Create a Request</MudButton>
+                </ToolbarContent>
+
+        </MudCalendar>
         </ChildContent>
     </MudTabPanel>
 </MudTabs>
+<MudDrawer @bind-Open="@_open" Width="600px" Height="100%" Anchor="Anchor.Right" Variant="@DrawerVariant.Temporary">
+    <MudCard Class="drawer-card">
+        <MudCardContent Class="drawer-card-content">
+            <MudText Align="Align.Center">Vacation Request</MudText>
+            <MudForm Spacing="2" Class="form-container">
+                <MudTextField T="int" Label="EmployeeID" @bind-value="CurrentRequest.EmployeeId" />
+                <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
+                <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
+                <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
+                <MudSelect T="bool" Label="Request Type" @bind-Value="CurrentRequest.RequestType" Required="true" Class="radio-group">
+                    <MudSelectItem Value="true">Vacation</MudSelectItem>
+                    <MudSelectItem Value="false">Sick Leave</MudSelectItem>
+                </MudSelect>
+                <MudButton OnClick="SaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Save Request</MudButton>
+
+            </MudForm>
+        </MudCardContent>
+    </MudCard>
+</MudDrawer>
+<MudOverlay @bind-Visible="_visible" DarkBackground>
+    <MudProgressCircular Color="Color.Success" Indeterminate="true" />
+</MudOverlay>

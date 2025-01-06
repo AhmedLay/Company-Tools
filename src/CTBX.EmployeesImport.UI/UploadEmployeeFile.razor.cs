@@ -11,9 +11,6 @@ public class UploadEmployeeFileBase : BaseMudComponent
 {
     [Inject]
     public required UploadEmployeesService Service { get; set; }
-
-    [Inject]
-    public new required ISnackbar Snackbar { get; set; }
     [Inject]
     public required IValidator<IBrowserFile> FileUploadValidator { get; set; }
 

@@ -17,6 +17,7 @@
     <PackageReference Include="MudBlazor.Translations" Version="1.5.1" />
     <PackageReference Include="MudBlazor" Version="7.15.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
   </ItemGroup>
 
   <ItemGroup>
