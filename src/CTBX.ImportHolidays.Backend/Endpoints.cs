@@ -31,14 +31,17 @@ public class Endpoints : CarterModule
             FileData file,
             CancellationToken cancellationToken) =>
         {
+            Console.WriteLine("Enter EndPoint");
             var result = await service.Handle<OperationResult>(new UploadHolidayFile(file.FileName, file.FileContent),cancellationToken);
-
+            Console.WriteLine("Exit EndPoint");
             return result switch
             {
                 _ when result.IsSuccess => Results.Ok(new { result.Message }),
                 _ when result.IsFailure => Results.BadRequest(new { result.Message }),
                 _ => Results.NotFound()
             };
+
+            
         });
         //app.MapPost(BackendRoutes.HOLIDAYSFILES, async (
         //    [FromServices] IFileUploadHandler service,

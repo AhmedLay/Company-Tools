@@ -1,4 +1,5 @@
-﻿using CTBX.CommonUtils;
+﻿using System.Runtime.CompilerServices;
+using CTBX.CommonUtils;
 using CTBX.EmployeesImport.Shared;
 using CTBX.ImportHolidays.Shared;
 using Dapper;
@@ -22,10 +23,14 @@ public class HolidaysImporter : CommandBusBase
 {
     private readonly HolidayImporterOptions _options;
     private readonly IDateTimeProvider _dateTimeProvider;
+    //private readonly HolidayImporterOptions _connectionString;
 
     public HolidaysImporter(IOptions<HolidayImporterOptions> options,
-                            IDateTimeProvider dateTimeProvider)
+                            IDateTimeProvider dateTimeProvider, IConfiguration configuration)
     {
+        
+        
+        //_connectionString = options.Value;
         _options = options.Value.GuardAgainstNull(nameof(options));
 
         On<UploadHolidayFile, OperationResult>(HandleUpload);
@@ -62,13 +67,38 @@ public class HolidaysImporter : CommandBusBase
         OperationResult.Success($"File [{command.FileName}] uploaded to [{_options.UploadDirectory}]");
     }
 
-    private Task PersistToDb(FileRecord fileRecord)
+
+
+    private async Task PersistToDb(FileRecord fileRecord)
     {
-        var insertQuery = "INSERT INTO holidayimports (FileName, FilePath, FileStatus,UploadDate) VALUES (@FileName, @FilePath, @FileStatus,@UploadDate)";
+        var insertQuery = "INSERT INTO public.holidayimports (FileName, FilePath, FileStatus,UploadDate) VALUES (@FileName, @FilePath, @FileStatus,@UploadDate)";
 
         using var connection = new NpgsqlConnection(_options.ConnectionString);
-        return connection.ExecuteAsync(insertQuery, fileRecord);
+        connection.Open();
+
+        await using var command = new NpgsqlCommand(insertQuery, connection);
+
+
+        command.Parameters.AddWithValue("$1", fileRecord.FileName);
+        command.Parameters.AddWithValue("$2", fileRecord.FilePath);
+        command.Parameters.AddWithValue("$3", fileRecord.FileStatus);
+        command.Parameters.AddWithValue("$4", fileRecord.UploadDate);
+        var result = await command.ExecuteNonQueryAsync();
+
+
     }
+
+    //private async Task PersistToDb(FileRecord fileRecord)
+    //{
+    //    var insertQuery = "INSERT INTO public.holidayimports (FileName, FilePath, FileStatus,UploadDate) VALUES (@FileName, @FilePath, @FileStatus,@UploadDate)";
+
+
+    //    using var connection = new NpgsqlConnection(_options.ConnectionString);
+    //    connection.Open();
+    //    var result = await connection.ExecuteAsync(insertQuery, fileRecord);
+    //    connection.Close();
+
+    //}
 }
 
 
@@ -85,7 +115,7 @@ public class FileImportService : CommandBusBase /*, IFileImportHandler*/
 
     public FileImportService(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("ctbx-common")!;
+        _connectionString = configuration.GetConnectionString("ctbx-common-db")!;
         On<UpdateFileStatus, OperationResult>(HandleUpdateFileStatus);
         On<DeleteFile, OperationResult>(HandleDeleteFile);
         On<ConvertFileToHolidaysCommand, OperationResult<List<Holiday>>>(HandleConvertFileToHolidays);

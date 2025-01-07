@@ -29,20 +29,24 @@ public class ImportHolidaysService
             FileName = file.Name,
             FileContent = fileContent,
         };
-
+        Console.WriteLine("Message1");
         var result = await _httpClient.PostAsJsonAsync(BackendRoutes.HOLIDAYSFILES, uploadedFile);
+        Console.WriteLine("Message2");
         result.EnsureSuccessStatusCode();
     }
 
-    public async Task<ImmutableList<FileRecord>> GetFileRecordsAsync()
+    public async Task<List<FileRecord>> GetFileRecordsAsync()
     {
-        var fileRecords = await _httpClient.GetFromJsonAsync<ImmutableList<FileRecord>>(BackendRoutes.HOLIDAYSFILES);
-        return fileRecords ?? [];
+        //var fileRecords = await _httpClient.GetFromJsonAsync<ImmutableList<FileRecord>>(BackendRoutes.HOLIDAYSFILES);
+        //return fileRecords ?? [];
+
+        var fileRecords = await _httpClient.GetFromJsonAsync<List<FileRecord>>(BackendRoutes.HOLIDAYSFILES);
+        return fileRecords ?? new List<FileRecord>();
     }
 
-    public async Task<ImmutableList<Holiday>> GetHolidaysAsync()
+    public async Task<List<Holiday>> GetHolidaysAsync()
     {
-        var employeeview = await _httpClient.GetFromJsonAsync<ImmutableList<Holiday>>(BackendRoutes.HOLIDAYS);
-        return employeeview ?? [];
+        var holidayview = await _httpClient.GetFromJsonAsync<List<Holiday>>(BackendRoutes.HOLIDAYS);
+        return holidayview ?? [];
     }
 }
