@@ -1,13 +1,16 @@
 using Carter;
 using CTBX.Backend;
 using CTBX.EmployeesImport.Backend;
+using CTBX.SkillManagment.Backend;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Hellang.Middleware.ProblemDetails;
-
+using Microsoft.Extensions.DependencyInjection;
 using MinimalApiArchitecture.Application;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenApi();
 
 builder.Services.AddHangfire(x => x.UsePostgreSqlStorage(options => options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("ctbx-common-db"))));
 builder.Services.AddHangfireServer();
@@ -34,8 +37,14 @@ builder.Services.RegisterEventuousStores(builder.Configuration);
 EmployeesImportFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
 AbsenceManagementFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
 CommonUtilRegistration.RegisterServices(builder.Services, builder.Configuration);
+SkillManagmentFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
+if (app.Environment.IsDevelopment())
+{
+    app.MapScalarApiReference();
+    app.MapOpenApi();
+}
 app.UseProblemDetails();
 app.UseCors("all");
 app.MapDefaultEndpoints();
