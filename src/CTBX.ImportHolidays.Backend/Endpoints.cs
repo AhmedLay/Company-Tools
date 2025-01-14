@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using CTBX.ImportHolidays.Shared;
 using NCommandBus.Core.Abstractions;
 using System.Collections.Immutable;
+using System.Threading;
 
 
 namespace CTBX.ImportHolidays.Backend;
@@ -22,9 +23,12 @@ public class Endpoints : CarterModule
 
         AddImportHolidaysFilesEndpoint(app);
         AddGetFileRecordsEndpoint(app);
+
+        SaveHolidaysToDBEndPoint(app);
+
         AddGetHolidaysEndpoint(app);
     }
-
+    // Working: Upload Holidays
     private void AddImportHolidaysFilesEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.HOLIDAYSFILES, async (
@@ -43,7 +47,7 @@ public class Endpoints : CarterModule
 
         }); 
     }
-
+    //Working: Get file records
     private void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(BackendRoutes.HOLIDAYSFILES, async (
@@ -62,6 +66,26 @@ public class Endpoints : CarterModule
         });
     }
 
+
+    // using this one currently
+    private void SaveHolidaysToDBEndPoint(IEndpointRouteBuilder app)
+    {
+        app.MapPost(BackendRoutes.HOLIDAYS, async (
+           [FromServices] HolidaysImporter service,
+           FileData file,
+           CancellationToken cancellationToken) =>
+        {
+
+            var result = await service.Handle<OperationResult>(new ProcessHolidaysFromFile(file.FileName, file.FileContent), cancellationToken);
+            return result switch
+            {
+                _ when result.IsSuccess => Results.Ok(new { result.Message }),
+                _ when result.IsFailure => Results.BadRequest(new { result.Message }),
+                _ => Results.NotFound()
+            };
+
+        });
+    }
 
 
 

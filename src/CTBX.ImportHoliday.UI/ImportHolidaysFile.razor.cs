@@ -78,7 +78,13 @@ public class ImportHolidayFileBase : BaseMudComponent
                 operation: () => Service.UploadFile(file),
                 successMssage: $"Upload succeeded for {file.Name}",
                 errMessage: $"Upload failed for {file.Name}."
+
             );
+
+            await OnHandleOperation(
+                operation: () => Service.SaveHolidays(file),
+                successMssage: $"Holidays exported {file.Name}",
+                errMessage: $"Holidays export failed for {file.Name}.");
         }
 
         UploadedFiles.Clear(); // Clear only after successful uploads

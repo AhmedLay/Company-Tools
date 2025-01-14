@@ -34,8 +34,10 @@ public class ImportHolidaysService
         };
         Console.WriteLine("Message1");
         var result = await _httpClient.PostAsJsonAsync(BackendRoutes.HOLIDAYSFILES, uploadedFile);
+        
         Console.WriteLine("Message2");
         result.EnsureSuccessStatusCode();
+        
     }
 
 
@@ -56,6 +58,28 @@ public class ImportHolidaysService
         }
 
 
+    }
+
+    // Just added his one
+    public async Task SaveHolidays(IBrowserFile file)
+    {
+
+        using var stream = file.OpenReadStream(maxAllowedSize: 10_000_000);
+        using var memoryStream = new MemoryStream();
+
+        await stream.CopyToAsync(memoryStream);
+
+        var fileContent = memoryStream.ToArray();
+
+        var uploadedFile = new FileData
+        {
+            FileName = file.Name,
+            FileContent = fileContent,
+        };
+        Console.WriteLine("SaveHolidays test message 1");
+        var result = await _httpClient.PostAsJsonAsync(BackendRoutes.HOLIDAYS, uploadedFile);
+        Console.WriteLine("SaveHolidays test message 2");
+        result.EnsureSuccessStatusCode();
     }
 
     public async Task<List<Holiday>> GetHolidaysAsync()

@@ -23,13 +23,8 @@ public class FileUploadCommandHandler : CommandBusBase
     {
         _connectionString = configuration.GetConnectionString("ctbx-common-db")!;
 
-     
-      
-        //On<SaveFileToFolderCommand, OperationResult>(HandleSaveFileToFolder);
-
         On<GetAllFileRecordsQuery, OperationResult<IImmutableList<FileRecord>>>(HandleGetAllFileRecords);
 
-        //On<GetAllFileRecordsQuery, OperationResult>(HandleGetAllFileRecords);
         On<GetHolidaysDataQuery, OperationResult>(HandleGetHolidaysData);
     }
 
@@ -49,7 +44,7 @@ public class FileUploadCommandHandler : CommandBusBase
         catch (Exception ex)
         {
             return (OperationResult<IImmutableList<FileRecord>>) OperationResult.Failure($"Failed to retrieve file records: {ex.Message}");
-            //return OperationResult<List<FileRecord>>.Failure($"Failed to retrieve file records: {ex.Message}");
+            
         }
     }
 
