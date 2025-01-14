@@ -76,7 +76,7 @@ public class Endpoints : CarterModule
            CancellationToken cancellationToken) =>
         {
 
-            var result = await service.Handle<OperationResult>(new ProcessHolidaysFromFile(file.FileName, file.FileContent), cancellationToken);
+            var result = await service.Handle<OperationResult>(new PersistHolidaysFromFile(file.FileName, file.FileContent), cancellationToken);
             return result switch
             {
                 _ when result.IsSuccess => Results.Ok(new { result.Message }),
