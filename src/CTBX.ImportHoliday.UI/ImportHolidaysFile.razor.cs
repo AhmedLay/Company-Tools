@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using CTBX.ImportHolidays.Shared;
+using System.Collections.Immutable;
 
 namespace CTBX.ImportHoliday.UI;
 
@@ -17,7 +18,7 @@ public class ImportHolidayFileBase : BaseMudComponent
 
     protected List<IBrowserFile> UploadedFiles { get; set; } = new();
     protected bool Visible { get; set; }
-    protected List<FileRecord> FileRecodsList { get; set; } = new();
+    protected IImmutableList<FileRecord> FileRecordsList { get; set; } = ImmutableList<FileRecord>.Empty;
 
     protected string Width { get; set; } = string.Empty;
     protected string Height { get; set; } = string.Empty;
@@ -103,16 +104,14 @@ public class ImportHolidayFileBase : BaseMudComponent
 
         try
         {
-            //var fileRecords = await Service.GetFileRecordsAsync();
-            //FileRecodsList = fileRecords.ToList(); // Convert ImmutableList to List
+            
+            FileRecordsList = await Service.GetFileRecordsAsync();
 
-
-            FileRecodsList = await Service.GetFileRecordsAsync() ?? new List<FileRecord>();
-           
         }
         catch (Exception ex)
         {
             await NotifyError($"Failed to reload data: {ex.Message}");
+            FileRecordsList = ImmutableList<FileRecord>.Empty; // Reset the list to an empty state
         }
         finally
         {

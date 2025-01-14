@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using NCommandBus.Core.Abstractions;
 using Npgsql;
 using YAEP.Utils;
+using static MudBlazor.CategoryTypes;
 
 namespace CTBX.ImportHolidays.Backend;
 
@@ -18,22 +19,22 @@ public class HolidayImporterOptions
 }
 
 public record UploadHolidayFile(string FileName, byte[] Content);
+public record ProcessHolidaysFromFile(string FileName, byte[] Content);
 
 public class HolidaysImporter : CommandBusBase
 {
     private readonly HolidayImporterOptions _options;
     private readonly IDateTimeProvider _dateTimeProvider;
-    //private readonly HolidayImporterOptions _connectionString;
+    
 
     public HolidaysImporter(IOptions<HolidayImporterOptions> options,
                             IDateTimeProvider dateTimeProvider, IConfiguration configuration)
     {
-        
-        
-        //_connectionString = options.Value;
         _options = options.Value.GuardAgainstNull(nameof(options));
 
         On<UploadHolidayFile, OperationResult>(HandleUpload);
+        On<ProcessHolidaysFromFile, OperationResult>(HandleHolidaysProcess);
+
         _dateTimeProvider = dateTimeProvider.GuardAgainstNull(nameof(dateTimeProvider));
     }
     private async ValueTask<OperationResult> HandleUpload(UploadHolidayFile command, CancellationToken cancellationToken)
@@ -63,6 +64,8 @@ public class HolidaysImporter : CommandBusBase
             UploadDate = _dateTimeProvider.UtcNow
         });
 
+
+
         return
         OperationResult.Success($"File [{command.FileName}] uploaded to [{_options.UploadDirectory}]");
     }
@@ -72,34 +75,89 @@ public class HolidaysImporter : CommandBusBase
     private async Task PersistToDb(FileRecord fileRecord)
     {
         var insertQuery = "INSERT INTO public.holidayimports (FileName, FilePath, FileStatus,UploadDate) VALUES (@FileName, @FilePath, @FileStatus,@UploadDate)";
-
+       
         using var connection = new NpgsqlConnection(_options.ConnectionString);
         connection.Open();
 
         await using var command = new NpgsqlCommand(insertQuery, connection);
 
+        command.Parameters.AddWithValue("@FileName", fileRecord.FileName);
+        command.Parameters.AddWithValue("@FilePath", fileRecord.FilePath);
+        command.Parameters.AddWithValue("@FileStatus", fileRecord.FileStatus);
+        command.Parameters.AddWithValue("@UploadDate", fileRecord.UploadDate);
 
-        command.Parameters.AddWithValue("$1", fileRecord.FileName);
-        command.Parameters.AddWithValue("$2", fileRecord.FilePath);
-        command.Parameters.AddWithValue("$3", fileRecord.FileStatus);
-        command.Parameters.AddWithValue("$4", fileRecord.UploadDate);
+        var result = await command.ExecuteNonQueryAsync();
+
+    }
+
+
+    public async ValueTask<OperationResult> HandleHolidaysProcess(ProcessHolidaysFromFile command, CancellationToken cancellationToken)
+    {
+        
+        if (command.Content.Length == 0)
+            return OperationResult.Failure("The file is empty.");
+
+        var holidays = new List<Holiday>();
+        var filepath = Path.Combine(_options.UploadDirectory, command.FileName);
+        
+        var lines = await File.ReadAllLinesAsync(filepath, cancellationToken);
+
+        foreach (var line in lines)
+        {
+            var parts = line.Split(';');
+            if (parts.Length < 5)
+                return OperationResult.Failure("Invalid file format.");
+
+            holidays.Add(new Holiday
+            {
+                Country = parts[0].Trim(),
+                State = parts[1].Trim(),
+                HolidayName = parts[2].Trim(),
+                HolidayDate = DateTimeOffset.Parse(parts[3].Trim()), // Adjust parsing logic if necessary
+                IsGlobal = bool.Parse(parts[4].Trim())
+            });
+        }
+
+        foreach (var holiday in holidays)
+        {
+            await PersistHolidaysToDb(holiday);
+        }
+
+        return
+            OperationResult.Success($"Holidays Imported Successfully from File [{command.FileName}]");
+        
+    }
+
+    private async Task PersistHolidaysToDb(Holiday holidays)
+    {
+        var insertQuery = @"
+        INSERT INTO public.holidays (Country, State, HolidayName, HolidayDate, IsGlobal) 
+        VALUES (@Country, @State, @HolidayName, @HolidayDate, @IsGlobal)";
+        using var connection = new NpgsqlConnection(_options.ConnectionString);
+        connection.Open();
+
+        await using var command = new NpgsqlCommand(insertQuery, connection);
+
+        command.Parameters.AddWithValue("@Country", holidays.Country);
+        command.Parameters.AddWithValue("@State", holidays.State);
+        command.Parameters.AddWithValue("@HolidayName", holidays.HolidayName);
+        command.Parameters.AddWithValue("@HolidayDate", holidays.HolidayDate);
+        command.Parameters.AddWithValue("@IsGlobal", holidays.IsGlobal);
+
+
         var result = await command.ExecuteNonQueryAsync();
 
 
     }
 
-    //private async Task PersistToDb(FileRecord fileRecord)
-    //{
-    //    var insertQuery = "INSERT INTO public.holidayimports (FileName, FilePath, FileStatus,UploadDate) VALUES (@FileName, @FilePath, @FileStatus,@UploadDate)";
 
-
-    //    using var connection = new NpgsqlConnection(_options.ConnectionString);
-    //    connection.Open();
-    //    var result = await connection.ExecuteAsync(insertQuery, fileRecord);
-    //    connection.Close();
-
-    //}
 }
+
+
+
+
+
+
 
 
 
@@ -128,7 +186,7 @@ public class FileImportService : CommandBusBase /*, IFileImportHandler*/
     {
         using var connection = new NpgsqlConnection(_connectionString);
         return await connection.QueryAsync<FileRecord>
-            ("SELECT * FROM public.fileimport WHere FileStatus = @FileStatus",
+            ("SELECT * FROM public.holidayimports WHere FileStatus = @FileStatus",
             new { FileStatus = "Pending" });
     }
 
@@ -140,7 +198,7 @@ public class FileImportService : CommandBusBase /*, IFileImportHandler*/
         {
             using var connection = new NpgsqlConnection(_connectionString);
             await connection.ExecuteAsync(
-                "UPDATE public.fileimports SET FileStatus = @FileStatus WHERE Id = @Id",
+                "UPDATE public.holidayimports SET FileStatus = @FileStatus WHERE Id = @Id",
                 new { FileStatus = command.status, Id = command.id });
 
             return OperationResult.Success($"File status updated to {command.status} for File ID {command.id}");
@@ -209,7 +267,7 @@ public class FileImportService : CommandBusBase /*, IFileImportHandler*/
                         Country = split[0],
                         State = split[1],
                         HolidayName = split[2],
-                        HolidayDate = DateOnly.Parse(split[3]),
+                        HolidayDate = DateTimeOffset.Parse(split[3]),
                         IsGlobal = bool.Parse(split[4])
                     });
                 }
@@ -241,7 +299,7 @@ public class FileImportService : CommandBusBase /*, IFileImportHandler*/
                     Country = split[0],
                     State = split[1],
                     HolidayName = split[2],
-                    HolidayDate = DateOnly.Parse(split[3]),
+                    HolidayDate = DateTimeOffset.Parse(split[3]),
                     IsGlobal = bool.Parse(split[4])
                 });
             }

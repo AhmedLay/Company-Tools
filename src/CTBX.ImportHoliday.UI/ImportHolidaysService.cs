@@ -1,8 +1,11 @@
 ﻿using CTBX.EmployeesImport.Shared;
 using CTBX.ImportHolidays.Shared;
 using Microsoft.AspNetCore.Components.Forms;
+using NCommandBus.Core.Abstractions;
+using System;
 using System.Collections.Immutable;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace CTBX.ImportHoliday.UI;
 
@@ -35,13 +38,24 @@ public class ImportHolidaysService
         result.EnsureSuccessStatusCode();
     }
 
-    public async Task<List<FileRecord>> GetFileRecordsAsync()
-    {
-        //var fileRecords = await _httpClient.GetFromJsonAsync<ImmutableList<FileRecord>>(BackendRoutes.HOLIDAYSFILES);
-        //return fileRecords ?? [];
 
-        var fileRecords = await _httpClient.GetFromJsonAsync<List<FileRecord>>(BackendRoutes.HOLIDAYSFILES);
-        return fileRecords ?? new List<FileRecord>();
+    public async Task<IImmutableList<FileRecord>> GetFileRecordsAsync()
+    { 
+
+        try
+        {
+            var response = await _httpClient.GetFromJsonAsync<IImmutableList<FileRecord>>(BackendRoutes.HOLIDAYSFILES);
+   
+            return response ?? ImmutableList<FileRecord>.Empty;
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: Failed to fetch file records (from GetFromJsonAsync): {ex.Message}");
+            return ImmutableList<FileRecord>.Empty;
+        }
+
+
     }
 
     public async Task<List<Holiday>> GetHolidaysAsync()

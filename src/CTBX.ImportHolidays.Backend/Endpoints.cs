@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using CTBX.ImportHolidays.Shared;
 using NCommandBus.Core.Abstractions;
+using System.Collections.Immutable;
 
 
 namespace CTBX.ImportHolidays.Backend;
@@ -31,45 +32,37 @@ public class Endpoints : CarterModule
             FileData file,
             CancellationToken cancellationToken) =>
         {
-            Console.WriteLine("Enter EndPoint");
-            var result = await service.Handle<OperationResult>(new UploadHolidayFile(file.FileName, file.FileContent),cancellationToken);
-            Console.WriteLine("Exit EndPoint");
-            return result switch
+
+            var result1 = await service.Handle<OperationResult>(new UploadHolidayFile(file.FileName, file.FileContent), cancellationToken);
+            return result1 switch
             {
-                _ when result.IsSuccess => Results.Ok(new { result.Message }),
-                _ when result.IsFailure => Results.BadRequest(new { result.Message }),
+                _ when result1.IsSuccess => Results.Ok(new { result1.Message }),
+                _ when result1.IsFailure => Results.BadRequest(new { result1.Message }),
                 _ => Results.NotFound()
             };
 
-            
-        });
-        //app.MapPost(BackendRoutes.HOLIDAYSFILES, async (
-        //    [FromServices] IFileUploadHandler service,
-        //    [FromServices] IOptions<FileUploadOptions> options,
-        //    [FromServices] IDateTimeProvider dateTimeProvider,
-        //    FileData file) =>
-        //{
-        //    service.GuardAgainstNull(nameof(service));
-
-        //    var filename = file.FileName;
-        //    var folderpath = options.GuardAgainstNull(nameof(options))
-        //                            .Value.UploadDirectory;
-        //    var fileRecord = new FileRecord
-        //    {
-        //        FileName = filename,
-        //        FilePath = Path.Combine(folderpath, filename),
-        //        FileStatus = "Pending",
-        //        UploadDate = dateTimeProvider.UtcNow
-        //    };
-
-        //    await service.SaveFileToFolder(folderpath, file);
-        //    await service.PersistToDb(fileRecord);
-
-        //    return Results.Ok(new { Message = "File uploaded successfully" });
-
-        //});
-
+        }); 
     }
+
+    private void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapGet(BackendRoutes.HOLIDAYSFILES, async (
+            [FromServices] FileUploadCommandHandler service,
+            CancellationToken cancellationToken) =>
+        {
+            var result = await service.Handle<OperationResult<IImmutableList<FileRecord>>>(new GetAllFileRecordsQuery(), cancellationToken);
+
+            
+            return result switch
+            {
+                _ when result.IsSuccess => Results.Ok(result.Value),
+                _ when result.IsFailure => Results.BadRequest(new { result.Message }),
+                _ => Results.NotFound()
+            };
+        });
+    }
+
+
 
 
 
@@ -103,21 +96,6 @@ public class Endpoints : CarterModule
 
     //}
 
-    private void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
-    {
-        app.MapGet(BackendRoutes.HOLIDAYS, async (
-            [FromServices] FileUploadCommandHandler service,
-            CancellationToken cancellationToken) =>
-        {
-            var result = await service.Handle<OperationResult>(new GetAllFileRecordsQuery(), cancellationToken);
-
-            return result switch
-            {
-                _ when result.IsSuccess => Results.Ok(new { result.Message }),
-                _ when result.IsFailure => Results.BadRequest(new { result.Message }),
-                _ => Results.NotFound()
-            };
-        });
-    }
+    
 }
 

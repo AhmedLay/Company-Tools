@@ -15,7 +15,7 @@ namespace CTBX.ImportHolidays.UI
                 .LessThanOrEqualTo(1_024_000).WithMessage("The file you are trying to upload is too big. Please try again.");
 
             RuleFor(file => file)
-                .MustAsync(ValidateFileContent).WithMessage("The file's content does not meet the required format. Each line must contain 6 columns separated by semicolons (;).");
+                .MustAsync(ValidateFileContent).WithMessage("The file's content does not meet the required format. Each line must contain 5 columns separated by semicolons (;).");
         }
 
         private async Task<bool> ValidateFileContent(IBrowserFile file, CancellationToken cancellationToken)
@@ -32,11 +32,11 @@ namespace CTBX.ImportHolidays.UI
                                      .Where(line => !string.IsNullOrWhiteSpace(line))
                                      .ToList();
 
-                // Jede Zeile überprüfen
+                
                 foreach (var line in dataRows)
                 {
                     var columns = line.Split(';');
-                    if (columns.Length != 6)
+                    if (columns.Length != 5)
                     {
                         return false;
                     }

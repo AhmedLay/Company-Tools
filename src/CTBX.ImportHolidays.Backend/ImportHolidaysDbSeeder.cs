@@ -25,8 +25,8 @@ namespace CTBX.ImportHolidays.Backend;
                 using var connection = new NpgsqlConnection(adminConnectionString);
                 await connection.OpenAsync(cancellationToken);
 
-                await CreateHolidaysTable(connection, cancellationToken);
-                _logger.LogInformation("Table created");
+                await CreateHolidaysTables(connection, cancellationToken);
+                _logger.LogInformation("Tables created");
             }
             catch (Exception ex)
             {
@@ -40,11 +40,14 @@ namespace CTBX.ImportHolidays.Backend;
             return Task.CompletedTask;
         }
 
-        private static async Task CreateHolidaysTable(NpgsqlConnection connection, CancellationToken cancellationToken)
+        private static async Task CreateHolidaysTables(NpgsqlConnection connection, CancellationToken cancellationToken)
         {
-            string createDbQuery = DbScripts.CreateHolidaysDbIfNotExists;
-            using var command = new NpgsqlCommand(createDbQuery, connection);
-            await command.ExecuteNonQueryAsync(cancellationToken);
+            string createDbQuery1 = DbScripts.CreateHolidaysDbIfNotExists;
+            string createDbQuery2 = DbScripts.CreateHolidaysTableIfNotExists;
+            using var command1 = new NpgsqlCommand(createDbQuery1, connection);
+            using var command2 = new NpgsqlCommand(createDbQuery2, connection);
+            await command1.ExecuteNonQueryAsync(cancellationToken);
+            await command2.ExecuteNonQueryAsync(cancellationToken);
         }
     }
 
@@ -59,6 +62,17 @@ public static class DbScripts
                 FileStatus TEXT,
                 UploadDate TIMESTAMP DEFAULT NOW()
                 
+            );
+        """;
+
+    public static string CreateHolidaysTableIfNotExists => """
+            CREATE TABLE IF NOT EXISTS public.holidays (
+                Id SERIAL PRIMARY KEY,
+                Country TEXT,
+                State TEXT,
+                HolidayName TEXT,
+                HolidayDate DATE NOT NULL,
+                IsGlobal BOOL NOT NULL  
             );
         """;
 }

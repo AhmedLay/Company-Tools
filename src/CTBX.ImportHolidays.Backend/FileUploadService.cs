@@ -5,6 +5,8 @@ using CTBX.ImportHolidays.Shared;
 using CTBX.EmployeesImport.Shared;
 using NCommandBus.Core.Abstractions;
 using YAEP.Utils;
+using static MudBlazor.CategoryTypes;
+using System.Collections.Immutable;
 
 namespace CTBX.ImportHolidays.Backend;
 
@@ -22,73 +24,66 @@ public class FileUploadCommandHandler : CommandBusBase
         _connectionString = configuration.GetConnectionString("ctbx-common-db")!;
 
      
-        On<PersistFileRecordCommand, OperationResult>(HandlePersistFileRecord);
-        On<SaveFileToFolderCommand, OperationResult>(HandleSaveFileToFolder);
-        On<GetAllFileRecordsQuery, OperationResult<List<FileRecord>>>(HandleGetAllFileRecords); 
+      
+        //On<SaveFileToFolderCommand, OperationResult>(HandleSaveFileToFolder);
+
+        On<GetAllFileRecordsQuery, OperationResult<IImmutableList<FileRecord>>>(HandleGetAllFileRecords);
+
+        //On<GetAllFileRecordsQuery, OperationResult>(HandleGetAllFileRecords);
         On<GetHolidaysDataQuery, OperationResult>(HandleGetHolidaysData);
     }
 
-    private async ValueTask<OperationResult> HandlePersistFileRecord(PersistFileRecordCommand command, CancellationToken cancellationToken)
-    {
-        try
-        {
-            const string insertQuery = "INSERT INTO holidayimports (FileName, FilePath, FileStatus, UploadDate) VALUES (@FileName, @FilePath, @FileStatus, @UploadDate)";
-
-            await using var connection = new NpgsqlConnection(_connectionString);
-            await connection.ExecuteAsync(insertQuery, command.FileRecord);
-
-            return OperationResult.Success("File record persisted successfully.");
-        }
-        catch (Exception ex)
-        {
-            return OperationResult.Failure($"Failed to persist file record: {ex.Message}");
-        }
-    }
-
-    private async ValueTask<OperationResult> HandleSaveFileToFolder(SaveFileToFolderCommand command, CancellationToken cancellationToken)
-    {
-        try
-        {
-            // Ensure the folder exists
-            if (!Directory.Exists(command.FolderPath))
-            {
-                Directory.CreateDirectory(command.FolderPath);
-            }
-
-            // Set the file name and create the final path
-            var fileName = command.File.FileName.GuardAgainstNullOrEmpty("fileName");
-            var filePath = Path.Combine(command.FolderPath, fileName);
-
-            if (command.File.FileContent == null || command.File.FileContent.Length == 0)
-            {
-                throw new ArgumentException("The uploaded file is empty.");
-            }
-
-            await File.WriteAllBytesAsync(filePath, command.File.FileContent, cancellationToken);
-            return OperationResult.Success(filePath);
-        }
-        catch (Exception ex)
-        {
-            return OperationResult.Failure($"Failed to save file to folder: {ex.Message}");
-        }
-    }
-
-    private async ValueTask<OperationResult<List<FileRecord>>> HandleGetAllFileRecords(GetAllFileRecordsQuery query, CancellationToken cancellationToken)
+    private async ValueTask<OperationResult<IImmutableList<FileRecord>>> HandleGetAllFileRecords(GetAllFileRecordsQuery command, CancellationToken cancellationToken)
     {
         try
         {
             await using var connection = new NpgsqlConnection(_connectionString);
-            const string selectQuery = "SELECT Id, FileName, FilePath, FileStatus, UploadDate FROM public.fileimports";
+            const string selectQuery = "SELECT id, filename, filepath, filestatus, uploaddate FROM public.holidayimports";
+
             var result = await connection.QueryAsync<FileRecord>(selectQuery);
-            var filerecords = result.ToList();
+            //var filerecords = result.ToList();
+            var fileRecords = result?.ToImmutableList() ?? ImmutableList<FileRecord>.Empty;
 
-            return OperationResult.Success("Success", filerecords);
+            return OperationResult.Success("Successfully retrieved file records.", (IImmutableList<FileRecord>)fileRecords);
         }
         catch (Exception ex)
         {
-            return (OperationResult<List<FileRecord>>) OperationResult.Failure($"Failed to retrieve file records: {ex.Message}");
+            return (OperationResult<IImmutableList<FileRecord>>) OperationResult.Failure($"Failed to retrieve file records: {ex.Message}");
+            //return OperationResult<List<FileRecord>>.Failure($"Failed to retrieve file records: {ex.Message}");
         }
     }
+
+
+
+    //private async ValueTask<OperationResult> HandleSaveFileToFolder(SaveFileToFolderCommand command, CancellationToken cancellationToken)
+    //{
+    //    try
+    //    {
+    //        // Ensure the folder exists
+    //        if (!Directory.Exists(command.FolderPath))
+    //        {
+    //            Directory.CreateDirectory(command.FolderPath);
+    //        }
+
+    //        // Set the file name and create the final path
+    //        var fileName = command.File.FileName.GuardAgainstNullOrEmpty("fileName");
+    //        var filePath = Path.Combine(command.FolderPath, fileName);
+
+    //        if (command.File.FileContent == null || command.File.FileContent.Length == 0)
+    //        {
+    //            throw new ArgumentException("The uploaded file is empty.");
+    //        }
+
+    //        await File.WriteAllBytesAsync(filePath, command.File.FileContent, cancellationToken);
+    //        return OperationResult.Success(filePath);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return OperationResult.Failure($"Failed to save file to folder: {ex.Message}");
+    //    }
+    //}
+
+
 
     private async ValueTask<OperationResult> HandleGetHolidaysData(GetHolidaysDataQuery query, CancellationToken cancellationToken)
     {

@@ -16,15 +16,15 @@ public static class ImportHolidaysFeatureRegistration
 
         services.AddScoped<HolidaysImporter>();
         services.AddHostedService<ImportHolidaysDbSeeder>();
-        //services.AddScoped<IFileUploadHandler, FileUploadService>();
+        services.AddScoped<FileUploadCommandHandler>();
         services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
         //services.Configure<HolidayImporterOptions>(configuration.GetSection("POSTGRES_DB"));
         //services.Configure<HolidayImporterOptions>(configuration
         //                    .GetConnectionString("ctbx-events-db"));
         services.Configure<HolidayImporterOptions>(options =>
         { options.ConnectionString = configuration
-                            .GetConnectionString("ctbx-events-db")
-                            !.GuardAgainstNullOrEmpty("ctbx-events-db"); });
+                            .GetConnectionString("ctbx-common-db")
+                            !.GuardAgainstNullOrEmpty("ctbx-common-db"); });
         services.AddScoped<FluentValidator>();
         services.AddScoped<FileImportService>();
         services.AddScoped<FileImporter>();
