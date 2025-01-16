@@ -1,5 +1,4 @@
 ﻿using Carter;
-using CTBX.CommonUtils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Routing;
 using CTBX.ImportHolidays.Shared;
 using NCommandBus.Core.Abstractions;
 using System.Collections.Immutable;
-using System.Threading;
 using CTBX.EmployeesImport.Shared;
 
 
@@ -24,12 +22,10 @@ public class Endpoints : CarterModule
 
         AddImportHolidaysFilesEndpoint(app);
         AddGetFileRecordsEndpoint(app);
-
         SaveHolidaysToDBEndPoint(app);
-
         GetHolidaysEndpoint(app);
     }
-    // Working: Upload Holidays
+ 
     private void AddImportHolidaysFilesEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.HOLIDAYSFILES, async (
@@ -48,14 +44,14 @@ public class Endpoints : CarterModule
 
         }); 
     }
-    //Working: Get file records
+ 
     private void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(BackendRoutes.HOLIDAYSFILES, async (
             [FromServices] HolidaysImporter service,
             CancellationToken cancellationToken) =>
         {
-            var result = await service.Handle<OperationResult<IImmutableList<FileRecord>>>(new GetAllFileRecordsQuery(), cancellationToken);
+            var result = await service.Handle<OperationResult<IImmutableList<FileRecord>>>(new GetAllFileRecords(), cancellationToken);
 
             
             return result switch
@@ -68,7 +64,6 @@ public class Endpoints : CarterModule
     }
 
 
-    // using this one currently
     private void SaveHolidaysToDBEndPoint(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.HOLIDAYS, async (
@@ -88,39 +83,22 @@ public class Endpoints : CarterModule
         });
     }
 
-
-
-
     private void GetHolidaysEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(BackendRoutes.HOLIDAYS, async (
             [FromServices] HolidaysImporter service,
             CancellationToken cancellationToken) =>
         {
-            var result = await service.Handle<OperationResult<IImmutableList<Holiday>>>(new GetHolidaysDataQuery(), cancellationToken);
+            var result = await service.Handle<OperationResult<IImmutableList<Holiday>>>(new GetHolidaysData(), cancellationToken);
 
             return result switch
             {
-                _ when result.IsSuccess => Results.Ok(new { result.Value }),
+                _ when result.IsSuccess => Results.Ok(result.Value ),
                 _ when result.IsFailure => Results.BadRequest(new { result.Message }),
                 _ => Results.NotFound()
             };
         });
     }
-
-
-
-    //private void AddGetHolidaysEndpoint(IEndpointRouteBuilder app)
-    //{
-    //    app.MapGet(BackendRoutes.HOLIDAYS, async([FromServices] IFileUploadHandler service) =>
-    //    {
-    //        service.GuardAgainstNull(nameof(service));
-    //        var records = await service.GetHolidaysDataAsync();
-    //        return Results.Ok(records);
-    //    });
-
-    //}
-
     
 }
 

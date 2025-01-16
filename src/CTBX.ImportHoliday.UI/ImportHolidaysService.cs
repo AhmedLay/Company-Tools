@@ -56,8 +56,6 @@ public class ImportHolidaysService
             Console.WriteLine($"Error: Failed to fetch file records: {ex.Message}");
             return ImmutableList<FileRecord>.Empty;
         }
-
-
     }
 
     

@@ -19,10 +19,6 @@ public class ImportHolidayFileBase : BaseMudComponent
     protected List<IBrowserFile> UploadedFiles { get; set; } = new();
     protected bool Visible { get; set; }
     protected IImmutableList<FileRecord> FileRecordsList { get; set; } = ImmutableList<FileRecord>.Empty;
-
-    protected string Width { get; set; } = string.Empty;
-    protected string Height { get; set; } = string.Empty;
-
     public bool Open { get; set; } // Updated naming
 
     public void OpenDrawer()
