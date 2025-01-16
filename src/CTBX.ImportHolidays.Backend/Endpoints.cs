@@ -52,7 +52,7 @@ public class Endpoints : CarterModule
     private void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(BackendRoutes.HOLIDAYSFILES, async (
-            [FromServices] ReadCommandHandler service,
+            [FromServices] HolidaysImporter service,
             CancellationToken cancellationToken) =>
         {
             var result = await service.Handle<OperationResult<IImmutableList<FileRecord>>>(new GetAllFileRecordsQuery(), cancellationToken);
@@ -94,7 +94,7 @@ public class Endpoints : CarterModule
     private void GetHolidaysEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(BackendRoutes.HOLIDAYS, async (
-            [FromServices] ReadCommandHandler service,
+            [FromServices] HolidaysImporter service,
             CancellationToken cancellationToken) =>
         {
             var result = await service.Handle<OperationResult<IImmutableList<Holiday>>>(new GetHolidaysDataQuery(), cancellationToken);
