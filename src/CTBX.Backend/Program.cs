@@ -39,6 +39,7 @@ builder.Services.RegisterEventuousStores(builder.Configuration);
 EmployeesImportFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
 AbsenceManagementFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
 CommonUtilRegistration.RegisterServices(builder.Services, builder.Configuration);
+ImportHolidaysFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
 SkillManagmentFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();

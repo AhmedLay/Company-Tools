@@ -19,13 +19,13 @@ public record PersistHolidaysFromFile(string FileName, byte[] Content);
 public record GetHolidaysData();
 
 
-public class HolidaysImporter : CommandBusBase
+public class ImportService : CommandBusBase
 {
     private readonly HolidayImporterOptions _options;
     private readonly IDateTimeProvider _dateTimeProvider;
     
 
-    public HolidaysImporter(IOptions<HolidayImporterOptions> options,
+    public ImportService(IOptions<HolidayImporterOptions> options,
                             IDateTimeProvider dateTimeProvider, IConfiguration configuration)
     {
         _options = options.Value.GuardAgainstNull(nameof(options));
@@ -66,8 +66,6 @@ public class HolidaysImporter : CommandBusBase
             UploadDate = _dateTimeProvider.UtcNow
         });
 
-
-
         return
         OperationResult.Success($"File [{command.FileName}] uploaded to [{_options.UploadDirectory}]");
     }
@@ -91,7 +89,6 @@ public class HolidaysImporter : CommandBusBase
 
     }
 
-    
     private async ValueTask<OperationResult<IImmutableList<FileRecord>>> HandleGetAllFileRecords(GetAllFileRecords command, CancellationToken cancellationToken)
     {
         try

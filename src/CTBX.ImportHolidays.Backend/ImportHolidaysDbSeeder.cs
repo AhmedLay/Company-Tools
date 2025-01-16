@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 
 
-
 namespace CTBX.ImportHolidays.Backend;
 
     public class ImportHolidaysDbSeeder : IHostedService

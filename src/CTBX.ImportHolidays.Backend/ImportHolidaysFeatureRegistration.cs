@@ -10,10 +10,9 @@ public static class ImportHolidaysFeatureRegistration
 {
     public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<HolidaysImporter>();
+        services.AddScoped<ImportService>();
         services.AddHostedService<ImportHolidaysDbSeeder>();
         services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
-
         services.Configure<HolidayImporterOptions>(options =>
         { options.ConnectionString = configuration
                             .GetConnectionString("ctbx-common-db")

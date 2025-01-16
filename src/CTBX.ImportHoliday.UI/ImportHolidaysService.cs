@@ -32,10 +32,10 @@ public class ImportHolidaysService
             FileName = file.Name,
             FileContent = fileContent,
         };
-        Console.WriteLine("Message1");
+        Console.WriteLine("Before endpoint Hit !!!!");
+
         var result = await _httpClient.PostAsJsonAsync(BackendRoutes.HOLIDAYSFILES, uploadedFile);
-        
-        Console.WriteLine("Message2");
+        Console.WriteLine("after endpoint Hit !!!!");
         result.EnsureSuccessStatusCode();
         
     }
@@ -74,9 +74,9 @@ public class ImportHolidaysService
             FileName = file.Name,
             FileContent = fileContent,
         };
-        Console.WriteLine("SaveHolidays test message 1");
+
         var result = await _httpClient.PostAsJsonAsync(BackendRoutes.HOLIDAYS, uploadedFile);
-        Console.WriteLine("SaveHolidays test message 2");
+ 
         result.EnsureSuccessStatusCode();
     }
 
@@ -85,7 +85,6 @@ public class ImportHolidaysService
         try
         {
             var response = await _httpClient.GetFromJsonAsync<IImmutableList<Holiday>>(BackendRoutes.HOLIDAYS);
-
             return response ?? ImmutableList<Holiday>.Empty;
         }
         catch (Exception ex)
