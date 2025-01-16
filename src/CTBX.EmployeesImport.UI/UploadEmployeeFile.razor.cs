@@ -1,4 +1,5 @@
 ﻿using CTBX.CommonMudComponents;
+using CTBX.EmployeesImport.Shared;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -18,7 +19,14 @@ public class UploadEmployeeFileBase : BaseMudComponent
 
     public List<IBrowserFile> UploadedFiles { get; set; } = new();
     public bool _visible = false;
+    public List<FileRecord> fileRecodsList = new();
+    public required string _width, _height;
+    public bool _open;
 
+    public void OpenDrawer()
+    {
+    _open = true;
+    }
     protected async Task LoadFiles(IReadOnlyList<IBrowserFile> files)
     {
         _visible = true;
@@ -40,7 +48,6 @@ public class UploadEmployeeFileBase : BaseMudComponent
             
         }
         _visible = false;
-
     }
     public void RemoveFile(IBrowserFile file)
     {
@@ -58,10 +65,21 @@ public class UploadEmployeeFileBase : BaseMudComponent
                 errMessage: $"Something went wrong with!"
             );
         }
+        await ReloadData();
         UploadedFiles.Clear();
          _visible = false;
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadData();
+    }
 
+    public async Task ReloadData()
+    {
+        _visible = true;
+        fileRecodsList = await Service.GetFileRecordsAsync() ?? new List<FileRecord>();
+        _visible = false;
+    }
 
 }
