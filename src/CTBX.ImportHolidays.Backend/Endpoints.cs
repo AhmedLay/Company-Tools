@@ -8,6 +8,7 @@ using CTBX.ImportHolidays.Shared;
 using NCommandBus.Core.Abstractions;
 using System.Collections.Immutable;
 using System.Threading;
+using CTBX.EmployeesImport.Shared;
 
 
 namespace CTBX.ImportHolidays.Backend;
@@ -26,7 +27,7 @@ public class Endpoints : CarterModule
 
         SaveHolidaysToDBEndPoint(app);
 
-        AddGetHolidaysEndpoint(app);
+        GetHolidaysEndpoint(app);
     }
     // Working: Upload Holidays
     private void AddImportHolidaysFilesEndpoint(IEndpointRouteBuilder app)
@@ -51,7 +52,7 @@ public class Endpoints : CarterModule
     private void AddGetFileRecordsEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(BackendRoutes.HOLIDAYSFILES, async (
-            [FromServices] FileUploadCommandHandler service,
+            [FromServices] ReadCommandHandler service,
             CancellationToken cancellationToken) =>
         {
             var result = await service.Handle<OperationResult<IImmutableList<FileRecord>>>(new GetAllFileRecordsQuery(), cancellationToken);
@@ -90,17 +91,17 @@ public class Endpoints : CarterModule
 
 
 
-    private void AddGetHolidaysEndpoint(IEndpointRouteBuilder app)
+    private void GetHolidaysEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(BackendRoutes.HOLIDAYS, async (
-            [FromServices] FileUploadCommandHandler service,
+            [FromServices] ReadCommandHandler service,
             CancellationToken cancellationToken) =>
         {
-            var result = await service.Handle<OperationResult>(new GetHolidaysDataQuery(), cancellationToken);
+            var result = await service.Handle<OperationResult<IImmutableList<Holiday>>>(new GetHolidaysDataQuery(), cancellationToken);
 
             return result switch
             {
-                _ when result.IsSuccess => Results.Ok(new { result.Message }),
+                _ when result.IsSuccess => Results.Ok(new { result.Value }),
                 _ when result.IsFailure => Results.BadRequest(new { result.Message }),
                 _ => Results.NotFound()
             };

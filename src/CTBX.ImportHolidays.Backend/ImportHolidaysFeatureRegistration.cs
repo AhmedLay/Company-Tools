@@ -16,7 +16,7 @@ public static class ImportHolidaysFeatureRegistration
 
         services.AddScoped<HolidaysImporter>();
         services.AddHostedService<ImportHolidaysDbSeeder>();
-        services.AddScoped<FileUploadCommandHandler>();
+        services.AddScoped<ReadCommandHandler>();
         services.Configure<FileUploadOptions>(configuration.GetSection(nameof(FileUploadOptions)));
         //services.Configure<HolidayImporterOptions>(configuration.GetSection("POSTGRES_DB"));
         //services.Configure<HolidayImporterOptions>(configuration
@@ -26,8 +26,8 @@ public static class ImportHolidaysFeatureRegistration
                             .GetConnectionString("ctbx-common-db")
                             !.GuardAgainstNullOrEmpty("ctbx-common-db"); });
         services.AddScoped<FluentValidator>();
-        services.AddScoped<FileImportService>();
-        services.AddScoped<FileImporter>();
+        //services.AddScoped<FileImportService>();
+        //services.AddScoped<FileImporter>();
 
         
 

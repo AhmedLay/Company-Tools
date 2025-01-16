@@ -10,22 +10,21 @@ using System.Collections.Immutable;
 
 namespace CTBX.ImportHolidays.Backend;
 
-public record PersistFileRecordCommand(FileRecord FileRecord);
-public record SaveFileToFolderCommand(string FolderPath, FileData File);
+
 public record GetAllFileRecordsQuery();
 public record GetHolidaysDataQuery();
 
-public class FileUploadCommandHandler : CommandBusBase
+public class ReadCommandHandler : CommandBusBase
 {
     private readonly string _connectionString;
 
-    public FileUploadCommandHandler(IConfiguration configuration)
+    public ReadCommandHandler(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString("ctbx-common-db")!;
 
         On<GetAllFileRecordsQuery, OperationResult<IImmutableList<FileRecord>>>(HandleGetAllFileRecords);
 
-        On<GetHolidaysDataQuery, OperationResult>(HandleGetHolidaysData);
+        On<GetHolidaysDataQuery, OperationResult<IImmutableList<Holiday>>>(HandleGetHolidaysData);
     }
 
     private async ValueTask<OperationResult<IImmutableList<FileRecord>>> HandleGetAllFileRecords(GetAllFileRecordsQuery command, CancellationToken cancellationToken)
@@ -49,54 +48,58 @@ public class FileUploadCommandHandler : CommandBusBase
     }
 
 
-
-    //private async ValueTask<OperationResult> HandleSaveFileToFolder(SaveFileToFolderCommand command, CancellationToken cancellationToken)
-    //{
-    //    try
-    //    {
-    //        // Ensure the folder exists
-    //        if (!Directory.Exists(command.FolderPath))
-    //        {
-    //            Directory.CreateDirectory(command.FolderPath);
-    //        }
-
-    //        // Set the file name and create the final path
-    //        var fileName = command.File.FileName.GuardAgainstNullOrEmpty("fileName");
-    //        var filePath = Path.Combine(command.FolderPath, fileName);
-
-    //        if (command.File.FileContent == null || command.File.FileContent.Length == 0)
-    //        {
-    //            throw new ArgumentException("The uploaded file is empty.");
-    //        }
-
-    //        await File.WriteAllBytesAsync(filePath, command.File.FileContent, cancellationToken);
-    //        return OperationResult.Success(filePath);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return OperationResult.Failure($"Failed to save file to folder: {ex.Message}");
-    //    }
-    //}
-
-
-
-    private async ValueTask<OperationResult> HandleGetHolidaysData(GetHolidaysDataQuery query, CancellationToken cancellationToken)
+    private async ValueTask<OperationResult<IImmutableList<Holiday>>> HandleGetHolidaysData(GetHolidaysDataQuery query, CancellationToken cancellationToken)
     {
         try
         {
             await using var connection = new NpgsqlConnection(_connectionString);
             const string selectQuery = "SELECT Country, State, HolidayName, HolidayDate, IsGlobal FROM public.Holidays";
             var result = await connection.QueryAsync<Holiday>(selectQuery);
-            var filerecords = result.ToList();
+           
+            var holidays = result?.ToImmutableList() ?? ImmutableList<Holiday>.Empty;
 
-            return OperationResult.Success("Success", filerecords);
+            return OperationResult.Success("Successfully retrieved Holidays", (IImmutableList<Holiday>)holidays);
         }
         catch (Exception ex)
         {
-            return OperationResult.Failure($"Failed to retrieve holiday data: {ex.Message}");
+            return (OperationResult<IImmutableList<Holiday>>) OperationResult.Failure($"Failed to retrieve holiday data: {ex.Message}");
         }
     }
 }
+
+
+
+//private async ValueTask<OperationResult> HandleSaveFileToFolder(SaveFileToFolderCommand command, CancellationToken cancellationToken)
+//{
+//    try
+//    {
+//        // Ensure the folder exists
+//        if (!Directory.Exists(command.FolderPath))
+//        {
+//            Directory.CreateDirectory(command.FolderPath);
+//        }
+
+//        // Set the file name and create the final path
+//        var fileName = command.File.FileName.GuardAgainstNullOrEmpty("fileName");
+//        var filePath = Path.Combine(command.FolderPath, fileName);
+
+//        if (command.File.FileContent == null || command.File.FileContent.Length == 0)
+//        {
+//            throw new ArgumentException("The uploaded file is empty.");
+//        }
+
+//        await File.WriteAllBytesAsync(filePath, command.File.FileContent, cancellationToken);
+//        return OperationResult.Success(filePath);
+//    }
+//    catch (Exception ex)
+//    {
+//        return OperationResult.Failure($"Failed to save file to folder: {ex.Message}");
+//    }
+//}
+
+
+
+
 
 //public class FileUploadService : IFileUploadHandler
 //{

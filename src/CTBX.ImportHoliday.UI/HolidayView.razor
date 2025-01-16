@@ -1,11 +1,11 @@
-@* @page "/holidays-view"
+@page "/holidays-view"
 @using CTBX.ImportHolidays.Shared
 @inherits HolidayViewBase
 
 <MudDataGrid Items="HolidaysList" Filterable="false" Groupable="false" Class="mt-4" QuickFilter="@_quickFilter">
 	<ToolBarContent>
-		<MudText Typo="Typo.h6">Employees</MudText>
-		<MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="ReloadData" />
+		<MudText Typo="Typo.h6">Holidays</MudText>
+		<MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="ReloadHolidaysData" />
 		<MudSpacer />
 		<MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
 					  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -21,4 +21,4 @@
 		<MudDataGridPager />
 	</PagerContent>
 </MudDataGrid>
- *@
+

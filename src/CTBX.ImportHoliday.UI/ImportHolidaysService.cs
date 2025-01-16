@@ -53,14 +53,14 @@ public class ImportHolidaysService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: Failed to fetch file records (from GetFromJsonAsync): {ex.Message}");
+            Console.WriteLine($"Error: Failed to fetch file records: {ex.Message}");
             return ImmutableList<FileRecord>.Empty;
         }
 
 
     }
 
-    // Just added his one
+    
     public async Task SaveHolidays(IBrowserFile file)
     {
 
@@ -82,9 +82,21 @@ public class ImportHolidaysService
         result.EnsureSuccessStatusCode();
     }
 
-    public async Task<List<Holiday>> GetHolidaysAsync()
+    public async Task<IImmutableList<Holiday>> GetHolidaysAsync()
     {
-        var holidayview = await _httpClient.GetFromJsonAsync<List<Holiday>>(BackendRoutes.HOLIDAYS);
-        return holidayview ?? [];
+        try
+        {
+            var response = await _httpClient.GetFromJsonAsync<IImmutableList<Holiday>>(BackendRoutes.HOLIDAYS);
+
+            return response ?? ImmutableList<Holiday>.Empty;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: Failed to fetch Holidays(from GetHolidaysAsync): {ex.Message}");
+            return ImmutableList<Holiday>.Empty;
+        }
     }
 }
+
+
+
