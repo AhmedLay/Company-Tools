@@ -1,4 +1,4 @@
-using CTBX.EmployeesImport.UI;
+using CTBX.ImportHolidays.UI;
 using CTBX.WebPortal.Client;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;

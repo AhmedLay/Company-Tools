@@ -1,0 +1,86 @@
+﻿@page "/holidays-upload"
+@using CTBX.ImportHolidays.Shared
+@inherits ImportHolidayFileBase
+
+
+<MudPaper Class="d-flex flex-column align-center py-4">
+
+	<div Class="d-flex align-items-center mb-3">
+		<MudText Typo="Typo.h3" Class="mr-2">
+			Welcome to the Holidays File Uploader!
+		</MudText>
+		<MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Info" Class="info-button" OnClick="@(() => OpenDrawer())" />
+	</div>
+
+	<MudText Typo="Typo.subtitle1" Class="text-secondary mb-4">
+		Streamline your holidays data uploads with ease and efficiency.
+	</MudText>
+
+	<div Class="d-flex align-items-center gap-3">
+		<MudFileUpload T="IReadOnlyList<IBrowserFile>"
+					   Accept=".txt, .csv"
+					   FilesChanged="LoadFiles">
+			<ActivatorContent>
+				<MudButton Variant="Variant.Filled"
+						   Color="Color.Warning"
+						   StartIcon="@Icons.Material.Filled.UploadFile">
+					Load Files
+				</MudButton>
+			</ActivatorContent>
+		</MudFileUpload>
+		<MudButton Variant="Variant.Filled"
+				   Color="Color.Success"
+				   OnClick="SubmitFiles"
+				   StartIcon="@Icons.Material.Filled.CloudUpload">
+			Submit Files
+		</MudButton>
+		<MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="ReloadData" />
+
+	</div>
+
+
+	<MudList T="string" Class="mt-4">
+		@foreach (var file in UploadedFiles)
+		{
+			<MudListItem @key="@file" OnClick="() => RemoveFile(file)">
+				<MudItem Class="custom-flex-layout">
+					@file.Name
+					<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => RemoveFile(file)" />
+				</MudItem>
+			</MudListItem>
+		}
+	</MudList>
+</MudPaper>
+
+<MudDataGrid Items="FileRecordsList" Filterable="false" SortMode="@SortMode.None" Groupable="false" Class="mt-4">
+	<Columns>
+		<PropertyColumn Property="x => x.Id" Title="ID" />
+		<PropertyColumn Property="x => x.FileName" Title="Name" />
+		@* <PropertyColumn Property="x => x.FileStatus" Title="Status" /> *@
+		<PropertyColumn Property="x => x.UploadDate" Title="Upload Date" Format="yyyy-MM-dd HH:mm" />
+	</Columns>
+</MudDataGrid>
+
+
+<MudOverlay @bind-Visible="Visible" DarkBackground>
+	<MudProgressCircular Color="Color.Success" Indeterminate="true" />
+</MudOverlay>
+
+<MudDrawer @bind-Open="@Open" Width="600px" Height="100%" Elevation="1" Anchor="Anchor.End" Variant="@DrawerVariant.Temporary">
+	<MudDrawerHeader Style="display: flex; justify-content: center; align-items: center;">
+		<MudText Typo="Typo.h5">
+			How to upload an Holiday File
+		</MudText>
+	</MudDrawerHeader>
+	<MudText Typo="Typo.body2" Class="px-4" Align="Align.Left">
+		1. Click "Load Files" to choose files.<br />
+		2. Select CSV or TXT files that follow the required format.<br />
+		3. Once the files are loaded, click "Submit Files" to upload.<br />
+		* Make sure one Holiday Entry is built like this:<br />
+		Email;Firstname;Name;PersonalId;AnualVacaitionDays;RemaningVacationDays<br />
+		max.mustermann@ctbx.de;max;mustermann;123;30;21
+	</MudText>
+</MudDrawer>
+
+
+
