@@ -17,7 +17,6 @@ var demoUserPassword = builder.AddParameter("DemoUserPassword", secret: true);
 // this is only to make it easy to manage the dbs in one PgAdmin
 // in prod each service will have its own db container 
 var postgresDbResource = builder.AddPostgres("ctbx-db")
-                                .WithDataVolume("dbData")
                                  .WithPgAdmin(options =>
                                  {
                                      options.WithHostPort(port: 49100);                                     
