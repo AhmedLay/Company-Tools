@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\CTBX.EmployeesImport.UI\CTBX.EmployeesImport.UI.csproj" />
     <ProjectReference Include="..\..\CTBX.AbsenceManagement.UI\CTBX.AbsenceManagement.UI.csproj" />
+    <ProjectReference Include="..\..\CTBX.ImportHoliday.UI\CTBX.ImportHolidays.UI.csproj" />
   </ItemGroup>
 
 </Project>

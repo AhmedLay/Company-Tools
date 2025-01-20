@@ -13,8 +13,6 @@ public class UploadEmployeeFileBase : BaseMudComponent
     public required UploadEmployeesService Service { get; set; }
 
     [Inject]
-    public new required ISnackbar Snackbar { get; set; }
-    [Inject]
     public required IValidator<IBrowserFile> FileUploadValidator { get; set; }
 
     public List<IBrowserFile> UploadedFiles { get; set; } = new();
