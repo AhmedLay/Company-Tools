@@ -8,6 +8,7 @@ namespace CTBX.AbsenceManagement.Shared.DTOs
 {
     public class VacationScheduleDTO
     {
+        public int EmployeeID { get; set; } 
         public string Id { get; set; } = string.Empty;
         public DateTimeOffset From { get; set; }
         public DateTimeOffset To { get; set; }

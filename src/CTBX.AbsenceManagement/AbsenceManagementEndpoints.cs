@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using MinimalApiArchitecture.Application.Commands;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Connections;
 
 namespace MinimalApiArchitecture.Application;
 public class AbsenceManagementEndpoints : CarterModule
@@ -27,6 +27,15 @@ public class AbsenceManagementEndpoints : CarterModule
             var result = await service.Handle(command, token);
             return Results.Ok(result);
 
+        });
+
+        app.MapPost(BackendRoutes.VacationScheduleEditURL, async (
+            VacationChangeCommand command,
+            CancellationToken token,
+            [FromServices] AbsenceManagementApplicationService service) =>
+        {
+            var result = await service.Handle(command, token);
+            return Results.Ok(result);
         });
 
         app.MapGet(BackendRoutes.VacationDatagridURL, async (

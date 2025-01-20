@@ -17,24 +17,15 @@
                     <PropertyColumn Property="x => x.From" Title="From" Format="dd-MM-yyyy" />
                     <PropertyColumn Property="x => x.To" Title="To" Format="dd-MM-yyyy" />
                     <TemplateColumn CellClass="d-flex justify-end">
-                        <CellTemplate>
-                            <MudStack Row>
-                                <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Dense="true">
-                                    <MudMenuItem>
-                                        <MudIcon Icon="@Icons.Material.Filled.Delete"/>
-                                        Delete
-                                    </MudMenuItem>
-                                    <MudMenuItem>
-                                        <MudIcon Icon="@Icons.Material.Filled.Edit" />
-                                        Edit Draft
-                                    </MudMenuItem>
-                                    <MudMenuItem>
-                                        <MudIcon Icon="@Icons.Material.Filled.Send" />
-                                        Send
-                                    </MudMenuItem>
-                                </MudMenu>
-                            </MudStack>
+                        <CellTemplate Context="context">
+                            <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Dense="true">
+                                <MudMenuItem OnClick="@(() => EditDraft(context.Item))">
+                                    <MudIcon Icon="@Icons.Material.Filled.Edit" />
+                                    Edit Draft
+                                </MudMenuItem>
+                            </MudMenu>
                         </CellTemplate>
+
                     </TemplateColumn>
                 </Columns>
             </MudDataGrid>       
@@ -65,7 +56,14 @@
                     <MudSelectItem Value="true">Vacation</MudSelectItem>
                     <MudSelectItem Value="false">Sick Leave</MudSelectItem>
                 </MudSelect>
-                <MudButton OnClick="SaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Save Request</MudButton>
+                @if (_isEditMode)
+                {
+                    <MudButton OnClick="UpdateDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Update Request</MudButton>
+                }
+                else
+                {
+                    <MudButton OnClick="SaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Save Request</MudButton>
+                }
 
             </MudForm>
         </MudCardContent>

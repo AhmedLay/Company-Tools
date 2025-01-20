@@ -12,9 +12,12 @@ using System.Runtime.Intrinsics;
 
 public class AbsenceManagementProjection : MongoProjector<VacationDocument>
 {
-    public AbsenceManagementProjection(IMongoDatabase client) : base(client) {
-
+    private readonly ILogger<AbsenceManagementProjection> _logger;
+    public AbsenceManagementProjection(IMongoDatabase client, ILogger<AbsenceManagementProjection> logger) : base(client)
+    {
+        _logger = logger;
         On<VacationScheduled>(aggregate => aggregate.GetId(), Handle);
+        On<VacationChanged>(aggregate => aggregate.GetId(), Handle);
     }
     static UpdateDefinition<VacationDocument> Handle(
         IMessageConsumeContext<VacationScheduled> ctx, UpdateDefinitionBuilder<VacationDocument> update)
@@ -30,6 +33,16 @@ public class AbsenceManagementProjection : MongoProjector<VacationDocument>
 
     }
 
+    static UpdateDefinition<VacationDocument> Handle(
+        IMessageConsumeContext<VacationChanged> ctx, UpdateDefinitionBuilder<VacationDocument> update)
+    {
+        var evt = ctx.Message;
+        return update.Set(x => x.Id, ctx.Stream.GetId())
+                 .Set(x => x.EmployeeId, evt.EmployeeID)
+                 .Set(x => x.From, evt.From)
+                 .Set(x => x.To, evt.To)
+                 .Set(x => x.Comment, evt.Comment ?? string.Empty);
+    }
 }
 
 

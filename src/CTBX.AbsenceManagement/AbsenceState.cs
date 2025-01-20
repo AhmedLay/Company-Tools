@@ -9,6 +9,11 @@ namespace MinimalApiArchitecture.Application
 {
     public record AbsenceState : State<AbsenceState>
     {
-        public string Title { get; set; } = string.Empty;
+        public string EmployeeId { get; set; } = string.Empty;
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+        public string Comment { get; set; } = string.Empty;
+        public bool IsApproved { get; set; }
     }
+    
 }

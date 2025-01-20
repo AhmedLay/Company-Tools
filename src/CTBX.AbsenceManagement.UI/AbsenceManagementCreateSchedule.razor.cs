@@ -5,7 +5,6 @@ using FluentValidation;
 using Heron.MudCalendar;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using MinimalApiArchitecture.Application.Commands;
 using MudBlazor;
 
 namespace CTBX.AbsenceManagement.UI
@@ -19,11 +18,12 @@ namespace CTBX.AbsenceManagement.UI
         public record Request(int Id, string Draftname, DateTimeOffset From, DateTimeOffset To, string AbsenceType);
         public List<VacationScheduleDTO> List { get; set; } = new();
         public List<Request> Requests { get; set; } = new();
-        public bool _open = false;
         public VacationRequest CurrentRequest { get; set; } = new();
-        public bool _visible = false;
         public List<DateTime> MarkedDates { get; set; } = new();
         public List<DraftsItems> _events = new();
+        public bool _open = false;
+        public bool _visible = false;
+        public bool _isEditMode = false;
         public void OpenDrawer()
         {
             _open = true;
@@ -49,20 +49,21 @@ namespace CTBX.AbsenceManagement.UI
                     }
                     return;
                 }
-                var id = Guid.NewGuid().ToString();
-                var command = new VacationScheduleCommand(id, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment, scheduledat);
-                var response = await Service.SendCommand(command);
-                if (response.IsSuccessStatusCode)
-                {
+                var command = new VacationScheduleCommand(null, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment, scheduledat);
                     _visible = true;
                     await LoadData();
-                    await NotifySuccess("Draft Saved");
+
+                await OnHandleOperation(
+                    operation: () => Service.SendCommand(command),
+                    successMssage: "Draft Saved",
+                    errMessage: $"Something went wrong!"
+                    );
                     ResetForm();
                     _open = false;
                     _visible = false;
                 }
             }
-        }
+
         public void SubmitRequest()
         {
             _open = false;
@@ -97,6 +98,42 @@ namespace CTBX.AbsenceManagement.UI
         public void DeleteItem()
         {
 
+        }
+        public void EditDraft(VacationScheduleDTO edit)
+        {
+            var eFrom = edit.From.UtcDateTime;
+            var eTo = edit.To.UtcDateTime;
+
+            CurrentRequest = new VacationRequest
+            {
+                EmployeeId = edit.EmployeeID,
+                From = eFrom,
+                To = eTo,
+                Scheduledat = DateTimeOffset.MinValue,
+                Comment = edit.Comment,
+                RequestType = true
+            };
+            Console.WriteLine(edit.EmployeeID);
+            _open = true;
+            _isEditMode = true;
+        }
+        public async Task UpdateDraft()
+        {
+            if (CurrentRequest.From == null || CurrentRequest.To == null)
+            {
+                return;
+            }
+            var from = new DateTimeOffset(CurrentRequest.From.Value, TimeSpan.Zero);
+            var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
+            var id = Guid.NewGuid().ToString();
+
+            var command = new VacationChangeCommand(id,CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment);
+            await OnHandleOperation(
+                   operation: () => Service.EditCommand(command),
+                   successMssage: "Draft Edited",
+                   errMessage: $"Something went wrong!"
+                   );
+            _open = false;
         }
     }
 }

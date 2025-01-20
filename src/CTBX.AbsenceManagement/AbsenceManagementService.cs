@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using CTBX.AbsenceManagement.Shared.DTOs;
-using MinimalApiArchitecture.Application.Commands;
 using MongoDB.Driver;
 
 namespace MinimalApiArchitecture.Application
@@ -31,6 +30,7 @@ namespace MinimalApiArchitecture.Application
         public async Task<List<VacationScheduleDTO>> GetData()
         {
             var projection = Builders<VacationScheduleCommand>.Projection
+                .Include(e =>e.EmployeeId)
                 .Include(e => e.Id)
                 .Include(e => e.From)
                 .Include(e => e.To)
@@ -43,6 +43,7 @@ namespace MinimalApiArchitecture.Application
 
             var listofdrafts = vacationScheduleCommands.Select(command => new VacationScheduleDTO
             {
+                EmployeeID = command.EmployeeId,
                 Id = command.Id,
                 From = command.From,
                 To = command.To,
