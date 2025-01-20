@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -21,6 +21,7 @@
     <PackageReference Include="Hangfire.Core" Version="1.8.17" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.20.10" />
     <PackageReference Include="Scalar.AspNetCore" Version="1.2.71" />
+    <PackageReference Include="Npgsql" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,10 +31,6 @@
     <ProjectReference Include="..\CTBX.ImportHolidays.Backend\CTBX.ImportHolidays.Backend.csproj" />
     <ProjectReference Include="..\CTBX.ServiceDefaults\CTBX.ServiceDefaults.csproj" />
     <ProjectReference Include="..\CTBX.SkillManagment.Backend\CTBX.SkillManagment.Backend.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="upload\" />
   </ItemGroup>
 
 </Project>

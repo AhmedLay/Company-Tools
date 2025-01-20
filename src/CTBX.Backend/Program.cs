@@ -1,5 +1,7 @@
 using Carter;
 using CTBX.Backend;
+using Eventuous;
+using Eventuous.Postgresql.Subscriptions;
 using CTBX.EmployeesImport.Backend;
 using CTBX.SkillManagment.Backend;
 using Hangfire;
@@ -12,6 +14,8 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
+
+//TypeMap.RegisterKnownEventTypes(typeof(AbsenceManagementAggregate).Assembly);
 
 builder.Services.AddHangfire(x => x.UsePostgreSqlStorage(options => options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("ctbx-common-db"))));
 builder.Services.AddHangfireServer();
@@ -37,6 +41,7 @@ builder.Services.RegisterJWTBearerAuthNService(builder.Configuration);
 builder.Services.RegisterEventuousStores(builder.Configuration);
 
 EmployeesImportFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
+CommonUtilRegistration.RegisterServices(builder.Services, builder.Configuration);
 AbsenceManagementFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);
 CommonUtilRegistration.RegisterServices(builder.Services, builder.Configuration);
 ImportHolidaysFeatureRegistration.RegisterServices(builder.Services, builder.Configuration);

@@ -1,24 +1,33 @@
-﻿using Eventuous.Postgresql.Subscriptions;
+﻿using DnsClient.Internal;
+using Eventuous.Postgresql;
+using Eventuous.Postgresql.Subscriptions;
+using Eventuous.Projections.MongoDB;
 using Eventuous.Subscriptions.Registrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Npgsql;
-
 namespace MinimalApiArchitecture.Application;
-
 public static class AbsenceManagementFeatureRegistration
 {
-    public static void RegisterServices(this IServiceCollection services,IConfiguration configuration)
+    public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // add service registrations here
+        var connectionString = configuration.GetConnectionString("ctbx-events-db")!.GuardAgainstNullOrEmpty("connectionstring");
+        services.AddEventuousPostgres(connectionString, "ctbx",true);
+        services.AddEventStore<PostgresStore>();
+        services.AddScoped<AbsenceManagementService>();
+        services.AddCommandService<AbsenceManagementApplicationService, AbsenceState>();
+        services.AddCheckpointStore<MongoCheckpointStore>();
+        services.AddSubscription<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions>(
+            "AbsenceProjections",
+            builder => builder
+                .AddEventHandler<AbsenceManagementProjection>()
+                );
     }
-
     public static SubscriptionBuilder RegisterSubscriptions(this SubscriptionBuilder<PostgresAllStreamSubscription, PostgresAllStreamSubscriptionOptions> builder)
     {
-        //add all projections and subscriptions here
-        throw new NotImplementedException();
+        return builder;
     }
+
 }
+
 

@@ -16,6 +16,7 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
 builder.Services.AddValidatorsFromAssemblyContaining<FileUploadValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AbsenceManagementFormValidator>();
 
 builder.Services.AddMudServices();
 builder.Services.AddMudTranslations();

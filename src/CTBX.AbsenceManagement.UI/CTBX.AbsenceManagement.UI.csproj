@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -15,6 +15,20 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.0" />
     <PackageReference Include="Heron.MudCalendar" Version="2.0.3" />
     <PackageReference Include="MudBlazor.Translations" Version="1.5.1" />
+    <PackageReference Include="MudBlazor" Version="7.15.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CTBX.AbsenceManagement.Shared\CTBX.AbsenceManagement.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CTBX.CommonMudComponents">
+      <HintPath>..\CTBX.CommonMudComponents\obj\Debug\net9.0\ref\CTBX.CommonMudComponents.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
+

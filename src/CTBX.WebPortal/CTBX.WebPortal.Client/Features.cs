@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+using System.Reflection;
+using CTBX.AbsenceManagement.UI;
 using CTBX.EmployeesImport.UI;
 using CTBX.ImportHoliday.UI;
 
@@ -10,6 +11,7 @@ public static class Features
     => [
         typeof(Program).Assembly,
         typeof(EmployeesImportRegistrations).Assembly,
+        typeof(AbsenceManagementRegistration).Assembly
         typeof(ImportHolidaysRegistration).Assembly,
        ];
 }

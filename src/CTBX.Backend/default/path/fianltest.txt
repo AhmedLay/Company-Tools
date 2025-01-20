@@ -1,3 +1,0 @@
-Email;firstname;lastname;employeenumber;AnualVacationDays;RemainingVacationDays
-email@example.com;John;Doe;12345;20;15
-jane.doe@example.com;Jane;Doe;12346;25;20

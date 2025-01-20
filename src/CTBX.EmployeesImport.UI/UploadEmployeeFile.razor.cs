@@ -1,4 +1,4 @@
-﻿using CTBX.CommonMudComponents;
+using CTBX.CommonMudComponents;
 using CTBX.EmployeesImport.Shared;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
@@ -11,7 +11,6 @@ public class UploadEmployeeFileBase : BaseMudComponent
 {
     [Inject]
     public required UploadEmployeesService Service { get; set; }
-
     [Inject]
     public required IValidator<IBrowserFile> FileUploadValidator { get; set; }
 

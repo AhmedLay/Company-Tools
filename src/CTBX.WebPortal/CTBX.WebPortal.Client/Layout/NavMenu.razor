@@ -1,29 +1,18 @@
-﻿
+
 <MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-
-    <MudNavLink Href="calender" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CalendarMonth">Calender</MudNavLink>
-
     <MudNavGroup Title="Reports" Icon="@Icons.Material.Filled.Send" Expanded="true">
-        <MudNavLink Href="vacation" Match="NavLinkMatch.Prefix" >Vacation Request</MudNavLink>
-        <MudNavLink Href="sickleavereport" Match="NavLinkMatch.Prefix" >Sick Report</MudNavLink>
+        <MudNavLink Href="vacation-schedule" Match="NavLinkMatch.Prefix">Request</MudNavLink>
     </MudNavGroup>
 
     <MudNavGroup Title="Supervisor Features" Icon="@Icons.Material.Filled.SupervisorAccount" Expanded="true">
-        <MudNavLink Href="/file-upload" Match="NavLinkMatch.Prefix">Add Employees</MudNavLink>
+        <MudNavLink Href="file-upload" Match="NavLinkMatch.Prefix">Add Employees</MudNavLink>
 
+        <MudNavLink Href="employees-view" Match="NavLinkMatch.Prefix">My Employees</MudNavLink>
         <MudNavLink Href="/employees-view" Match="NavLinkMatch.Prefix">My Employees</MudNavLink>
 		<MudNavLink Href="/holidays-upload" Match="NavLinkMatch.Prefix">Holidays Import</MudNavLink>
 		<MudNavLink Href="/holidays-view" Match="NavLinkMatch.Prefix">Holidays</MudNavLink>
     </MudNavGroup>
-
-    <MudNavGroup Title="Future Features 2" Icon="@Icons.Material.Filled.Notes" Expanded="true">
-        <MudNavLink Href="ss" Match="NavLinkMatch.Prefix"> Placeholder 3</MudNavLink>
-        <MudNavLink Href="ss" Match="NavLinkMatch.Prefix">Placeholder 4</MudNavLink>
-        <MudNavLink Href="ss" Match="NavLinkMatch.Prefix">Placeholder 5</MudNavLink>
-        <MudNavLink Href="/errortest" Match="NavLinkMatch.Prefix"> error tester</MudNavLink>
-    </MudNavGroup>
-
     <MudNavGroup Title="Settings" Icon="@Icons.Material.Filled.Settings" Expanded="true">
         <MudNavLink Href="/users">Users</MudNavLink>
         <MudNavLink Href="/security">Security</MudNavLink>
