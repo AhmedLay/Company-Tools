@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using CTBX.CommonUtils;
-using CTBX.EmployeesImport.Shared;
 using CTBX.ImportHolidays.Shared;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +31,6 @@ public class ImportService : CommandBusBase
 
         On<UploadHolidayFile, OperationResult>(HandleUpload);
         On<GetAllFileRecords, OperationResult<IImmutableList<FileRecord>>>(HandleGetAllFileRecords);
-
         On<PersistHolidaysFromFile, OperationResult>(HandleHolidaysPersistence);
         On<GetHolidaysData, OperationResult<IImmutableList<Holiday>>>(HandleGetHolidaysData);
 
@@ -104,7 +102,6 @@ public class ImportService : CommandBusBase
         catch (Exception ex)
         {
             return (OperationResult<IImmutableList<FileRecord>>)OperationResult.Failure($"Failed to retrieve file records: {ex.Message}");
-
         }
     }
 

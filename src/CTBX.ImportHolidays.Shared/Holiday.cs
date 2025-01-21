@@ -1,5 +1,5 @@
 ﻿
-namespace CTBX.EmployeesImport.Shared;
+namespace CTBX.ImportHolidays.Shared;
 
 public class Holiday
 {
