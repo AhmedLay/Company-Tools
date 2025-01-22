@@ -5,7 +5,6 @@ public class Holiday
 {
     public Holiday()
     {
-
     }
     public int Id { get; set; }
     public string Country { get; set; } = string.Empty;

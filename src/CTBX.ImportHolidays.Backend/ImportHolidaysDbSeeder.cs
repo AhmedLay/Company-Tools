@@ -58,7 +58,7 @@ public static class DbScripts
                 Id SERIAL PRIMARY KEY,
                 FileName TEXT,
                 FilePath TEXT,
-                FileStatus TEXT,
+                Status TEXT,
                 UploadDate TIMESTAMP DEFAULT NOW()
                 
             );

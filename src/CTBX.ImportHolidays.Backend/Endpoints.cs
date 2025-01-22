@@ -8,8 +8,8 @@ using NCommandBus.Core.Abstractions;
 using System.Collections.Immutable;
 
 
-
 namespace CTBX.ImportHolidays.Backend;
+
 public class FileUploadOptions
 {
     public string UploadDirectory { get; set; } = string.Empty;

@@ -1,12 +1,18 @@
-﻿using CTBX.ImportHolidays.Shared;
-using FluentValidation;
+﻿using FluentValidation;
+using CTBX.ImportHolidays.Shared;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CTBX.ImportHolidays.Backend;
 
-class FluentValidator : AbstractValidator<FileData>
+public class FluentValidator : AbstractValidator<FileData>
 {
-    public FluentValidator()
+    private readonly IServiceProvider _serviceProvider;
+
+    public FluentValidator(IServiceProvider serviceProvider)
     {
+        _serviceProvider = serviceProvider;
+
         RuleFor(file => file.FileName)
             .NotEmpty().WithMessage("File name must not be empty.")
             .Must(fileName => fileName.EndsWith(".csv") || fileName.EndsWith(".txt"))
@@ -20,5 +26,8 @@ class FluentValidator : AbstractValidator<FileData>
         RuleFor(file => file.FileContent.Length)
             .LessThanOrEqualTo(1_024_000) // 1 MB limit
             .WithMessage("File size must not exceed 1 MB.");
+
+        
     }
+
 }
