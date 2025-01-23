@@ -1,0 +1,17 @@
+﻿@* @page "/report-sick-leave"
+@inject HttpClient Http
+
+
+<EditForm Model="@report" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <MudTextField @bind-Value="report.EmployeeId" Label="Employee ID" />
+    <MudTextField @bind-Value="report.From" Label="From" />
+    <MudTextField @bind-Value="report.Until" Label="Until" />
+    <MudTextField @bind-Value="report.Document" Label="Document" />
+    <MudTextField @bind-Value="report.ReportedBy" Label="Reported By" />
+
+    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Submit</MudButton>
+</EditForm>
+ *@
