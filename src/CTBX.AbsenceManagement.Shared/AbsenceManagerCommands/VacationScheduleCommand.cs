@@ -1,6 +1,6 @@
 ﻿
     public record VacationScheduleCommand(
-    string? Id,
+    string Id,
     int EmployeeId,
     DateTimeOffset From,
     DateTimeOffset To,

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-    public record VacationChangeCommand(
+// change vacation 
+    public record ChangeVacation(
     string Id,
     int EmployeeId,
     DateTimeOffset From,

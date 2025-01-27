@@ -30,7 +30,7 @@ public class AbsenceManagementEndpoints : CarterModule
         });
 
         app.MapPost(BackendRoutes.VacationScheduleEditURL, async (
-            VacationChangeCommand command,
+            ChangeVacation command,
             CancellationToken token,
             [FromServices] AbsenceManagementApplicationService service) =>
         {

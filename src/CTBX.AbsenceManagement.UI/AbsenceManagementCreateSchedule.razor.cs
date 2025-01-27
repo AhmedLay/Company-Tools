@@ -49,7 +49,8 @@ namespace CTBX.AbsenceManagement.UI
                     }
                     return;
                 }
-                var command = new VacationScheduleCommand(null, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment, scheduledat);
+                var id = Guid.NewGuid().ToString();
+                var command = new VacationScheduleCommand(id, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment, scheduledat);
                     _visible = true;
                     await LoadData();
 
@@ -64,12 +65,6 @@ namespace CTBX.AbsenceManagement.UI
                 }
             }
 
-        public void SubmitRequest()
-        {
-            _open = false;
-            NotifySuccess("Vacation Request sent");
-            ResetForm();
-        }
         protected override async Task OnInitializedAsync()
         {           
             await LoadData();
@@ -127,7 +122,7 @@ namespace CTBX.AbsenceManagement.UI
             var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
             var id = Guid.NewGuid().ToString();
 
-            var command = new VacationChangeCommand(id,CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment);
+            var command = new ChangeVacation(id,CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment);
             await OnHandleOperation(
                    operation: () => Service.EditCommand(command),
                    successMssage: "Draft Edited",

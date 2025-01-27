@@ -17,7 +17,7 @@ namespace CTBX.AbsenceManagement.UI
             return await _httpClient.PostAsJsonAsync(BackendRoutes.VacationScheduleURL, command);
         }
 
-        public async Task<HttpResponseMessage> EditCommand(VacationChangeCommand command)
+        public async Task<HttpResponseMessage> EditCommand(ChangeVacation command)
         {
             return await _httpClient.PostAsJsonAsync(BackendRoutes.VacationScheduleEditURL, command);   
         }
