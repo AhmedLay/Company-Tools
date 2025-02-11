@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
 using CTBX.AbsenceManagement.Shared.DTOs;
 using CTBX.CommonMudComponents;
 using FluentValidation;
@@ -20,14 +21,31 @@ namespace CTBX.AbsenceManagement.UI
         public List<VacationScheduleDTO> List { get; set; } = new();
         public List<Request> Requests { get; set; } = new();
         public bool _open = false;
+
+        //I added
+        public bool _sickLeaveDrawerOpen;
+
+
         public VacationRequest CurrentRequest { get; set; } = new();
         public bool _visible = false;
         public List<DateTime> MarkedDates { get; set; } = new();
         public List<DraftsItems> _events = new();
         public void OpenDrawer()
         {
+
+            // I add
+            CurrentRequest.IsVacation = true;
             _open = true;
         }
+
+        // I add
+        public void OpenSickLeaveDrawer()
+        {
+            CurrentRequest.IsVacation = false;
+            _sickLeaveDrawerOpen = true;
+        }
+
+       
         public async Task SaveDraft()
         {
             if (CurrentRequest.From == null || CurrentRequest.To == null)
@@ -38,9 +56,9 @@ namespace CTBX.AbsenceManagement.UI
             var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
             var scheduledat = DateTimeOffset.UtcNow;
 
-            if (CurrentRequest.RequestType == true)
+            var validationResult = await RequestValidator.ValidateAsync(CurrentRequest);
+            if (CurrentRequest.IsVacation == true)
             {
-                var validationResult = await RequestValidator.ValidateAsync(CurrentRequest);
                 if (!validationResult.IsValid)
                 {
                     foreach (var error in validationResult.Errors)
@@ -55,14 +73,42 @@ namespace CTBX.AbsenceManagement.UI
                 if (response.IsSuccessStatusCode)
                 {
                     _visible = true;
-                    await LoadData();
-                    await NotifySuccess("Draft Saved");
+                    await LoadVacationData();
+                    await NotifySuccess("Vacation Draft Saved");
                     ResetForm();
                     _open = false;
                     _visible = false;
                 }
             }
+
         }
+
+        //I added
+        public async Task SaveSickLeaveDraft()
+        {
+            if (CurrentRequest.From == null || CurrentRequest.To == null)
+            {
+                return;
+            }
+
+            var from = new DateTimeOffset(CurrentRequest.From.Value, TimeSpan.Zero);
+            var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
+            var reportedat = DateTimeOffset.UtcNow;
+
+            var id = Guid.NewGuid().ToString();
+            var command = new RequestSickLeave(id, CurrentRequest.EmployeeId, from, to, reportedat);
+            var response = await Service.SendSickLeaveCommand(command);
+            if (response.IsSuccessStatusCode)
+            {
+                _visible = true;
+                await LoadVacationData();
+                await NotifySuccess("Sick Leave Draft Saved");
+                ResetForm();
+                _sickLeaveDrawerOpen = false;
+                _visible = false;
+            }
+        }
+
         public void SubmitRequest()
         {
             _open = false;
@@ -71,15 +117,16 @@ namespace CTBX.AbsenceManagement.UI
         }
         protected override async Task OnInitializedAsync()
         {           
-            await LoadData();
+            await LoadVacationData();
         }
-        public async Task LoadData()
+        public async Task LoadVacationData()
         {
             _visible = true;
             List = await Service.GetVacationSchedulesAsync();
             _events = await Service.GetVacationSchedulesCalenderAsync();
             _visible = false;
         }
+
 
         private void ResetForm()
         {
@@ -91,7 +138,7 @@ namespace CTBX.AbsenceManagement.UI
                 To = null,
                 Scheduledat = DateTimeOffset.MinValue,
                 Comment = string.Empty,
-                RequestType = true
+                IsVacation = true
             };
         }
         public void DeleteItem()

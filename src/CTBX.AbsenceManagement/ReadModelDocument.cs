@@ -7,14 +7,15 @@ using Eventuous.Projections.MongoDB.Tools;
 
 namespace MinimalApiArchitecture.Application
 {
-    public record VacationDocument : ProjectedDocument
+    public record ReadModelDocument : ProjectedDocument
     {
-        public VacationDocument(string id ) : base(id) { }
+        public ReadModelDocument(string id ) : base(id) { }
         public int EmployeeId { get; init; }
         public DateTimeOffset From { get; init; }
         public DateTimeOffset To { get; init; }
         public DateTimeOffset ScheduledAt { get; init; }
         public string Comment { get; init; } = string.Empty;
+
 
     }
 }

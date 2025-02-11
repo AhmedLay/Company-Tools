@@ -12,10 +12,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Heron.MudCalendar" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.1" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
-    <PackageReference Include="MudBlazor" Version="7.15.0" />
+    <PackageReference Include="MudBlazor" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CTBX.CommonMudComponents\CTBX.CommonMudComponents.csproj" />
+    <ProjectReference Include="..\CTBX.ReportSickLeave.Backend\CTBX.ReportSickLeave.Backend.csproj" />
+    <ProjectReference Include="..\CTBX.ReportSickLeave.Shared\CTBX.ReportSickLeave.Shared.csproj" />
   </ItemGroup>
 
 </Project>

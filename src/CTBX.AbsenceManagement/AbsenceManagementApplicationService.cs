@@ -1,4 +1,5 @@
-﻿using Eventuous;
+﻿using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
+using Eventuous;
 using MinimalApiArchitecture.Application.Commands;
 
 namespace MinimalApiArchitecture.Application
@@ -11,6 +12,14 @@ namespace MinimalApiArchitecture.Application
                 .InState(ExpectedState.New)
                 .GetId(cmd => new AbsenceId(cmd.Id))
                 .Act((aggregate, cmd) => aggregate.ScheduleVacation(cmd.EmployeeId, cmd.From, cmd.To, cmd.Comment, cmd.ScheduledAt));
+
+            //
+            On<RequestSickLeave>()
+                .InState(ExpectedState.New)
+                .GetId(cmd => new AbsenceId(cmd.Id))
+                .Act((aggregate, cmd) => aggregate.RequestSickLeave(cmd.EmployeeId, cmd.From, cmd.Until, cmd.ReportedAt));
+
+
         }
     }
 

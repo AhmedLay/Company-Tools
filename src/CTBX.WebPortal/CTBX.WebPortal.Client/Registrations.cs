@@ -5,6 +5,7 @@ using CTBX.ImportHoliday.UI;
 using CTBX.AbsenceManagement.UI;
 
 
+
 public static class Registrations
 {
     public static WebAssemblyHostBuilder RegisterFeatures(this WebAssemblyHostBuilder builder)
@@ -12,6 +13,7 @@ public static class Registrations
         EmployeesImportRegistrations.RegisterServices(builder.Services, builder.HostEnvironment.BaseAddress);
         AbsenceManagementRegistration.RegisterServices(builder.Services, builder.HostEnvironment.BaseAddress);
         ImportHolidaysRegistration.RegisterServices(builder.Services, builder.HostEnvironment.BaseAddress);
+        
         return builder;
     }
 }

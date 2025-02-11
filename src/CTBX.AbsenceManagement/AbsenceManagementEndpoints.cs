@@ -1,4 +1,5 @@
 ﻿using Carter;
+using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
 using DnsClient.Protocol;
 using Eventuous;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +16,7 @@ public class AbsenceManagementEndpoints : CarterModule
     {
         app.MapGet("/absences", () => "Absence list here");
         AddVacationsEndpoints(app);
+        RequestSickLeaveEndpoint(app);
     }
 
     private static void AddVacationsEndpoints(IEndpointRouteBuilder app)
@@ -43,5 +45,17 @@ public class AbsenceManagementEndpoints : CarterModule
             return Results.Ok(vacationSchedules);
         });
 
+    }
+
+    private static void RequestSickLeaveEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapPost(BackendRoutes.SICKLEAVEREQUEST, async (
+            RequestSickLeave command,
+            CancellationToken token,
+            [FromServices] AbsenceManagementApplicationService service) =>
+        {
+            var result = await service.Handle(command, token);
+            return Results.Ok(result);
+        });
     }
 }

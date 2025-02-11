@@ -6,4 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" Version="9.0.0" />
+    <PackageReference Include="Carter" Version="9.0.0" />
+    <PackageReference Include="Carter.Analyzers" Version="9.0.0" />
+    <PackageReference Include="Eventuous.Application" Version="0.15.1" />
+    <PackageReference Include="Eventuous.Postgresql" Version="0.15.1" />
+    <PackageReference Include="Eventuous.Projections.MongoDB" Version="0.15.1" />
+    <PackageReference Include="Eventuous.Extensions.DependencyInjection" Version="0.15.1" />
+    <ProjectReference Include="..\CTBX.ReportSickLeave.Shared\CTBX.ReportSickLeave.Shared.csproj" />
+    <PackageReference Update="yaep" Version="2.1.0" />
+  </ItemGroup>
+
 </Project>

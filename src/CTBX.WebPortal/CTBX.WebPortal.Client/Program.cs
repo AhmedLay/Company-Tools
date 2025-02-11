@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using MudBlazor.Translations;
 using FluentValidation;
+using CTBX.EmployeesImport.UI;
 
 
 
@@ -15,8 +16,8 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
-builder.Services.AddValidatorsFromAssemblyContaining<FileUploadValidator>();
-//builder.Services.AddValidatorsFromAssemblyContaining<AbsenceManagementFormValidator>();
+//builder.Services.AddValidatorsFromAssemblyContaining<FileUploadValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AbsenceManagementFormValidator>();
 
 builder.Services.AddMudServices();
 builder.Services.AddMudTranslations();

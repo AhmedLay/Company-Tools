@@ -68,8 +68,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.ReportSickLeave.Backen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.ReportSickLeave.Shared", "src\CTBX.ReportSickLeave.Shared\CTBX.ReportSickLeave.Shared.csproj", "{5A740FB6-CD74-4EFC-92F0-BF632974699F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.ReportSickLeave.UI", "src\CTBX.ReportSickLeave.UI\CTBX.ReportSickLeave.UI.csproj", "{5104D706-08AE-45FC-B189-6869925AF754}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -160,10 +158,6 @@ Global
 		{5A740FB6-CD74-4EFC-92F0-BF632974699F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A740FB6-CD74-4EFC-92F0-BF632974699F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A740FB6-CD74-4EFC-92F0-BF632974699F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5104D706-08AE-45FC-B189-6869925AF754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5104D706-08AE-45FC-B189-6869925AF754}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5104D706-08AE-45FC-B189-6869925AF754}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5104D706-08AE-45FC-B189-6869925AF754}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,7 +185,6 @@ Global
 		{2B27EFAB-AEB2-4B5A-9402-76E2492AF183} = {751E6878-286E-4608-A1AD-8C96C8ECBE38}
 		{FB269864-4055-4263-BBF7-368A1371738F} = {4F6FB864-527D-4D3D-9282-650A398A8575}
 		{5A740FB6-CD74-4EFC-92F0-BF632974699F} = {4F6FB864-527D-4D3D-9282-650A398A8575}
-		{5104D706-08AE-45FC-B189-6869925AF754} = {4F6FB864-527D-4D3D-9282-650A398A8575}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D9A5A77E-C524-4362-8482-9F518DC4C82F}

@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
 using CTBX.AbsenceManagement.Shared.DTOs;
 using MinimalApiArchitecture.Application.Commands;
 using static CTBX.AbsenceManagement.UI.VacationScheduleFileBase;
@@ -29,5 +30,20 @@ namespace CTBX.AbsenceManagement.UI
         {
             return await _httpClient.GetFromJsonAsync<List<DraftsItems>>(BackendRoutes.VacationCalenderViewURL) ?? new List<DraftsItems>();
         }
+
+        public async Task<HttpResponseMessage> SendSickLeaveCommand(RequestSickLeave command)
+        {
+            return await _httpClient.PostAsJsonAsync(BackendRoutes.SICKLEAVEREQUEST, command);
+
+        }
+
+        //public async Task<List<SickLeaveReport>> GetVacationSchedulesAsync()
+        //{
+        //    return await _httpClient.GetFromJsonAsync<List<SickLeaveReport>>(BackendRoutes.SICKLEAVEDATA) ?? new List<SickLeaveReport>();
+        //}
+        //public async Task<List<DraftItems>> GetVacationSchedulesCalenderAsync()
+        //{
+        //    return await _httpClient.GetFromJsonAsync<List<DraftItems>>(BackendRoutes.SICKLEAVEREQUEST) ?? new List<DraftItems>();
+        //}
     }
 }

@@ -11,7 +11,13 @@ using System.Threading.Tasks;
         public DateTime? To { get; set; }
         public DateTimeOffset Scheduledat { get; set; }
         public string Comment { get; set; } = string.Empty;
-        public bool RequestType { get; set; } = true;
+        public bool IsVacation { get; set; }
     }
 
+
+public enum RequestType
+{
+    Holidays,
+    SickLeave
+}
 

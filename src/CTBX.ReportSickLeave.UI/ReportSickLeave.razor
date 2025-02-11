@@ -1,17 +1,75 @@
-﻿@* @page "/report-sick-leave"
-@inject HttpClient Http
+﻿@page "/report-sick-leave"
+@using CTBX.ReportSickLeave.Shared
+@inherits ReportSickLeaveBase
 
 
-<EditForm Model="@report" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<PageTitle>Sick Report Request</PageTitle>
+<MudTabs Elevation="0" Rounded="false" Outlined="true" Centered="true" PanelClass="p-0" Position="Position.Top">
+    <MudTabPanel Text="List View">
+        <ChildContent>
+            <MudDataGrid Items="@List" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">Your Drafts</MudText>
+                    <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="LoadData" />
+                    <MudButton Size="@Size.Medium" Variant="@Variant.Filled" Color="@Color.Tertiary" OnClick="OpenDrawer">Create a Request</MudButton>
+                    <MudSpacer />
+                </ToolBarContent>
+                <Columns>
+                    <PropertyColumn Property="x => x.EmployeeId" Title="EmployeeID" />
+                    <PropertyColumn Property="x => x.From" Title="From" Format="dd-MM-yyyy" />
+                    <PropertyColumn Property="x => x.Until" Title="To" Format="dd-MM-yyyy" />
+                    <TemplateColumn CellClass="d-flex justify-end">
+                        <CellTemplate>
+                            <MudStack Row>
+                                <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Dense="true">
+                                    <MudMenuItem>
+                                        <MudIcon Icon="@Icons.Material.Filled.Delete"/>
+                                        Delete
+                                    </MudMenuItem>
+                                    <MudMenuItem>
+                                        <MudIcon Icon="@Icons.Material.Filled.Edit" />
+                                        Edit Draft
+                                    </MudMenuItem>
+                                    <MudMenuItem>
+                                        <MudIcon Icon="@Icons.Material.Filled.Send" />
+                                        Send
+                                    </MudMenuItem>
+                                </MudMenu>
+                            </MudStack>
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
+            </MudDataGrid>       
+        </ChildContent>
+    </MudTabPanel>
 
-    <MudTextField @bind-Value="report.EmployeeId" Label="Employee ID" />
-    <MudTextField @bind-Value="report.From" Label="From" />
-    <MudTextField @bind-Value="report.Until" Label="Until" />
-    <MudTextField @bind-Value="report.Document" Label="Document" />
-    <MudTextField @bind-Value="report.ReportedBy" Label="Reported By" />
+	    <MudTabPanel Text="Calendar View">
+        <ChildContent>
+            <MudCalendar Color="Color.Inherit" Items="_events" >
+                <ToolbarContent>
+                    <MudButton Size="@Size.Medium" Variant="@Variant.Filled" Color="@Color.Tertiary" OnClick="OpenDrawer">Create a Request</MudButton>
+                </ToolbarContent>
 
-    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Submit</MudButton>
-</EditForm>
- *@
+        </MudCalendar>
+        </ChildContent>
+    </MudTabPanel>
+</MudTabs>
+
+<MudDrawer @bind-Open="@_open" Width="600px" Height="100%" Anchor="Anchor.Right" Variant="@DrawerVariant.Temporary">
+	<MudCard Class="drawer-card">
+		<MudCardContent Class="drawer-card-content">
+			<MudText Align="Align.Center">Vacation Request</MudText>
+			<MudForm Spacing="2" Class="form-container">
+				<MudTextField T="int" Label="EmployeeID" @bind-value="SickRequest.EmployeeId" />
+				<MudDatePicker Label="From" @bind-datetime="SickRequest.From" />
+				<MudDatePicker Label="Until" @bind-datetime="SickRequest.Until" />
+				<MudButton OnClick="SubmitRequest" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Submit Request</MudButton>
+
+			</MudForm>
+		</MudCardContent>
+	</MudCard>
+</MudDrawer>
+<MudOverlay @bind-Visible="_visible" DarkBackground>
+	<MudProgressCircular Color="Color.Success" Indeterminate="true" />
+</MudOverlay>
+

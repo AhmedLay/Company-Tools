@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CTBX.AbsenceManagement.Shared\CTBX.AbsenceManagement.Shared.csproj" />
+    <ProjectReference Include="..\CTBX.CommonMudComponents\CTBX.CommonMudComponents.csproj" />
   </ItemGroup>
 
   <ItemGroup>

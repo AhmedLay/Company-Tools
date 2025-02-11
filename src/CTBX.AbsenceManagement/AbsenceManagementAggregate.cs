@@ -18,6 +18,19 @@ namespace MinimalApiArchitecture.Application
                 });
         }
 
+        public void RequestSickLeave(int employeeId, DateTimeOffset from, DateTimeOffset until, DateTimeOffset reportedAt)
+        {
+            EnsureDoesntExist();
+            Apply(
+                new SickLeaveRequested
+                {
+                    EmployeeId = employeeId,
+                    From = from,
+                    Until = until,
+                    ReportedAt = reportedAt
+                });
+        }
+
         public void RequestVacation(int employeeid, int supervisorid, DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledat)
         {
             EnsureExists();
@@ -73,6 +86,8 @@ namespace MinimalApiArchitecture.Application
                 });
         }
 
+        
+
     }
 
 
@@ -119,4 +134,19 @@ namespace MinimalApiArchitecture.Application
         public string Reason { get; set; } = string.Empty;
 
     }
+
+
+    /////
+    [EventType("V1.SickLeaveRequested")]
+    public record SickLeaveRequested
+    {
+        public int EmployeeId { get; init; }
+        public DateTimeOffset From { get; init; }
+        public DateTimeOffset Until { get; init; }
+        //public SickLeaveStatus Status { get; init; }
+        public DateTimeOffset ReportedAt { get; init; }
+    }
+
+    
+
 }
