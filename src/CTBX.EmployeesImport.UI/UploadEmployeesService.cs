@@ -20,7 +20,7 @@ namespace CTBX.EmployeesImport.UI
 
             var fileContent = memoryStream.ToArray();
 
-            var uploadedFile = new FileData
+            var uploadedFile = new EmployeesFileData
             {
                 FileName = file.Name,
                 FileContent = fileContent, 
