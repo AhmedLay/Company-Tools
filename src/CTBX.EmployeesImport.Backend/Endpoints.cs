@@ -24,7 +24,7 @@ public class Endpoints : CarterModule
             [FromServices] IOptions<FileUploadOptions> options,
             [FromServices] IDateTimeProvider dateTimeProvider,
             [FromServices] FileImporter fileImporter,
-            FileData file) =>
+            EmployeesFileData file) =>
         {
             service.GuardAgainstNull(nameof(service));
          

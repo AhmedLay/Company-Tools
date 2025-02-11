@@ -8,7 +8,7 @@ using FluentValidation;
 
 namespace CTBX.EmployeesImport.Backend
 {
-    public class FluentValidator : AbstractValidator<FileData>
+    public class FluentValidator : AbstractValidator<EmployeesFileData>
     {
         public FluentValidator()
         {

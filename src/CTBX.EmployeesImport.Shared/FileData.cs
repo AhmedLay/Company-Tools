@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CTBX.EmployeesImport.Shared;
 
-public class FileData
+public class EmployeesFileData
 {
     public string FileName { get; set; } = string.Empty;
     public byte[] FileContent { get; set; } = Array.Empty<byte>();

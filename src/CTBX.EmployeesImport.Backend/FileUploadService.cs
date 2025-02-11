@@ -22,7 +22,7 @@ namespace CTBX.EmployeesImport.Backend
             await connection.ExecuteAsync(insertQuery, fileRecord);
         }
 
-        public async Task<string> SaveFileToFolder(string folderPath, FileData file)
+        public async Task<string> SaveFileToFolder(string folderPath, EmployeesFileData file)
         {
 
             if (!Directory.Exists(folderPath))
