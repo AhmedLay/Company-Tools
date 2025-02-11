@@ -1,6 +1,4 @@
-﻿
-
-namespace CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
+﻿namespace CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
 
 public record RequestSickLeave(
     string Id,
