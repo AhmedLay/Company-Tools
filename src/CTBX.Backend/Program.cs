@@ -52,6 +52,9 @@ if (app.Environment.IsDevelopment())
 {
     app.MapScalarApiReference();
     app.MapOpenApi();
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 app.UseProblemDetails();
 app.UseCors("all");
