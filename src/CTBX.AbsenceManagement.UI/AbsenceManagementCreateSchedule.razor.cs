@@ -93,10 +93,11 @@ namespace CTBX.AbsenceManagement.UI
 
             var from = new DateTimeOffset(CurrentRequest.From.Value, TimeSpan.Zero);
             var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
+            var Comment = CurrentRequest.Comment;
             var reportedat = DateTimeOffset.UtcNow;
 
             var id = Guid.NewGuid().ToString();
-            var command = new RequestSickLeave(id, CurrentRequest.EmployeeId, from, to, reportedat);
+            var command = new RequestSickLeave(id, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment ,reportedat);
             var response = await Service.SendSickLeaveCommand(command);
             if (response.IsSuccessStatusCode)
             {

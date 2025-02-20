@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
 using CTBX.AbsenceManagement.Shared.DTOs;
 using MinimalApiArchitecture.Application.Commands;
 using MongoDB.Driver;
@@ -8,11 +9,13 @@ namespace MinimalApiArchitecture.Application
     public class AbsenceManagementService
     {
         private readonly IMongoCollection<VacationScheduleCommand> _vacationSchedules;
+        private readonly IMongoCollection<RequestSickLeave> _sickLeaveSchedules;
 
         public AbsenceManagementService(IMongoClient mongoClient)
         {
             var database = mongoClient.GetDatabase("ctbx-read-db"); 
             _vacationSchedules = database.GetCollection<VacationScheduleCommand>("Vacation");
+            _sickLeaveSchedules = database.GetCollection<RequestSickLeave>("Vacation");
         }
 
         public async Task<List<VacationScheduleDTO>> GetDataTest()
@@ -52,6 +55,32 @@ namespace MinimalApiArchitecture.Application
             return listofdrafts;
         }
 
+        public async Task<List<SickLeaveDTO>> GetSickLeaveData()
+        {
+            try
+            {
+                var sickLeaveScheduleCommands = await _sickLeaveSchedules
+                    .Find(FilterDefinition<RequestSickLeave>.Empty)
+                    .ToListAsync();
+
+                var listofsickleaves = sickLeaveScheduleCommands.Select(command => new SickLeaveDTO
+                {
+                    Id = command.Id,
+                    From = command.From,
+                    Until = command.Until,
+                    Comment = command.Comment ?? string.Empty,
+                    ReportedAt = command.ReportedAt,
+                }).ToList();
+
+                return listofsickleaves;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (e.g., using ILogger)
+                throw new ApplicationException("An error occurred while retrieving sick leave data.", ex);
+            }
+        }
+
         public async Task<List<DraftsItems>> GetCalenderData()
         {
             var projection = Builders<VacationScheduleCommand>.Projection
@@ -74,6 +103,8 @@ namespace MinimalApiArchitecture.Application
             }).ToList();
 
             return listofdrafts;
+
+
         }
 
     }

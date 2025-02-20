@@ -1,5 +1,6 @@
 ﻿using Carter;
 using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
+using CTBX.AbsenceManagement.Shared.DTOs;
 using DnsClient.Protocol;
 using Eventuous;
 using Microsoft.AspNetCore.Builder;
@@ -65,8 +66,8 @@ public class AbsenceManagementEndpoints : CarterModule
         app.MapGet(BackendRoutes.SICKLEAVEDATA, async(
             [FromServices] AbsenceManagementService service) =>
         {
-            var vacationSchedules = await service.GetData();
-            return Results.Ok(vacationSchedules);
+            var sickLeaveData = await service.GetSickLeaveData();
+            return sickLeaveData.Any() ? Results.Ok(sickLeaveData) : Results.NotFound("No sick leave requests found.");
         });
 
     }

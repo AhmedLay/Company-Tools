@@ -5,6 +5,7 @@ public record RequestSickLeave(
     int EmployeeId,
     DateTimeOffset From,
     DateTimeOffset Until,
+    String Comment,
     DateTimeOffset ReportedAt
     );
 
