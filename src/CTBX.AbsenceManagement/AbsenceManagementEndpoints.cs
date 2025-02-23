@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using MinimalApiArchitecture.Application.Commands;
 using MongoDB.Driver;
 
 namespace MinimalApiArchitecture.Application;
@@ -24,7 +23,7 @@ public class AbsenceManagementEndpoints : CarterModule
     private static void AddVacationsEndpoints(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.VacationScheduleURL, async (
-        VacationScheduleCommand command,
+        VacationScheduled command,
         CancellationToken token,
         [FromServices] AbsenceManagementApplicationService service) =>
         {
@@ -52,7 +51,7 @@ public class AbsenceManagementEndpoints : CarterModule
     private static void RequestSickLeaveEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.SICKLEAVEREQUEST, async (
-            RequestSickLeave command,
+            RequestingSickLeave command,
             CancellationToken token,
             [FromServices] AbsenceManagementApplicationService service) =>
         {
@@ -66,8 +65,9 @@ public class AbsenceManagementEndpoints : CarterModule
         app.MapGet(BackendRoutes.SICKLEAVEDATA, async(
             [FromServices] AbsenceManagementService service) =>
         {
-            var sickLeaveData = await service.GetSickLeaveData();
-            return sickLeaveData.Any() ? Results.Ok(sickLeaveData) : Results.NotFound("No sick leave requests found.");
+            //var sickLeaveData = await service.GetSickLeaveData();
+            //return sickLeaveData.Any() ? Results.Ok(sickLeaveData) : Results.NotFound("No sick leave requests found.");
+            await Task.Delay(1);
         });
 
     }

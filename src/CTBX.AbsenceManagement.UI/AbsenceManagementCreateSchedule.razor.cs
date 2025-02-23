@@ -6,7 +6,6 @@ using FluentValidation;
 using Heron.MudCalendar;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using MinimalApiArchitecture.Application.Commands;
 using MudBlazor;
 
 namespace CTBX.AbsenceManagement.UI
@@ -68,7 +67,7 @@ namespace CTBX.AbsenceManagement.UI
                     return;
                 }
                 var id = Guid.NewGuid().ToString();
-                var command = new VacationScheduleCommand(id, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment, scheduledat);
+                var command = new SchedulingVacation(id, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment, scheduledat);
                 var response = await Service.SendCommand(command);
                 if (response.IsSuccessStatusCode)
                 {
@@ -86,28 +85,8 @@ namespace CTBX.AbsenceManagement.UI
         //I added
         public async Task SaveSickLeaveDraft()
         {
-            if (CurrentRequest.From == null || CurrentRequest.To == null)
-            {
-                return;
-            }
 
-            var from = new DateTimeOffset(CurrentRequest.From.Value, TimeSpan.Zero);
-            var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
-            var Comment = CurrentRequest.Comment;
-            var reportedat = DateTimeOffset.UtcNow;
-
-            var id = Guid.NewGuid().ToString();
-            var command = new RequestSickLeave(id, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment ,reportedat);
-            var response = await Service.SendSickLeaveCommand(command);
-            if (response.IsSuccessStatusCode)
-            {
-                _visible = true;
-                await LoadVacationData();
-                await NotifySuccess("Sick Leave Draft Saved");
-                ResetForm();
-                _sickLeaveDrawerOpen = false;
-                _visible = false;
-            }
+            await Task.Delay(20);
         }
 
         public void SubmitRequest()
