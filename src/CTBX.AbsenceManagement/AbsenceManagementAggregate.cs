@@ -4,92 +4,88 @@ namespace MinimalApiArchitecture.Application
 {
     public class AbsenceManagementAggregate : Aggregate<AbsenceState>
     {
-        public void ScheduleVacation(int id,DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledat)
+        public void ScheduleVacation(int id, DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledAt)
         {
             EnsureDoesntExist();
-            Apply(
-                new VacationScheduled
-                {
-                    EmployeeID = id,
-                    From = from,
-                    To = to,
-                    Comment = comment,
-                    ScheduledAt = scheduledat
-                });
+            Apply(new VacationScheduled
+            {
+                EmployeeID = id,
+                From = from,
+                To = to,
+                Comment = comment,
+                ScheduledAt = scheduledAt
+            });
         }
 
         public void RequestSickLeave(int employeeId, DateTimeOffset from, DateTimeOffset until, DateTimeOffset reportedAt)
         {
             EnsureDoesntExist();
-            Apply(
-                new SickLeaveRequested
-                {
-                    EmployeeId = employeeId,
-                    From = from,
-                    Until = until,
-                    ReportedAt = reportedAt
-                });
+            Apply(new SickLeaveRequested
+            {
+                EmployeeId = employeeId,
+                From = from,
+                Until = until,
+                ReportedAt = reportedAt
+            });
         }
 
-        public void RequestVacation(int employeeid, int supervisorid, DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledat)
+        public void RequestVacation(int employeeId, int supervisorId, DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledAt)
         {
             EnsureExists();
-
-            Apply(
-                new VacationRequest
-                {
-                    EmployeeID = employeeid,
-                    SupervisorID = supervisorid,
-                    From = from,
-                    To = to,
-                    Comment = comment,
-                    ScheduledAt = scheduledat
-                });
+            Apply(new VacationRequest
+            {
+                EmployeeID = employeeId,
+                SupervisorID = supervisorId,
+                From = from,
+                To = to,
+                Comment = comment,
+                ScheduledAt = scheduledAt
+            });
         }
 
-        public void ApproveRequest(int supervisorid, DateTimeOffset approvedat)
+        public void ApproveRequest(int supervisorId, DateTimeOffset approvedAt)
         {
             EnsureExists();
-
-            Apply(
-                new VacationApproved
-                {   
-                    SupervisorID = supervisorid,
-                    ApprovedAt = approvedat
-                });
+            Apply(new VacationApproved
+            {
+                SupervisorID = supervisorId,
+                ApprovedAt = approvedAt
+            });
         }
 
-        public void RejectRequest(int supervisorid, int employeeid,DateTimeOffset rejectedat, string reason)
+        public void RejectRequest(int supervisorId, int employeeId, DateTimeOffset rejectedAt, string reason)
         {
             EnsureExists();
-
-            Apply(
-                new VacationRejected
-                {
-                    SupervisorID = supervisorid,
-                    EmployeeID = employeeid,
-                    RejectedAt = rejectedat,
-                    Reason = reason
-                });
+            Apply(new VacationRejected
+            {
+                SupervisorID = supervisorId,
+                EmployeeID = employeeId,
+                RejectedAt = rejectedAt,
+                Reason = reason
+            });
         }
 
-        public void AbondonRequest(int employeeid, DateTimeOffset approvedat, string reason)
+        public void AbandonRequest(int employeeId, DateTimeOffset approvedAt, string reason)
         {
             EnsureExists();
-
-            Apply(
-                new VacationAbondon
-                {
-                    EmployeeID = employeeid,
-                    Reason = reason,
-                    ApprovedAt = approvedat
-                });
+            Apply(new VacationAbandoned
+            {
+                EmployeeID = employeeId,
+                ApprovedAt = approvedAt,
+                Reason = reason
+            });
         }
 
-        
-
+        public void ConfirmSickLeave(int employeeId, DateTimeOffset confirmedAt)
+        {
+            EnsureExists();
+            Apply(new SickLeaveConfirmed
+            {
+                EmployeeId = employeeId,
+                ConfirmedAt = confirmedAt
+            });
+        }
     }
-
 
     [EventType("V1.VacationScheduled")]
     public record VacationScheduled
@@ -100,23 +96,25 @@ namespace MinimalApiArchitecture.Application
         public string Comment { get; set; } = string.Empty;
         public DateTimeOffset ScheduledAt { get; set; }
     }
+
     [EventType("V1.VacationRequest")]
     public record VacationRequest
     {
-        public int EmployeeID { get; set; } 
+        public int EmployeeID { get; set; }
         public int SupervisorID { get; set; }
         public DateTimeOffset From { get; set; }
         public DateTimeOffset To { get; set; }
         public string Comment { get; set; } = string.Empty;
         public DateTimeOffset ScheduledAt { get; set; }
     }
+
     [EventType("V1.VacationApproved")]
     public record VacationApproved
     {
         public int SupervisorID { get; set; }
         public DateTimeOffset ApprovedAt { get; set; }
-
     }
+
     [EventType("V1.VacationRejected")]
     public record VacationRejected
     {
@@ -124,29 +122,29 @@ namespace MinimalApiArchitecture.Application
         public int EmployeeID { get; set; }
         public DateTimeOffset RejectedAt { get; set; }
         public string Reason { get; set; } = string.Empty;
-
     }
-    [EventType("V1.VacationAbondon")]
-    public record VacationAbondon
+
+    [EventType("V1.VacationAbandoned")]
+    public record VacationAbandoned
     {
         public int EmployeeID { get; set; }
         public DateTimeOffset ApprovedAt { get; set; }
         public string Reason { get; set; } = string.Empty;
-
     }
 
-
-    /////
     [EventType("V1.SickLeaveRequested")]
     public record SickLeaveRequested
     {
         public int EmployeeId { get; init; }
         public DateTimeOffset From { get; init; }
         public DateTimeOffset Until { get; init; }
-        //public SickLeaveStatus Status { get; init; }
         public DateTimeOffset ReportedAt { get; init; }
     }
 
-    
-
+    [EventType("V1.SickLeaveConfirmed")]
+    public record SickLeaveConfirmed
+    {
+        public int EmployeeId { get; init; }
+        public DateTimeOffset ConfirmedAt { get; init; }
+    }
 }

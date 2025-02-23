@@ -10,11 +10,15 @@ namespace MinimalApiArchitecture.Application
     public record ReadModelDocument : ProjectedDocument
     {
         public ReadModelDocument(string id ) : base(id) { }
-        public int EmployeeId { get; init; }
-        public DateTimeOffset From { get; init; }
-        public DateTimeOffset To { get; init; }
-        public DateTimeOffset ScheduledAt { get; init; }
-        public string Comment { get; init; } = string.Empty;
+        public int EmployeeId { get; set; }
+        public int? SupervisorId { get; set; }
+        public DateTimeOffset From { get; set; }
+        public DateTimeOffset To { get; set; }
+        public DateTimeOffset ScheduledAt { get; set; }
+        public DateTimeOffset? ApprovedAt { get; set; }
+        public DateTimeOffset? RejectedAt { get; set; }
+        public string Comment { get; set; } = string.Empty;
+        public string Reason { get; set; } = string.Empty;
 
 
     }
