@@ -59,8 +59,15 @@ namespace MinimalApiArchitecture.Application
         {
             try
             {
+                var projection = Builders<RequestSickLeave>.Projection
+                .Include(e => e.Id)
+                .Include(e => e.From)
+                .Include(e => e.Until)
+                .Include(e => e.Comment);
+
                 var sickLeaveScheduleCommands = await _sickLeaveSchedules
                     .Find(FilterDefinition<RequestSickLeave>.Empty)
+                    .Project<RequestSickLeave>(projection)
                     .ToListAsync();
 
                 var listofsickleaves = sickLeaveScheduleCommands.Select(command => new SickLeaveDTO
