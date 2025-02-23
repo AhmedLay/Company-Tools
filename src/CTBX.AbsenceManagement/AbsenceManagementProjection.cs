@@ -17,15 +17,17 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
     }
 
     static UpdateDefinition<ReadModelDocument> Handle(
-        IMessageConsumeContext<VacationScheduled> ctx, UpdateDefinitionBuilder<ReadModelDocument> update)
+     IMessageConsumeContext<VacationScheduled> ctx, UpdateDefinitionBuilder<ReadModelDocument> update)
     {
         var evt = ctx.Message;
+
         return update.SetOnInsert(x => x.Id, ctx.Stream.GetId())
                  .Set(x => x.EmployeeId, evt.EmployeeID)
                  .Set(x => x.From, evt.From)
                  .Set(x => x.To, evt.To)
                  .Set(x => x.ScheduledAt, evt.ScheduledAt)
                  .Set(x => x.Comment, evt.Comment ?? string.Empty);
+
     }
 
     static UpdateDefinition<ReadModelDocument> Handle(

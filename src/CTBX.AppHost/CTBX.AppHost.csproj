@@ -22,10 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CTBX.AbsenceManagement\CTBX.AbsenceManagement.Backend.csproj" />
     <ProjectReference Include="..\CTBX.Backend\CTBX.Backend.csproj" />
     <ProjectReference Include="..\CTBX.WebPortal\CTBX.WebPortal\CTBX.WebPortal.csproj" />
     <ProjectReference Include="..\IDP\IDP.csproj" />
   </ItemGroup>
+
 
 </Project>

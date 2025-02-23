@@ -23,7 +23,7 @@ public class AbsenceManagementEndpoints : CarterModule
     private static void AddVacationsEndpoints(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.VacationScheduleURL, async (
-        VacationScheduled command,
+        SchedulingVacation command,
         CancellationToken token,
         [FromServices] AbsenceManagementApplicationService service) =>
         {

@@ -1,3 +1,4 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
@@ -52,7 +53,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.ImportHolidays.Shared"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.ImportHolidays.Backend", "src\CTBX.ImportHolidays.Backend\CTBX.ImportHolidays.Backend.csproj", "{A16E14BC-6607-48AA-A342-8B2222182E4D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Features.ImportHolidays", "Features.ImportHolidays", "{36FFACFA-133F-4A43-B1F9-AE5A33EF675D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Features.HolidayImport", "Features.HolidayImport", "{36FFACFA-133F-4A43-B1F9-AE5A33EF675D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.EmployeesImport.Backend", "src\CTBX.EmployeesImport.Backend\CTBX.EmployeesImport.Backend.csproj", "{E12F4FF3-6D8E-4156-98F9-6F5F1418B6B5}"
 EndProject
@@ -61,12 +62,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.AbsenceManagement.Shared", "src\CTBX.AbsenceManagement.Shared\CTBX.AbsenceManagement.Shared.csproj", "{01F0FCD4-03F7-432E-A30D-CCACC073492E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.CommonUtils", "src\CTBX.CommonUtils\CTBX.CommonUtils.csproj", "{2B27EFAB-AEB2-4B5A-9402-76E2492AF183}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Features.ReportSickLeave", "Features.ReportSickLeave", "{4F6FB864-527D-4D3D-9282-650A398A8575}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.ReportSickLeave.Backend", "src\CTBX.ReportSickLeave.Backend\CTBX.ReportSickLeave.Backend.csproj", "{FB269864-4055-4263-BBF7-368A1371738F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTBX.ReportSickLeave.Shared", "src\CTBX.ReportSickLeave.Shared\CTBX.ReportSickLeave.Shared.csproj", "{5A740FB6-CD74-4EFC-92F0-BF632974699F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,14 +145,6 @@ Global
 		{2B27EFAB-AEB2-4B5A-9402-76E2492AF183}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B27EFAB-AEB2-4B5A-9402-76E2492AF183}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B27EFAB-AEB2-4B5A-9402-76E2492AF183}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB269864-4055-4263-BBF7-368A1371738F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB269864-4055-4263-BBF7-368A1371738F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB269864-4055-4263-BBF7-368A1371738F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB269864-4055-4263-BBF7-368A1371738F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A740FB6-CD74-4EFC-92F0-BF632974699F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A740FB6-CD74-4EFC-92F0-BF632974699F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A740FB6-CD74-4EFC-92F0-BF632974699F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A740FB6-CD74-4EFC-92F0-BF632974699F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,8 +170,6 @@ Global
 		{8C6C78B3-6708-4677-8FDA-268BA316D255} = {4805B004-5D5A-449B-B73F-E0BF85E025F5}
 		{01F0FCD4-03F7-432E-A30D-CCACC073492E} = {A231E683-AE15-4E58-8C55-391AC12E5916}
 		{2B27EFAB-AEB2-4B5A-9402-76E2492AF183} = {751E6878-286E-4608-A1AD-8C96C8ECBE38}
-		{FB269864-4055-4263-BBF7-368A1371738F} = {4F6FB864-527D-4D3D-9282-650A398A8575}
-		{5A740FB6-CD74-4EFC-92F0-BF632974699F} = {4F6FB864-527D-4D3D-9282-650A398A8575}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D9A5A77E-C524-4362-8482-9F518DC4C82F}
