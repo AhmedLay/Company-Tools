@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
 using CTBX.AbsenceManagement.Shared.DTOs;
-using static CTBX.AbsenceManagement.UI.VacationScheduleFileBase;
+using static CTBX.AbsenceManagement.UI.ScheduleFileBase;
 
 namespace CTBX.AbsenceManagement.UI
 {
@@ -19,10 +19,11 @@ namespace CTBX.AbsenceManagement.UI
             return await _httpClient.PostAsJsonAsync(BackendRoutes.VacationScheduleURL, command);
         }
 
-        public async Task<List<VacationScheduleDTO>> GetVacationSchedulesAsync()
+        public async Task<HttpResponseMessage> SendCommandSL(SchedulingVacation command)
         {
-            return await _httpClient.GetFromJsonAsync<List<VacationScheduleDTO>>(BackendRoutes.VacationDatagridURL) ?? new List<VacationScheduleDTO>();
+            return await _httpClient.PostAsJsonAsync(BackendRoutes.SICKLEAVEREQUEST, command);
         }
+
 
         public async Task<List<DraftsItems>> GetVacationSchedulesCalenderAsync()
         {

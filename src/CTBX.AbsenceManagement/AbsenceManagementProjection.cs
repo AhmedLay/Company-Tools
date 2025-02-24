@@ -8,7 +8,7 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
 {
     public AbsenceManagementProjection(IMongoDatabase client) : base(client)
     {
-        On<VacationScheduled>(aggregate => aggregate.GetId(), Handle);
+        On<SchedulingVacation>(aggregate => aggregate.GetId(), Handle);
         On<SickLeaveRequested>(aggregate => aggregate.GetId(), Handle);
         On<VacationRequest>(aggregate => aggregate.GetId(), Handle);
         On<VacationApproved>(aggregate => aggregate.GetId(), Handle);
@@ -17,7 +17,7 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
     }
 
     static UpdateDefinition<ReadModelDocument> Handle(
-     IMessageConsumeContext<VacationScheduled> ctx, UpdateDefinitionBuilder<ReadModelDocument> update)
+     IMessageConsumeContext<SchedulingVacation> ctx, UpdateDefinitionBuilder<ReadModelDocument> update)
     {
         var evt = ctx.Message;
 
