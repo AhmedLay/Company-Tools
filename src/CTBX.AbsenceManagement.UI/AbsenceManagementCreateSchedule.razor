@@ -10,7 +10,6 @@
                 <ToolBarContent>
                     <MudText Typo="Typo.h6">Your Drafts</MudText>
                     <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="LoadVacationData" />
-
                     <MudMenu>
                         <ActivatorContent>
                             <MudButton Variant="Variant.Filled" Color="Color.Tertiary">Create Request</MudButton>
@@ -19,8 +18,7 @@
                             <MudMenuItem OnClick="OpenDrawer" >Vacation Request</MudMenuItem>
                             <MudMenuItem OnClick="OpenSickLeaveDrawer">Sick Leave Request</MudMenuItem>
                         </ChildContent>
-                    </MudMenu>
-                                      
+                    </MudMenu>                                 
                 </ToolBarContent>
                 <Columns>
                     <PropertyColumn Property="x => x.Comment" Title="Comment" />

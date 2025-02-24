@@ -8,32 +8,16 @@ namespace MinimalApiArchitecture.Application
     public class AbsenceManagementService
     {
         private readonly IMongoCollection<VacationScheduled> _vacationSchedules;
-        //private readonly IMongoCollection<re> _sickLeaveSchedules;
 
         public AbsenceManagementService(IMongoClient mongoClient)
         {
             var database = mongoClient.GetDatabase("ctbx-read-db"); 
-            _vacationSchedules = database.GetCollection<VacationScheduled>("Readmodel");
-            //_sickLeaveSchedules = database.GetCollection<RequestSickLeave>("Readmodel");
+            _vacationSchedules = database.GetCollection<VacationScheduled>("ReadModel");
         }
 
-        public async Task<List<VacationScheduleDTO>> GetDataTest()
-        {
-            var vacationSchedules = new List<VacationScheduleDTO>
-        {
-        new VacationScheduleDTO
-            {
-            Id = "1",
-            From = DateTimeOffset.UtcNow.AddDays(1),
-            To = DateTimeOffset.UtcNow.AddDays(7),
-            Comment = "Urlaub für Familie",
-             }};
-            return await Task.FromResult(vacationSchedules);
-        }
         public async Task<List<VacationScheduleDTO>> GetData()
         {
             var projection = Builders<VacationScheduled>.Projection
-                .Include(e => e.EmployeeID)
                 .Include(e => e.From)
                 .Include(e => e.To)
                 .Include(e => e.Comment);
@@ -54,12 +38,10 @@ namespace MinimalApiArchitecture.Application
             return listofdrafts;
         }
 
-       
-
+      
         public async Task<List<DraftsItems>> GetCalenderData()
         {
             var projection = Builders<VacationScheduled>.Projection
-                .Include(e => e.EmployeeID)
                 .Include(e => e.From)
                 .Include(e => e.To)
                 .Include(e => e.Comment);
