@@ -7,7 +7,7 @@ namespace MinimalApiArchitecture.Application
         public void ScheduleVacation(int id, DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledAt)
         {
             EnsureDoesntExist();
-            Apply(new SchedulingVacation
+            Apply(new VacationSchedule
             {
                 EmployeeID = id,
                 From = from,
@@ -17,7 +17,7 @@ namespace MinimalApiArchitecture.Application
             });
         }
 
-        public void RequestSickLeave(int employeeId, DateTimeOffset from, DateTimeOffset until, DateTimeOffset reportedAt)
+        public void RequestSickLeave(int employeeId, DateTimeOffset from, DateTimeOffset until, DateTimeOffset reportedAt,string comment)
         {
             EnsureDoesntExist();
             Apply(new SickLeaveRequested
@@ -25,6 +25,7 @@ namespace MinimalApiArchitecture.Application
                 EmployeeId = employeeId,
                 From = from,
                 Until = until,
+                Comment = comment,
                 ReportedAt = reportedAt
             });
         }
@@ -32,7 +33,7 @@ namespace MinimalApiArchitecture.Application
         public void RequestVacation(int employeeId, int supervisorId, DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledAt)
         {
             EnsureExists();
-            Apply(new VacationRequest
+            Apply(new VacationScheduleEdit
             {
                 EmployeeID = employeeId,
                 SupervisorID = supervisorId,
@@ -88,7 +89,7 @@ namespace MinimalApiArchitecture.Application
     }
 
     [EventType("V1.VacationScheduled")]
-    public record SchedulingVacation
+    public record VacationSchedule
     {
         public int EmployeeID { get; set; }
         public DateTimeOffset From { get; set; }
@@ -97,8 +98,8 @@ namespace MinimalApiArchitecture.Application
         public DateTimeOffset ScheduledAt { get; set; }
     }
 
-    [EventType("V1.VacationRequest")]
-    public record VacationRequest
+    [EventType("V1.VacationScheduleEdit")]
+    public record VacationScheduleEdit
     {
         public int EmployeeID { get; set; }
         public int SupervisorID { get; set; }
@@ -139,6 +140,7 @@ namespace MinimalApiArchitecture.Application
         public DateTimeOffset From { get; init; }
         public DateTimeOffset Until { get; init; }
         public DateTimeOffset ReportedAt { get; init; }
+        public string Comment { get; init; } = string.Empty;
     }
 
     [EventType("V1.SickLeaveConfirmed")]

@@ -7,7 +7,7 @@ namespace MinimalApiArchitecture.Application
     {
         public AbsenceManagementApplicationService(IEventStore store) : base(store)
         {
-            On<CTBX.AbsenceManagement.Shared.AbsenceManagerCommands.SchedulingVacation>()
+            On<SchedulingVacation>()
             .InState(ExpectedState.New)
             .GetId(cmd => new AbsenceId(cmd.Id))
             .Act((aggregate, cmd) => aggregate.ScheduleVacation(cmd.EmployeeId, cmd.From, cmd.To, cmd.Comment, cmd.ScheduledAt));
@@ -15,7 +15,7 @@ namespace MinimalApiArchitecture.Application
             On<RequestingSickLeave>()
                 .InState(ExpectedState.New)
                 .GetId(cmd => new AbsenceId(cmd.Id))
-                .Act((aggregate, cmd) => aggregate.RequestSickLeave(cmd.EmployeeId, cmd.From, cmd.Until, cmd.ReportedAt));
+                .Act((aggregate, cmd) => aggregate.RequestSickLeave(cmd.EmployeeId, cmd.From, cmd.Until, cmd.ReportedAt,cmd.Comment));
 
             On<ChangingVacationSchedule>()
                 .InState(ExpectedState.Existing)
