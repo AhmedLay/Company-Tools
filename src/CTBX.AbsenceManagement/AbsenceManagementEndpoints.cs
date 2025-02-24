@@ -1,13 +1,9 @@
 ﻿using Carter;
 using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
-using CTBX.AbsenceManagement.Shared.DTOs;
-using DnsClient.Protocol;
-using Eventuous;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using MongoDB.Driver;
 
 namespace MinimalApiArchitecture.Application;
 public class AbsenceManagementEndpoints : CarterModule

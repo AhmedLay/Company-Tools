@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
@@ -25,11 +24,6 @@
     <ProjectReference Include="..\CTBX.CommonMudComponents\CTBX.CommonMudComponents.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="CTBX.CommonMudComponents">
-      <HintPath>..\CTBX.CommonMudComponents\obj\Debug\net9.0\ref\CTBX.CommonMudComponents.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
 </Project>
 
