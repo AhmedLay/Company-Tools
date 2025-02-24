@@ -67,7 +67,7 @@ namespace CTBX.AbsenceManagement.UI
                     return;
                 }
                 var id = Guid.NewGuid().ToString();
-                var command = new SchedulingVacation(id, CurrentRequest.EmployeeId, from, to, CurrentRequest.Comment, scheduledat);
+                var command = new SchedulingVacation(id, 123, from, to, CurrentRequest.Comment, scheduledat);
                 var response = await Service.SendCommand(command);
                 if (response.IsSuccessStatusCode)
                 {

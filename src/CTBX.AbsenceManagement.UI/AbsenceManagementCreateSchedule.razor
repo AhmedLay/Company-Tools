@@ -107,7 +107,6 @@
             <MudCardContent Class="drawer-card-content">
                 <MudText Align="Align.Center">Vacation Request</MudText>
                 <MudForm Spacing="2" Class="form-container">
-                    <MudTextField T="int" Label="EmployeeID" @bind-value="CurrentRequest.EmployeeId" />
                     <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
                     <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
                     <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
@@ -122,7 +121,6 @@
             <MudCardContent Class="drawer-card-content">
                 <MudText Align="Align.Center">Sick Leave Request</MudText>
                 <MudForm Spacing="2" Class="form-container">
-                    <MudTextField T="int" Label="EmployeeID" @bind-value="CurrentRequest.EmployeeId" />
                     <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
                     <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
                     <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
@@ -133,27 +131,6 @@
     </MudDrawer>
 
 </MudTabs>
-<MudDrawer @bind-value="@_open" Width="600px" Height="100%" Anchor="Anchor.Right" Variant="@DrawerVariant.Temporary">
-    <MudCard Class="drawer-card">
-        <MudCardContent Class="drawer-card-content">
-            <MudText Align="Align.Center">Vacation Request</MudText>
-            <MudForm Spacing="2" Class="form-container">
-                <MudTextField T="int" Label="EmployeeID" @bind-value="CurrentRequest.EmployeeId" />
-                <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
-                <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
-                <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
-                @* <MudSelect T="bool" Label="Request Type" @bind-Value="CurrentRequest.IsVacation" Required="true" Class="radio-group">
-                    <MudSelectItem Value="true">Vacation</MudSelectItem>
-                    <MudSelectItem Value="false">Sick Leave</MudSelectItem>
-                </MudSelect> *@
-                <MudButton OnClick="SaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Save Request</MudButton>
-
-            </MudForm>
-        </MudCardContent>
-    </MudCard>
-</MudDrawer>
-
-
 
 
 <MudOverlay @bind-Visible="_visible" DarkBackground>

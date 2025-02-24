@@ -6,9 +6,9 @@ using FluentValidation.Results;
 
 namespace CTBX.EmployeesImport.UI;
 
-public class FileUploadValidator : AbstractValidator<IBrowserFile>
+public class ValidatorEmployeeFile : AbstractValidator<IBrowserFile>
 {
-    public FileUploadValidator()
+    public ValidatorEmployeeFile()
     {
         RuleFor(file => file.Name)
             .NotEmpty().WithMessage("File name cannot be empty.");
