@@ -7,7 +7,7 @@ namespace MinimalApiArchitecture.Application
         public void ScheduleVacation(int id, DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledAt)
         {
             EnsureDoesntExist();
-            Apply(new VacationScheduled
+            Apply(new SchedulingVacation
             {
                 EmployeeID = id,
                 From = from,
@@ -88,7 +88,7 @@ namespace MinimalApiArchitecture.Application
     }
 
     [EventType("V1.VacationScheduled")]
-    public record VacationScheduled
+    public record SchedulingVacation
     {
         public int EmployeeID { get; set; }
         public DateTimeOffset From { get; set; }

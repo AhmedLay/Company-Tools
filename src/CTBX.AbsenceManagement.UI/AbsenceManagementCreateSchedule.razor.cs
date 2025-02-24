@@ -10,14 +10,13 @@ using MudBlazor;
 
 namespace CTBX.AbsenceManagement.UI
 {
-    public class VacationScheduleFileBase : BaseMudComponent
+    public class ScheduleFileBase : BaseMudComponent
     {
         [Inject]
         public required AbsenceManagementService Service { get; set; }
         [Inject]
         public required IValidator<VacationRequest> RequestValidator { get; set; }
         public record Request(int Id, string Draftname, DateTimeOffset From, DateTimeOffset To, string AbsenceType);
-        public List<VacationScheduleDTO> List { get; set; } = new();
         public List<Request> Requests { get; set; } = new();
         public bool _open = false;
 
@@ -72,10 +71,11 @@ namespace CTBX.AbsenceManagement.UI
                 if (response.IsSuccessStatusCode)
                 {
                     _visible = true;
+                    _open = false;
+                    ResetForm();
+                    await Task.Delay(400);
                     await LoadVacationData();
                     await NotifySuccess("Vacation Draft Saved");
-                    ResetForm();
-                    _open = false;
                     _visible = false;
                 }
             }
@@ -85,8 +85,39 @@ namespace CTBX.AbsenceManagement.UI
         //I added
         public async Task SaveSickLeaveDraft()
         {
+            if (CurrentRequest.From == null || CurrentRequest.To == null)
+            {
+                return;
+            }
+            var from = new DateTimeOffset(CurrentRequest.From.Value, TimeSpan.Zero);
+            var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
+            var scheduledat = DateTimeOffset.UtcNow;
 
-            await Task.Delay(20);
+            var validationResult = await RequestValidator.ValidateAsync(CurrentRequest);
+            if (CurrentRequest.IsVacation == true)
+            {
+                if (!validationResult.IsValid)
+                {
+                    foreach (var error in validationResult.Errors)
+                    {
+                        await NotifyError(error.ErrorMessage);
+                    }
+                    return;
+                }
+                var id = Guid.NewGuid().ToString();
+                var command = new SchedulingVacation(id, 123, from, to, CurrentRequest.Comment, scheduledat);
+                var response = await Service.SendCommandSL(command);
+                if (response.IsSuccessStatusCode)
+                {
+                    _visible = true;
+                    await LoadVacationData();
+                    await NotifySuccess("Sick Report Draft Saved");
+                    ResetForm();
+                    _open = false;
+                    _visible = false;
+                }
+            }
+
         }
 
         public void SubmitRequest()
@@ -102,7 +133,6 @@ namespace CTBX.AbsenceManagement.UI
         public async Task LoadVacationData()
         {
             _visible = true;
-            List = await Service.GetVacationSchedulesAsync();
             _events = await Service.GetVacationSchedulesCalenderAsync();
             _visible = false;
         }

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CTBX.AbsenceManagement.Shared.DTOs;
 
-public class VacationScheduleDTO
+public class ViewModel
 {
-    public string Id { get; set; } = string.Empty;
     public DateTimeOffset From { get; set; }
     public DateTimeOffset To { get; set; }
     public string Comment { get; set; } = string.Empty;
