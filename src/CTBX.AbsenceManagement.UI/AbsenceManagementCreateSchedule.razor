@@ -11,7 +11,6 @@
                     <MudText Typo="Typo.h6">Your Drafts</MudText>
                     <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="LoadVacationData" />
 
-
                     <MudMenu>
                         <ActivatorContent>
                             <MudButton Variant="Variant.Filled" Color="Color.Tertiary">Create Request</MudButton>
@@ -21,37 +20,7 @@
                             <MudMenuItem OnClick="OpenSickLeaveDrawer">Sick Leave Request</MudMenuItem>
                         </ChildContent>
                     </MudMenu>
-
-                        <MudDrawer @bind-Open="_open" Width="600px" Height="100%" Anchor="Anchor.Right" Variant="@DrawerVariant.Temporary">
-                            <MudCard Class="drawer-card">
-                                <MudCardContent Class="drawer-card-content">
-                                    <MudText Align="Align.Center">Vacation Request</MudText>
-                                    <MudForm Spacing="2" Class="form-container">
-                                        <MudTextField T="int" Label="EmployeeID" @bind-value="CurrentRequest.EmployeeId" />
-                                        <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
-                                        <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
-                                        <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
-                                        <MudButton OnClick="SaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Save Vacation Request</MudButton>
-                                    </MudForm>
-                                </MudCardContent>
-                            </MudCard>
-                        </MudDrawer>
-
-                        <MudDrawer @bind-Open="_sickLeaveDrawerOpen" Width="600px" Height="100%" Anchor="Anchor.Right" Variant="@DrawerVariant.Temporary">
-                            <MudCard Class="drawer-card">
-                                <MudCardContent Class="drawer-card-content">
-                                    <MudText Align="Align.Center">Sick Leave Request</MudText>
-                                    <MudForm Spacing="2" Class="form-container">
-                                        <MudTextField T="int" Label="EmployeeID" @bind-value="CurrentRequest.EmployeeId" />
-                                        <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
-                                        <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
-                                        <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
-                                        <MudButton OnClick="SaveSickLeaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Save Sick Leave Request</MudButton>
-                                    </MudForm>
-                                </MudCardContent>
-                            </MudCard>
-                        </MudDrawer>
-                    
+                                      
                 </ToolBarContent>
                 <Columns>
                     <PropertyColumn Property="x => x.Comment" Title="Comment" />
