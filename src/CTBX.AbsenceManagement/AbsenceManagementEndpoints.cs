@@ -1,5 +1,5 @@
 ﻿using Carter;
-using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
+using CTBX.AbsenceManagement.Shared;
 using Eventuous;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +27,7 @@ public class AbsenceManagementEndpoints : CarterModule
             return Results.Ok(result);
         });
 
-        app.MapPost("AbsenceManagement/{id}/Change", async (
+        app.MapPost(BackendRoutes.EditVacation, async (
         ChangingVacationSchedule command,
         CancellationToken token,
         [FromServices] AbsenceManagementApplicationService service) =>

@@ -1,12 +1,7 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
-using CTBX.AbsenceManagement.Shared.DTOs;
+﻿using CTBX.AbsenceManagement.Shared;
 using CTBX.CommonMudComponents;
 using FluentValidation;
-using Heron.MudCalendar;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using MudBlazor;
 
 namespace CTBX.AbsenceManagement.UI
 {
@@ -19,68 +14,51 @@ namespace CTBX.AbsenceManagement.UI
         public record Request(int Id, string Draftname, DateTimeOffset From, DateTimeOffset To, string AbsenceType);
         public List<Request> Requests { get; set; } = new();
         public bool _open = false;
-
-        //I added
-        public bool _sickLeaveDrawerOpen;
-
-
         public RequestModel CurrentRequest { get; set; } = new();
         public bool _visible = false;
         public List<DateTime> MarkedDates { get; set; } = new();
         public List<DraftsItems> _events = new();
+        public bool _isEditMode = false;
+        public bool _isVacationRequest = true;
+
         public void OpenDrawer()
         {
-
-            // I add
-            CurrentRequest.IsVacation = true;
             _open = true;
         }
-
-        // I add
         public void OpenSickLeaveDrawer()
         {
-            CurrentRequest.IsVacation = false;
-            _sickLeaveDrawerOpen = true;
+            _isVacationRequest = false;
+            _open = true;
         }
-
-       
         public async Task SaveDraft()
         {
             if (CurrentRequest.From == null || CurrentRequest.To == null)
-            {
-                return;
-            }
+            return;
             var from = new DateTimeOffset(CurrentRequest.From.Value, TimeSpan.Zero);
             var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
             var scheduledat = DateTimeOffset.UtcNow;
 
             var validationResult = await RequestValidator.ValidateAsync(CurrentRequest);
-            if (CurrentRequest.IsVacation == true)
+
+            if (!validationResult.IsValid)
             {
-                if (!validationResult.IsValid)
+                foreach (var error in validationResult.Errors)
                 {
-                    foreach (var error in validationResult.Errors)
-                    {
-                        await NotifyError(error.ErrorMessage);
-                    }
-                    return;
+                    await NotifyError(error.ErrorMessage);
                 }
-                var id = Guid.NewGuid().ToString();
-                var command = new SchedulingVacation(id, 123, from, to, CurrentRequest.Comment, scheduledat);
-                var response = await Service.SendCommand(command);
-                if (response.IsSuccessStatusCode)
-                {
-                    _visible = true;
-                    _open = false;
-                    ResetForm();
-                    await LoadVacationData();
-                    await NotifySuccess("Vacation Draft Saved");
-                    _visible = false;
-                }
+                return;
             }
-
+            var id = Guid.NewGuid().ToString();
+            var command = new SchedulingVacation(id, 123, from, to, CurrentRequest.Comment, scheduledat);
+            await OnHandleOperation(
+                operation: async () => await Service.SendCommand(command),
+                successMssage: "Vacation Draft Saved",
+                errMessage: "Something went wrong!"
+                );
+                _open = false;
+                 ResetForm();
+                 await LoadVacationData();
         }
-
         public async Task SaveSickLeaveDraft()
         {
             if (CurrentRequest.From == null || CurrentRequest.To == null)
@@ -92,30 +70,27 @@ namespace CTBX.AbsenceManagement.UI
             var scheduledat = DateTimeOffset.UtcNow;
 
             var validationResult = await RequestValidator.ValidateAsync(CurrentRequest);
-            if (CurrentRequest.IsVacation == false)
-            {
-                if (!validationResult.IsValid)
-                {
-                    foreach (var error in validationResult.Errors)
-                    {
-                        await NotifyError(error.ErrorMessage);
-                    }
-                    return;
-                }
-                var id = Guid.NewGuid().ToString();
-                var command = new RequestingSickLeave(id, 123, from, to, CurrentRequest.Comment, DateTimeOffset.UtcNow);
-                var response = await Service.SendCommandSL(command);
-                if (response.IsSuccessStatusCode)
-                {
-                    _visible = true;
-                    await LoadVacationData();
-                    ResetForm();
-                    await NotifySuccess("Sick Report Draft Saved");
-                    _sickLeaveDrawerOpen = false;
-                    _visible = false;
-                }
-            }
 
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    await NotifyError(error.ErrorMessage);
+                }
+                return;
+            }
+            var id = Guid.NewGuid().ToString();
+            var command = new RequestingSickLeave(id, 123, from, to, CurrentRequest.Comment, DateTimeOffset.UtcNow);
+            var response = await Service.SendCommandSL(command);
+            await OnHandleOperation(
+                    operation: async () => await Service.SendCommandSL(command),
+                    successMssage: "Sick Leave Draft Saved",
+                    errMessage: "Something went wrong!"
+                );
+
+            _open = false;
+            ResetForm();
+            await LoadVacationData();
         }
 
         public void SubmitRequest()
@@ -125,7 +100,7 @@ namespace CTBX.AbsenceManagement.UI
             ResetForm();
         }
         protected override async Task OnInitializedAsync()
-        {           
+        {
             await LoadVacationData();
         }
         public async Task LoadVacationData()
@@ -134,8 +109,6 @@ namespace CTBX.AbsenceManagement.UI
             _events = await Service.GetVacationSchedulesCalenderAsync();
             _visible = false;
         }
-
-
         private void ResetForm()
         {
 
@@ -146,23 +119,50 @@ namespace CTBX.AbsenceManagement.UI
                 To = null,
                 Scheduledat = DateTimeOffset.MinValue,
                 Comment = string.Empty,
-                IsVacation = true
             };
+            _isEditMode = false;
         }
         public void EditDraft(DraftsItems draft)
         {
-            // Setze die aktuellen Werte für das Bearbeiten
+            _isEditMode = true;
+
             CurrentRequest = new RequestModel
             {
-                EmployeeId = 123, // Falls EmployeeId benötigt wird
+                Id = draft.id,
+                EmployeeId = 123,
                 From = draft.Start,
                 To = draft.End,
                 Comment = draft.Text,
-                IsVacation = true // Oder anhand des Typs setzen
             };
-
-            // Passenden Drawer öffnen
             _open = true;
+        }
+        public async Task UpdateDraft()
+        {
+            if (CurrentRequest.From == null || CurrentRequest.To == null)
+            return;
+            var from = new DateTimeOffset(CurrentRequest.From.Value, TimeSpan.Zero);
+            var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
+            var editAt = DateTimeOffset.UtcNow;
+            var validationResult = await RequestValidator.ValidateAsync(CurrentRequest);
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    await NotifyError(error.ErrorMessage);
+                }
+                return;
+            }
+            var id = CurrentRequest.Id;
+            var command = new ChangingVacationSchedule(id, 123, from, to, CurrentRequest.Comment, editAt);
+            await OnHandleOperation(
+               operation: async () => await Service.SendCommandEditVacation(command),
+               successMssage: "Vacation Draft is Edited",
+               errMessage: "Something went wrong!"
+               );
+            _open = false;
+            ResetForm();
+            await LoadVacationData();
+
         }
 
     }

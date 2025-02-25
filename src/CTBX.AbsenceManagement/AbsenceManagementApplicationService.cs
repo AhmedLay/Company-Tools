@@ -1,4 +1,4 @@
-﻿using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
+﻿using CTBX.AbsenceManagement.Shared;
 using Eventuous;
 
 namespace MinimalApiArchitecture.Application
@@ -20,7 +20,12 @@ namespace MinimalApiArchitecture.Application
             On<ChangingVacationSchedule>()
                 .InState(ExpectedState.Existing)
                 .GetId(cmd => new AbsenceId(cmd.Id))
-                .Act((aggregate, cmd) => aggregate.RequestVacation(cmd.EmployeeId, cmd.SupervisorId, cmd.From, cmd.To, cmd.Comment, cmd.ScheduledAt));
+                .Act((aggregate, cmd) => aggregate.EditVacationRequest(cmd.EmployeeId,cmd.From, cmd.To, cmd.Comment, cmd.ScheduledAt));
+
+            On<RequestingVacation>()
+                .InState(ExpectedState.Existing)
+                .GetId(cmd => new AbsenceId(cmd.Id))
+                .Act((aggregate, cmd) => aggregate.RequestVacation(cmd.EmployeeId,cmd.SupervisorId, cmd.From, cmd.To, cmd.Comment, cmd.Requestedat));
 
             On<ApprovingVacation>()
                 .InState(ExpectedState.Existing)

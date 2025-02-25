@@ -1,7 +1,6 @@
-﻿using System.Drawing;
-using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
-using CTBX.AbsenceManagement.Shared.DTOs;
+﻿using CTBX.AbsenceManagement.Shared;
 using MongoDB.Driver;
+using System.Drawing;
 
 namespace MinimalApiArchitecture.Application
 {
@@ -20,7 +19,8 @@ namespace MinimalApiArchitecture.Application
                 .Include(e => e.Id)
                 .Include(e => e.From)
                 .Include(e => e.To)
-                .Include(e => e.Comment);
+                .Include(e => e.Comment)
+                .Include(e =>e.Status);
 
             var vacationScheduleCommands = await _vacationSchedules
                 .Find(FilterDefinition<ViewModel>.Empty)
@@ -33,6 +33,7 @@ namespace MinimalApiArchitecture.Application
                 Start = command.From.DateTime,
                 End = command.To.DateTime,
                 Text = command.Comment,
+                Status = command.Status,
 
             }).ToList();
 

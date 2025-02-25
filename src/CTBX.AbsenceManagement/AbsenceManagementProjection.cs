@@ -14,6 +14,7 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
         On<VacationApproved>(aggregate => aggregate.GetId(), Handle);
         On<VacationRejected>(aggregate => aggregate.GetId(), Handle);
         On<VacationAbandoned>(aggregate => aggregate.GetId(), Handle);
+        On<VacationRequested>(aggregate => aggregate.GetId(), Handle);
     }
 
     static UpdateDefinition<ReadModelDocument> Handle(
@@ -26,8 +27,8 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
                  .Set(x => x.From, evt.From)
                  .Set(x => x.To, evt.To)
                  .Set(x => x.ScheduledAt, evt.ScheduledAt)
-                 .Set(x => x.Comment, evt.Comment ?? string.Empty);
-
+                 .Set(x => x.Comment, evt.Comment ?? string.Empty)
+                 .Set(x => x.Status, evt.Status);
     }
 
     static UpdateDefinition<ReadModelDocument> Handle(
@@ -48,10 +49,22 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
         var evt = ctx.Message;
         return update.SetOnInsert(x => x.Id, ctx.Stream.GetId())
                  .Set(x => x.EmployeeId, evt.EmployeeID)
-                 .Set(x => x.SupervisorId, evt.SupervisorID)
                  .Set(x => x.From, evt.From)
                  .Set(x => x.To, evt.To)
                  .Set(x => x.ScheduledAt, evt.ScheduledAt)
+                 .Set(x => x.Comment, evt.Comment ?? string.Empty) ;
+    }
+
+    static UpdateDefinition<ReadModelDocument> Handle(
+       IMessageConsumeContext<VacationRequested> ctx, UpdateDefinitionBuilder<ReadModelDocument> update)
+    {
+        var evt = ctx.Message;
+        return update.SetOnInsert(x => x.Id, ctx.Stream.GetId())
+                 .Set(x => x.EmployeeId, evt.EmployeeID)
+                 .Set(x => x.SupervisorId,evt.SupervisorID)
+                 .Set(x => x.From, evt.From)
+                 .Set(x => x.To, evt.To)
+                 .Set(x => x.RequestedAt, evt.RequestedAt)
                  .Set(x => x.Comment, evt.Comment ?? string.Empty);
     }
 
@@ -72,7 +85,7 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
                  .Set(x => x.SupervisorId, evt.SupervisorID)
                  .Set(x => x.EmployeeId, evt.EmployeeID)
                  .Set(x => x.RejectedAt, evt.RejectedAt)
-                 .Set(x => x.Reason, evt.Reason ?? string.Empty);
+                 .Set(x => x.Reason, evt.Reason ?? string.Empty) ;
     }
 
     static UpdateDefinition<ReadModelDocument> Handle(

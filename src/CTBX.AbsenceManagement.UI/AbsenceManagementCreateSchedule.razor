@@ -24,6 +24,7 @@
                     <PropertyColumn Property="x => x.Text" Title="Comment" />
                     <PropertyColumn Property="x => x.Start" Title="From" Format="dd-MM-yyyy" />
                     <PropertyColumn Property="x => x.End" Title="To" Format="dd-MM-yyyy" />
+                    <PropertyColumn Property="x => x.Status" Title="Status"/>
                     <TemplateColumn CellClass="d-flex justify-end">
                         <CellTemplate>
                             <MudStack Row>
@@ -32,7 +33,7 @@
                                         <MudIcon Icon="@Icons.Material.Filled.Delete"/>
                                         Delete
                                     </MudMenuItem>
-                                    <MudMenuItem>
+                                    <MudMenuItem OnClick="@(() => EditDraft(context.Item))">
                                         <MudIcon Icon="@Icons.Material.Filled.Edit" />
                                         Edit Draft
                                     </MudMenuItem>
@@ -73,26 +74,33 @@
     <MudDrawer @bind-Open="_open" Width="600px" Height="100%" Anchor="Anchor.Right" Variant="@DrawerVariant.Temporary">
         <MudCard Class="drawer-card">
             <MudCardContent Class="drawer-card-content">
-                <MudText Align="Align.Center">Vacation Request</MudText>
+                <MudText Align="Align.Center">Request</MudText>
                 <MudForm Spacing="2" Class="form-container">
                     <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
-                    <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
+                    <MudDatePicker Label="To"  @bind-Date="CurrentRequest.To" />
                     <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
-                    <MudButton OnClick="SaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Save Vacation Request</MudButton>
-                </MudForm>
-            </MudCardContent>
-        </MudCard>
-    </MudDrawer>
 
-    <MudDrawer @bind-Open="_sickLeaveDrawerOpen" Width="600px" Height="100%" Anchor="Anchor.Right" Variant="@DrawerVariant.Temporary">
-        <MudCard Class="drawer-card">
-            <MudCardContent Class="drawer-card-content">
-                <MudText Align="Align.Center">Sick Leave Request</MudText>
-                <MudForm Spacing="2" Class="form-container">
-                    <MudDatePicker Label="From" @bind-Date="CurrentRequest.From" />
-                    <MudDatePicker Label="To" @bind-Date="CurrentRequest.To" />
-                    <MudTextField T="string" Label="Comment" @bind-Text="CurrentRequest.Comment" Lines="3" />
-                    <MudButton OnClick="SaveSickLeaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">Save Sick Leave Request</MudButton>
+                    @if (_isEditMode)
+                    {
+                        <MudButton OnClick="UpdateDraft" Variant="Variant.Filled" Color="Color.Warning" FullWidth="true">
+                            Update Request
+                        </MudButton>
+                    }
+                    else
+                    {
+                        @if (_isVacationRequest)
+                        {
+                            <MudButton OnClick="SaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">
+                                Save Vacation Request
+                            </MudButton>
+                        }
+                        else
+                        {
+                            <MudButton OnClick="SaveSickLeaveDraft" Variant="Variant.Filled" Color="Color.Success" FullWidth="true">
+                                Save Sick Leave Request
+                            </MudButton>
+                        }
+                    }
                 </MudForm>
             </MudCardContent>
         </MudCard>

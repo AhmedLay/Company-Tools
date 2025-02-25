@@ -1,4 +1,4 @@
-﻿namespace CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
+﻿namespace CTBX.AbsenceManagement.Shared;
 
 public record SchedulingVacation(
     string Id,
@@ -21,12 +21,21 @@ public record RequestingSickLeave(
 public record ChangingVacationSchedule(
     string Id,
     int EmployeeId,
-    int SupervisorId,
     DateTimeOffset From,
     DateTimeOffset To,
     string Comment,
     DateTimeOffset ScheduledAt
 );
+
+public record RequestingVacation(
+    string Id,
+    int EmployeeId,
+    int SupervisorId,
+    DateTimeOffset From,
+    DateTimeOffset To,
+    string Comment,
+    DateTimeOffset Requestedat
+ );
 
 public record ApprovingVacation(
     string Id,
