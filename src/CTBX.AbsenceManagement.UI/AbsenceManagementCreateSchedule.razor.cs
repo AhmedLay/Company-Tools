@@ -149,9 +149,20 @@ namespace CTBX.AbsenceManagement.UI
                 IsVacation = true
             };
         }
-        public void DeleteItem()
+        public void EditDraft(DraftsItems draft)
         {
+            // Setze die aktuellen Werte für das Bearbeiten
+            CurrentRequest = new RequestModel
+            {
+                EmployeeId = 123, // Falls EmployeeId benötigt wird
+                From = draft.Start,
+                To = draft.End,
+                Comment = draft.Text,
+                IsVacation = true // Oder anhand des Typs setzen
+            };
 
+            // Passenden Drawer öffnen
+            _open = true;
         }
 
     }

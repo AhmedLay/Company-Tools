@@ -7,24 +7,24 @@ namespace MinimalApiArchitecture.Application
 {
     public class AbsenceManagementService
     {
-        private readonly IMongoCollection<SchedulingVacation> _vacationSchedules;
+        private readonly IMongoCollection<ViewModel> _vacationSchedules;
 
         public AbsenceManagementService(IMongoClient mongoClient)
         {
             var database = mongoClient.GetDatabase("ctbx-read-db");
-            _vacationSchedules = database.GetCollection<SchedulingVacation>("ReadModel");
+            _vacationSchedules = database.GetCollection<ViewModel>("ReadModel");
         }
         public async Task<List<DraftsItems>> GetCalenderData()
         {
-            var projection = Builders<SchedulingVacation>.Projection
-                .Include("_id")
+            var projection = Builders<ViewModel>.Projection
+                .Include(e => e.Id)
                 .Include(e => e.From)
                 .Include(e => e.To)
                 .Include(e => e.Comment);
 
             var vacationScheduleCommands = await _vacationSchedules
-                .Find(FilterDefinition<SchedulingVacation>.Empty)
-                .Project<SchedulingVacation>(projection)
+                .Find(FilterDefinition<ViewModel>.Empty)
+                .Project<ViewModel>(projection)
                 .ToListAsync();
 
             var listofdrafts = vacationScheduleCommands.Select(command => new DraftsItems
