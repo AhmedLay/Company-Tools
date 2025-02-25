@@ -18,20 +18,6 @@ namespace MinimalApiArchitecture.Application
                 Status = Status.Drafted  
             });
         }
-
-        public void RequestSickLeave(int employeeId, DateTimeOffset from, DateTimeOffset until, DateTimeOffset reportedAt,string comment)
-        {
-            EnsureDoesntExist();
-            Apply(new SickLeaveRequested
-            {
-                EmployeeId = employeeId,
-                From = from,
-                Until = until,
-                Comment = comment,
-                ReportedAt = reportedAt
-            });
-        }
-
         public void EditVacationRequest(int employeeId, DateTimeOffset from, DateTimeOffset to, string comment, DateTimeOffset scheduledAt)
         {
             EnsureExists();
@@ -42,10 +28,9 @@ namespace MinimalApiArchitecture.Application
                 To = to,
                 Comment = comment,
                 ScheduledAt = scheduledAt,
-                Status = AbsenceStatus.Drafted
+                Status = Status.Drafted
             });
         }
-
         public void RequestVacation(int employeeId, int supervisorId, DateTimeOffset from, DateTimeOffset to, string comment,DateTimeOffset requestedat)
         {
             EnsureExists();
@@ -57,10 +42,9 @@ namespace MinimalApiArchitecture.Application
                 To = to,
                 Comment = comment,
                 RequestedAt = requestedat,
-                Status = AbsenceStatus.Requested
+                Status = Status.Requested
             });
         }
-
         public void ApproveRequest(int supervisorId, DateTimeOffset approvedAt)
         {
             EnsureExists();
@@ -68,10 +52,9 @@ namespace MinimalApiArchitecture.Application
             {
                 SupervisorID = supervisorId,
                 ApprovedAt = approvedAt,
-                Status = AbsenceStatus.VacationApproved
+                Status = Status.Approved
             });
         }
-
         public void RejectRequest(int supervisorId, int employeeId, DateTimeOffset rejectedAt, string reason)
         {
             EnsureExists();
@@ -81,10 +64,9 @@ namespace MinimalApiArchitecture.Application
                 EmployeeID = employeeId,
                 RejectedAt = rejectedAt,
                 Reason = reason,
-                Status = AbsenceStatus.Rejected
+                Status = Status.Rejected
             });
         }
-
         public void AbandonRequest(int employeeId, DateTimeOffset approvedAt, string reason)
         {
             EnsureExists();
@@ -93,10 +75,21 @@ namespace MinimalApiArchitecture.Application
                 EmployeeID = employeeId,
                 ApprovedAt = approvedAt,
                 Reason = reason,
-                Status = AbsenceStatus.Abondon
+                Status = Status.Abondon
             });
         }
-
+        public void RequestSickLeave(int employeeId, DateTimeOffset from, DateTimeOffset until, DateTimeOffset reportedAt, string comment)
+        {
+            EnsureDoesntExist();
+            Apply(new SickLeaveRequested
+            {
+                EmployeeId = employeeId,
+                From = from,
+                Until = until,
+                Comment = comment,
+                ReportedAt = reportedAt
+            });
+        }
         public void ConfirmSickLeave(int employeeId, DateTimeOffset confirmedAt)
         {
             EnsureExists();
@@ -127,7 +120,7 @@ namespace MinimalApiArchitecture.Application
         public DateTimeOffset To { get; set; }
         public string Comment { get; set; } = string.Empty;
         public DateTimeOffset ScheduledAt { get; set; }
-        public AbsenceStatus Status { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 
     [EventType("V1.VacationRequested")]
@@ -139,16 +132,15 @@ namespace MinimalApiArchitecture.Application
         public DateTimeOffset To { get; set; }
         public string Comment { get; set; } = string.Empty;
         public DateTimeOffset RequestedAt { get; set; }
-        public AbsenceStatus Status { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
-
 
     [EventType("V1.VacationApproved")]
     public record VacationApproved
     {
         public int SupervisorID { get; set; }
         public DateTimeOffset ApprovedAt { get; set; }
-        public AbsenceStatus Status { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 
     [EventType("V1.VacationRejected")]
@@ -158,7 +150,7 @@ namespace MinimalApiArchitecture.Application
         public int EmployeeID { get; set; }
         public DateTimeOffset RejectedAt { get; set; }
         public string Reason { get; set; } = string.Empty;
-        public AbsenceStatus Status { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 
     [EventType("V1.VacationAbandoned")]
@@ -167,7 +159,7 @@ namespace MinimalApiArchitecture.Application
         public int EmployeeID { get; set; }
         public DateTimeOffset ApprovedAt { get; set; }
         public string Reason { get; set; } = string.Empty;
-        public AbsenceStatus Status { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 
     [EventType("V1.SickLeaveRequested")]

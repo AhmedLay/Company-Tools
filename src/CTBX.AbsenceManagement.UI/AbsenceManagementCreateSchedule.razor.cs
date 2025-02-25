@@ -51,7 +51,7 @@ namespace CTBX.AbsenceManagement.UI
             var id = Guid.NewGuid().ToString();
             var command = new SchedulingVacation(id, 123, from, to, CurrentRequest.Comment, scheduledat);
             await OnHandleOperation(
-                operation: async () => await Service.SendCommand(command),
+                operation: async () => await Service.SetSchedule(command),
                 successMssage: "Vacation Draft Saved",
                 errMessage: "Something went wrong!"
                 );
@@ -155,7 +155,7 @@ namespace CTBX.AbsenceManagement.UI
             var id = CurrentRequest.Id;
             var command = new ChangingVacationSchedule(id, 123, from, to, CurrentRequest.Comment, editAt);
             await OnHandleOperation(
-               operation: async () => await Service.SendCommandEditVacation(command),
+               operation: async () => await Service.EditVacation(command),
                successMssage: "Vacation Draft is Edited",
                errMessage: "Something went wrong!"
                );
@@ -163,6 +163,24 @@ namespace CTBX.AbsenceManagement.UI
             ResetForm();
             await LoadVacationData();
 
+        }
+        public async Task ConfirmRequest(DraftsItems items)
+        {
+            if (items == null)
+                return;
+
+            var id = items.id;
+            var requestedAt = DateTimeOffset.UtcNow;
+            var from = new DateTimeOffset(items.Start, TimeSpan.Zero);
+            var to = new DateTimeOffset(items.End ?? DateTime.UtcNow, TimeSpan.Zero);
+
+            var command = new RequestingVacation(id, 123, 234, from, to, items.Text, requestedAt);
+
+            await OnHandleOperation(
+                operation: async () => await Service.RequestVacation(command),
+                successMssage: "Vacation Draft is requested",
+                errMessage: "Something went wrong!"
+            );
         }
 
     }

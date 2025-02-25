@@ -15,6 +15,7 @@ namespace MinimalApiArchitecture.Application
         }
         public async Task<List<DraftsItems>> GetCalenderData()
         {
+            var filter = Builders<ViewModel>.Filter.Eq(e => e.Status, "Drafted");
             var projection = Builders<ViewModel>.Projection
                 .Include(e => e.Id)
                 .Include(e => e.From)
@@ -23,7 +24,7 @@ namespace MinimalApiArchitecture.Application
                 .Include(e =>e.Status);
 
             var vacationScheduleCommands = await _vacationSchedules
-                .Find(FilterDefinition<ViewModel>.Empty)
+                .Find(filter)
                 .Project<ViewModel>(projection)
                 .ToListAsync();
 

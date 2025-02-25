@@ -5,6 +5,7 @@ public static class BackendRoutes
     public const string EditVacation = "api/ctbx/EditVacation/{id}";
     public const string VacationDatagridURL = "api/ctbx/vacationdata";
     public const string VacationCalenderViewURL = "api/ctbx/vacationcalenderview";
+    public const string RequestVacationURL = "api/ctbx/RequestVacation/{id}";
 
     public const string SICKLEAVEREQUEST = "api/ctbx/sickleaverequest";
     public const string SICKLEAVEDATA = "api/ctbx/sickleavedata";
