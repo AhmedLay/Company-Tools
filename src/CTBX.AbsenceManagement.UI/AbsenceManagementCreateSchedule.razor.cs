@@ -15,7 +15,7 @@ namespace CTBX.AbsenceManagement.UI
         [Inject]
         public required AbsenceManagementService Service { get; set; }
         [Inject]
-        public required IValidator<VacationRequest> RequestValidator { get; set; }
+        public required IValidator<RequestModel> RequestValidator { get; set; }
         public record Request(int Id, string Draftname, DateTimeOffset From, DateTimeOffset To, string AbsenceType);
         public List<Request> Requests { get; set; } = new();
         public bool _open = false;
@@ -24,7 +24,7 @@ namespace CTBX.AbsenceManagement.UI
         public bool _sickLeaveDrawerOpen;
 
 
-        public VacationRequest CurrentRequest { get; set; } = new();
+        public RequestModel CurrentRequest { get; set; } = new();
         public bool _visible = false;
         public List<DateTime> MarkedDates { get; set; } = new();
         public List<DraftsItems> _events = new();
@@ -73,7 +73,6 @@ namespace CTBX.AbsenceManagement.UI
                     _visible = true;
                     _open = false;
                     ResetForm();
-                    await Task.Delay(400);
                     await LoadVacationData();
                     await NotifySuccess("Vacation Draft Saved");
                     _visible = false;
@@ -82,7 +81,6 @@ namespace CTBX.AbsenceManagement.UI
 
         }
 
-        //I added
         public async Task SaveSickLeaveDraft()
         {
             if (CurrentRequest.From == null || CurrentRequest.To == null)
@@ -94,7 +92,7 @@ namespace CTBX.AbsenceManagement.UI
             var scheduledat = DateTimeOffset.UtcNow;
 
             var validationResult = await RequestValidator.ValidateAsync(CurrentRequest);
-            if (CurrentRequest.IsVacation == true)
+            if (CurrentRequest.IsVacation == false)
             {
                 if (!validationResult.IsValid)
                 {
@@ -105,15 +103,15 @@ namespace CTBX.AbsenceManagement.UI
                     return;
                 }
                 var id = Guid.NewGuid().ToString();
-                var command = new SchedulingVacation(id, 123, from, to, CurrentRequest.Comment, scheduledat);
+                var command = new RequestingSickLeave(id, 123, from, to, CurrentRequest.Comment, DateTimeOffset.UtcNow);
                 var response = await Service.SendCommandSL(command);
                 if (response.IsSuccessStatusCode)
                 {
                     _visible = true;
                     await LoadVacationData();
-                    await NotifySuccess("Sick Report Draft Saved");
                     ResetForm();
-                    _open = false;
+                    await NotifySuccess("Sick Report Draft Saved");
+                    _sickLeaveDrawerOpen = false;
                     _visible = false;
                 }
             }
@@ -141,7 +139,7 @@ namespace CTBX.AbsenceManagement.UI
         private void ResetForm()
         {
 
-            CurrentRequest = new VacationRequest
+            CurrentRequest = new RequestModel
             {
                 EmployeeId = 0,
                 From = null,
@@ -155,5 +153,6 @@ namespace CTBX.AbsenceManagement.UI
         {
 
         }
+
     }
 }

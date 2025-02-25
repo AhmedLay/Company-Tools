@@ -17,7 +17,7 @@ namespace MinimalApiArchitecture.Application
         public async Task<List<DraftsItems>> GetCalenderData()
         {
             var projection = Builders<SchedulingVacation>.Projection
-                .Exclude("_id")
+                .Include("_id")
                 .Include(e => e.From)
                 .Include(e => e.To)
                 .Include(e => e.Comment);
@@ -29,6 +29,7 @@ namespace MinimalApiArchitecture.Application
 
             var listofdrafts = vacationScheduleCommands.Select(command => new DraftsItems
             {
+                id = command.Id,
                 Start = command.From.DateTime,
                 End = command.To.DateTime,
                 Text = command.Comment,

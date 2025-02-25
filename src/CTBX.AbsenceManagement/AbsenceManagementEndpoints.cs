@@ -1,5 +1,6 @@
 ﻿using Carter;
 using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
+using Eventuous;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,16 @@ public class AbsenceManagementEndpoints : CarterModule
     private static void AddVacationsEndpoints(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.VacationScheduleURL, async (
-        CTBX.AbsenceManagement.Shared.AbsenceManagerCommands.SchedulingVacation command,
+        SchedulingVacation command,
+        CancellationToken token,
+        [FromServices] AbsenceManagementApplicationService service) =>
+        {
+            var result = await service.Handle(command, token);
+            return Results.Ok(result);
+        });
+
+        app.MapPost("AbsenceManagement/{id}/Change", async (
+        ChangingVacationSchedule command,
         CancellationToken token,
         [FromServices] AbsenceManagementApplicationService service) =>
         {

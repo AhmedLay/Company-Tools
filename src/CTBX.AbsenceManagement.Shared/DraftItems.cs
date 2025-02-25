@@ -8,6 +8,7 @@ using Heron.MudCalendar;
 
     public class DraftsItems : CalendarItem
     {
+        public required string id { get; set; } 
         public string Title { get; set; } = string.Empty;
         public Color Color { get; set; } 
     }

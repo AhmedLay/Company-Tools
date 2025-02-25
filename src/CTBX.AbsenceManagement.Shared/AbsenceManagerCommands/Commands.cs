@@ -14,6 +14,7 @@ public record RequestingSickLeave(
     int EmployeeId,
     DateTimeOffset From,
     DateTimeOffset Until,
+    string Comment,
     DateTimeOffset ReportedAt
 );
 

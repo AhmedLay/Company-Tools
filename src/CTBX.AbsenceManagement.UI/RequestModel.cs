@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-     public class VacationRequest
+     public class RequestModel
     {
         public int EmployeeId { get; set; }
         public DateTime? From { get; set; }

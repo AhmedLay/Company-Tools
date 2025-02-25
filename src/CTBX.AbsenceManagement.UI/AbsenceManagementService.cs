@@ -19,7 +19,7 @@ namespace CTBX.AbsenceManagement.UI
             return await _httpClient.PostAsJsonAsync(BackendRoutes.VacationScheduleURL, command);
         }
 
-        public async Task<HttpResponseMessage> SendCommandSL(SchedulingVacation command)
+        public async Task<HttpResponseMessage> SendCommandSL(RequestingSickLeave command)
         {
             return await _httpClient.PostAsJsonAsync(BackendRoutes.SICKLEAVEREQUEST, command);
         }
@@ -29,5 +29,6 @@ namespace CTBX.AbsenceManagement.UI
         {
             return await _httpClient.GetFromJsonAsync<List<DraftsItems>>(BackendRoutes.VacationCalenderViewURL) ?? new List<DraftsItems>();
         }
+
     }
 }

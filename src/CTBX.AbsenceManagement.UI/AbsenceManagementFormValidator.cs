@@ -6,7 +6,7 @@ using FluentValidation.Results;
 
 namespace CTBX.EmployeesImport.UI;
 
-public class AbsenceManagementFormValidator : AbstractValidator<VacationRequest>
+public class AbsenceManagementFormValidator : AbstractValidator<RequestModel>
 {
     public AbsenceManagementFormValidator()
     {

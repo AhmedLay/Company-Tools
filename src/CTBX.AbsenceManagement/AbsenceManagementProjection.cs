@@ -8,16 +8,16 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
 {
     public AbsenceManagementProjection(IMongoDatabase client) : base(client)
     {
-        On<SchedulingVacation>(aggregate => aggregate.GetId(), Handle);
+        On<VacationSchedule>(aggregate => aggregate.GetId(), Handle);
         On<SickLeaveRequested>(aggregate => aggregate.GetId(), Handle);
-        On<VacationRequest>(aggregate => aggregate.GetId(), Handle);
+        On<VacationScheduleEdit>(aggregate => aggregate.GetId(), Handle);
         On<VacationApproved>(aggregate => aggregate.GetId(), Handle);
         On<VacationRejected>(aggregate => aggregate.GetId(), Handle);
         On<VacationAbandoned>(aggregate => aggregate.GetId(), Handle);
     }
 
     static UpdateDefinition<ReadModelDocument> Handle(
-     IMessageConsumeContext<SchedulingVacation> ctx, UpdateDefinitionBuilder<ReadModelDocument> update)
+     IMessageConsumeContext<VacationSchedule> ctx, UpdateDefinitionBuilder<ReadModelDocument> update)
     {
         var evt = ctx.Message;
 
@@ -38,11 +38,12 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
                  .Set(x => x.EmployeeId, evt.EmployeeId)
                  .Set(x => x.From, evt.From)
                  .Set(x => x.To, evt.Until)
-                 .Set(x => x.ScheduledAt, evt.ReportedAt);
+                 .Set(x => x.ScheduledAt, evt.ReportedAt)
+                 .Set(x => x.Comment, evt.Comment ?? string.Empty);
     }
 
     static UpdateDefinition<ReadModelDocument> Handle(
-        IMessageConsumeContext<VacationRequest> ctx, UpdateDefinitionBuilder<ReadModelDocument> update)
+        IMessageConsumeContext<VacationScheduleEdit> ctx, UpdateDefinitionBuilder<ReadModelDocument> update)
     {
         var evt = ctx.Message;
         return update.SetOnInsert(x => x.Id, ctx.Stream.GetId())
