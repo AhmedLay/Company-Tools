@@ -65,9 +65,7 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
         var evt = ctx.Message;
         return update.SetOnInsert(x => x.Id, ctx.Stream.GetId())
                  .Set(x => x.SupervisorId, evt.SupervisorID)
-                 .Set(x => x.EmployeeId, evt.EmployeeID)
                  .Set(x => x.RejectedAt, evt.RejectedAt)
-                 .Set(x => x.Reason, evt.Reason ?? string.Empty)
                  .Set(x => x.Status, evt.Status);
     }
     static UpdateDefinition<ReadModelDocument> Handle(

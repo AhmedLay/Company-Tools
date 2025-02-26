@@ -101,7 +101,7 @@ namespace CTBX.AbsenceManagement.UI
         public async Task LoadVacationData()
         {
             _visible = true;
-            _events = await Service.GetVacationSchedulesCalenderAsync();
+            _events = await Service.GetData();
             _visible = false;
         }
         private void ResetForm()

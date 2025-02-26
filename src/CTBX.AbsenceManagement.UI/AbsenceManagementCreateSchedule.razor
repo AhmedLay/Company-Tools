@@ -30,17 +30,25 @@
                             @if (context.Item.Status == "Drafted")
                             {
                                 <MudStack Row>
-                                    <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Dense="true">
-                                    <MudMenuItem OnClick="@(() => EditDraft(context.Item))">
-                                        <MudIcon Icon="@Icons.Material.Filled.Edit" />
-                                        Edit Draft
-                                    </MudMenuItem>
-                                    <MudMenuItem OnClick="@(() => ConfirmRequest(context.Item))">
-                                        <MudIcon Icon="@Icons.Material.Filled.Send" />
-                                        Send
-                                    </MudMenuItem>
-                                </MudMenu>
-                            </MudStack>
+                                    <MudMenu Color="Color.Primary">
+                                        <ActivatorContent>
+                                            <MudButton Color="Color.Info" Variant="Variant.Filled">
+                                                <MudIcon Icon="@Icons.Material.Filled.Settings" class="me-2" />
+                                                Action
+                                            </MudButton>
+                                        </ActivatorContent>
+                                        <ChildContent>
+                                            <MudMenuItem OnClick="@(() => EditDraft(context.Item))">
+                                                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Info" class="me-2" />
+                                                Edit
+                                            </MudMenuItem>
+                                            <MudMenuItem OnClick="@(() => ConfirmRequest(context.Item))">
+                                                <MudIcon Icon="@Icons.Material.Filled.Send" Color="Color.Success" class="me-2" />
+                                                Submit
+                                            </MudMenuItem>
+                                        </ChildContent>
+                                    </MudMenu>
+                                </MudStack>
                             }
                         </CellTemplate>
                     </TemplateColumn>

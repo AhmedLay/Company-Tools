@@ -15,7 +15,7 @@ namespace CTBX.AbsenceManagement.UI
         public async Task LoadVacationData()
         {
             _visible = true;
-            _events = await Service.GetVacationSchedulesCalenderAsync();
+            _events = await Service.GetDataSV();
             _visible = false;
         }
         protected override async Task OnInitializedAsync()
@@ -43,7 +43,7 @@ namespace CTBX.AbsenceManagement.UI
             var command = new RejectingRequest(id, 123, rejectedAt);
             await OnHandleOperation(
                     operation: async () => await Service.RejectRequest(command),
-                    successMssage: "Vacation is Approved!",
+                    successMssage: "Vacation got rejected!",
                     errMessage: "Something went wrong!"
                 );
 
