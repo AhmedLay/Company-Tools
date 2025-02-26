@@ -27,23 +27,21 @@
                     <PropertyColumn Property="x => x.Status" Title="Status"/>
                     <TemplateColumn CellClass="d-flex justify-end">
                         <CellTemplate>
-                            <MudStack Row>
-                                <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Dense="true">
-                                    <MudMenuItem>
-                                        <MudIcon Icon="@Icons.Material.Filled.Delete"/>
-                                        Delete
-                                    </MudMenuItem>
+                            @if (context.Item.Status == "Drafted")
+                            {
+                                <MudStack Row>
+                                    <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Dense="true">
                                     <MudMenuItem OnClick="@(() => EditDraft(context.Item))">
                                         <MudIcon Icon="@Icons.Material.Filled.Edit" />
                                         Edit Draft
                                     </MudMenuItem>
-
                                     <MudMenuItem OnClick="@(() => ConfirmRequest(context.Item))">
                                         <MudIcon Icon="@Icons.Material.Filled.Send" />
                                         Send
                                     </MudMenuItem>
                                 </MudMenu>
                             </MudStack>
+                            }
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>

@@ -25,6 +25,14 @@ namespace CTBX.AbsenceManagement.UI
         {
             return await _httpClient.PostAsJsonAsync(BackendRoutes.EditVacation, command);
         }
+        public async Task<HttpResponseMessage> ApproveVacation(ApprovingVacation command)
+        {
+            return await _httpClient.PostAsJsonAsync(BackendRoutes.ApproveVacationURL, command);
+        }
+        public async Task<HttpResponseMessage> RejectRequest(RejectingRequest command)
+        {
+            return await _httpClient.PostAsJsonAsync(BackendRoutes.RejectRequestURL, command);
+        }
         public async Task<List<DraftsItems>> GetVacationSchedulesCalenderAsync()
         {
             return await _httpClient.GetFromJsonAsync<List<DraftsItems>>(BackendRoutes.VacationCalenderViewURL) ?? new List<DraftsItems>();

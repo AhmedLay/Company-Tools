@@ -15,9 +15,3 @@ using System.Threading.Tasks;
     }
 
 
-//public enum RequestType
-//{
-//    Holidays,
-//    SickLeave
-//}
-

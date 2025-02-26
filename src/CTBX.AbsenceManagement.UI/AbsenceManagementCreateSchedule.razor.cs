@@ -92,16 +92,11 @@ namespace CTBX.AbsenceManagement.UI
             ResetForm();
             await LoadVacationData();
         }
-
         public void SubmitRequest()
         {
             _open = false;
             NotifySuccess("Vacation Request sent");
             ResetForm();
-        }
-        protected override async Task OnInitializedAsync()
-        {
-            await LoadVacationData();
         }
         public async Task LoadVacationData()
         {
@@ -171,10 +166,8 @@ namespace CTBX.AbsenceManagement.UI
 
             var id = items.id;
             var requestedAt = DateTimeOffset.UtcNow;
-            var from = new DateTimeOffset(items.Start, TimeSpan.Zero);
-            var to = new DateTimeOffset(items.End ?? DateTime.UtcNow, TimeSpan.Zero);
 
-            var command = new RequestingVacation(id, 123, 234, from, to, items.Text, requestedAt);
+            var command = new RequestingVacation(id, 234, requestedAt);
 
             await OnHandleOperation(
                 operation: async () => await Service.RequestVacation(command),
@@ -182,6 +175,9 @@ namespace CTBX.AbsenceManagement.UI
                 errMessage: "Something went wrong!"
             );
         }
-
+        protected override async Task OnInitializedAsync()
+        {
+            await LoadVacationData();
+        }
     }
 }

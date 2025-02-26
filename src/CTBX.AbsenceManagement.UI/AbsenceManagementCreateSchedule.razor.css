@@ -1,0 +1,4 @@
+.mud-table th, .mud-table td {
+    width: 150px !important;
+    max-width: 150px !important;
+}

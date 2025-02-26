@@ -1,0 +1,49 @@
+﻿@page "/request-manager"
+@inherits RequestManagementFileBase
+
+<PageTitle>Request Manager</PageTitle>
+<MudDataGrid Items="@_events" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Manage Requests</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="LoadVacationData" />
+    </ToolBarContent>
+    <Columns>
+        <PropertyColumn Property="x => x.EmployeeID" Title="EmployeeID" />
+        <PropertyColumn Property="x => x.Start" Title="From" Format="dd-MM-yyyy" />
+        <PropertyColumn Property="x => x.End" Title="To" Format="dd-MM-yyyy" />
+        <PropertyColumn Property="x => x.Text" Title="Comment" />
+        <TemplateColumn CellClass="d-flex justify-end">
+            <CellTemplate>
+                @if (context.Item.Status == "Requested")
+                {
+                    <MudStack Row>
+                        <MudMenu Color="Color.Primary">
+                            <ActivatorContent>
+                                <MudButton Color="Color.Info" Variant="Variant.Filled">
+                                    <MudIcon Icon="@Icons.Material.Filled.Settings" class="me-2" />
+                                    Action
+                                </MudButton>
+                            </ActivatorContent>
+                            <ChildContent>
+                                <MudMenuItem OnClick="@(() => ApproveRequest(context.Item))">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" class="me-2" />
+                                    Approve Request
+                                </MudMenuItem>
+                                <MudMenuItem OnClick="@(() => RejectRequest(context.Item))">
+                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" class="me-2" />
+                                    Reject Request
+                                </MudMenuItem>
+                            </ChildContent>
+                        </MudMenu>
+                    </MudStack>
+                }
+            </CellTemplate>
+        </TemplateColumn>
+
+
+    </Columns>
+</MudDataGrid>
+
+<MudOverlay @bind-Visible="_visible" DarkBackground>
+    <MudProgressCircular Color="Color.Success" Indeterminate="true" />
+</MudOverlay>

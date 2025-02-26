@@ -29,11 +29,7 @@ public record ChangingVacationSchedule(
 
 public record RequestingVacation(
     string Id,
-    int EmployeeId,
     int SupervisorId,
-    DateTimeOffset From,
-    DateTimeOffset To,
-    string Comment,
     DateTimeOffset Requestedat
  );
 
@@ -46,9 +42,8 @@ public record ApprovingVacation(
 public record RejectingRequest(
     string Id,
     int SupervisorId,
-    int EmployeeId,
-    DateTimeOffset RejectedAt,
-    string Reason
+    DateTimeOffset RejectedAt
+    //string Reason
 );
 
 public record AbdoningRequest(

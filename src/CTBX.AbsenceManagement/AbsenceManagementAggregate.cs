@@ -31,16 +31,12 @@ namespace MinimalApiArchitecture.Application
                 Status = Status.Drafted
             });
         }
-        public void RequestVacation(int employeeId, int supervisorId, DateTimeOffset from, DateTimeOffset to, string comment,DateTimeOffset requestedat)
+        public void RequestVacation(int supervisorId,DateTimeOffset requestedat)
         {
             EnsureExists();
             Apply(new VacationRequested
             {
-                EmployeeID = employeeId,
                 SupervisorID = supervisorId,
-                From = from,
-                To = to,
-                Comment = comment,
                 RequestedAt = requestedat,
                 Status = Status.Requested
             });
@@ -55,15 +51,13 @@ namespace MinimalApiArchitecture.Application
                 Status = Status.Approved
             });
         }
-        public void RejectRequest(int supervisorId, int employeeId, DateTimeOffset rejectedAt, string reason)
+        public void RejectRequest(int supervisorId,DateTimeOffset rejectedAt)
         {
             EnsureExists();
             Apply(new VacationRejected
             {
                 SupervisorID = supervisorId,
-                EmployeeID = employeeId,
                 RejectedAt = rejectedAt,
-                Reason = reason,
                 Status = Status.Rejected
             });
         }
@@ -126,11 +120,7 @@ namespace MinimalApiArchitecture.Application
     [EventType("V1.VacationRequested")]
     public record VacationRequested
     {
-        public int EmployeeID { get; set; }
         public int SupervisorID { get; set; }
-        public DateTimeOffset From { get; set; }
-        public DateTimeOffset To { get; set; }
-        public string Comment { get; set; } = string.Empty;
         public DateTimeOffset RequestedAt { get; set; }
         public string Status { get; set; } = string.Empty;
     }
@@ -147,9 +137,7 @@ namespace MinimalApiArchitecture.Application
     public record VacationRejected
     {
         public int SupervisorID { get; set; }
-        public int EmployeeID { get; set; }
         public DateTimeOffset RejectedAt { get; set; }
-        public string Reason { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
     }
 

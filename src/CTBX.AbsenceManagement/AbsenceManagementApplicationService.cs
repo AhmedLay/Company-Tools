@@ -25,7 +25,7 @@ namespace MinimalApiArchitecture.Application
             On<RequestingVacation>()
                 .InState(ExpectedState.Existing)
                 .GetId(cmd => new AbsenceId(cmd.Id))
-                .Act((aggregate, cmd) => aggregate.RequestVacation(cmd.EmployeeId,cmd.SupervisorId, cmd.From, cmd.To, cmd.Comment, cmd.Requestedat));
+                .Act((aggregate, cmd) => aggregate.RequestVacation(cmd.SupervisorId, cmd.Requestedat));
 
             On<ApprovingVacation>()
                 .InState(ExpectedState.Existing)
@@ -35,7 +35,7 @@ namespace MinimalApiArchitecture.Application
             On<RejectingRequest>()
                 .InState(ExpectedState.Existing)
                 .GetId(cmd => new AbsenceId(cmd.Id))
-                .Act((aggregate, cmd) => aggregate.RejectRequest(cmd.SupervisorId, cmd.EmployeeId, cmd.RejectedAt, cmd.Reason));
+                .Act((aggregate, cmd) => aggregate.RejectRequest(cmd.SupervisorId, cmd.RejectedAt));
 
             On<AbdoningRequest>()
                 .InState(ExpectedState.Existing)

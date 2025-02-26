@@ -9,6 +9,7 @@ namespace CTBX.AbsenceManagement.Shared;
 public class ViewModel
 {
     public string Id { get; set; } = string.Empty;
+    public int EmployeeId { get; set; }
     public DateTimeOffset From { get; set; }
     public DateTimeOffset To { get; set; }
     public string Comment { get; set; } = string.Empty;
