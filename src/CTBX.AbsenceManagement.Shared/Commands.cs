@@ -48,8 +48,6 @@ public record RejectingRequest(
 
 public record AbdoningRequest(
     string Id,
-    int EmployeeId,
-    DateTimeOffset ApprovedAt,
-    string Reason
+    DateTimeOffset AbondonAt
 );
 

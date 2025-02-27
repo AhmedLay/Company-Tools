@@ -11,7 +11,6 @@ namespace CTBX.AbsenceManagement.UI
         public AbsenceManagementService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-
         }
         public async Task<HttpResponseMessage> SetSchedule(SchedulingVacation command)
         {
@@ -41,10 +40,17 @@ namespace CTBX.AbsenceManagement.UI
         {
             return await _httpClient.GetFromJsonAsync<List<DraftsItems>>(BackendRoutes.SuperVisorData) ?? new List<DraftsItems>();
         }
-
         public async Task<HttpResponseMessage> RequestVacation(RequestingVacation command)
         {
             return await _httpClient.PostAsJsonAsync(BackendRoutes.RequestVacationURL, command);
+        }
+        public async Task<HttpResponseMessage> AbondonRequest(AbdoningRequest command)
+        {
+            return await _httpClient.PostAsJsonAsync(BackendRoutes.AbondonRequestURL, command);
+        }
+        public async Task<int> GetEmployeeID(string email)
+        {
+            return await _httpClient.GetFromJsonAsync<int>($"{BackendRoutes.GetEmployeeID}?email={email}");
         }
     }
 }

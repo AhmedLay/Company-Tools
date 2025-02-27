@@ -5,8 +5,6 @@ namespace MinimalApiArchitecture.Application
     public record AbsenceState : State<AbsenceState>
     {
         public AbsenceStatus Status { get; private init; } = AbsenceStatus.Drafted;
-
-
         //on the record -> state changes 
         public AbsenceState()
         {
@@ -15,7 +13,6 @@ namespace MinimalApiArchitecture.Application
             On<SickLeaveConfirmed>((state, evt) => state with { Status = AbsenceStatus.SickLeaveConfirmed });
         }
     }
-
     public enum AbsenceStatus
     {
         Drafted,

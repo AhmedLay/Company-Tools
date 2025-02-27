@@ -12,13 +12,19 @@
                     <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="LoadVacationData" />
                     <MudMenu>
                         <ActivatorContent>
-                            <MudButton Variant="Variant.Filled" Color="Color.Tertiary">Create Request</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add">
+                                Create Request
+                            </MudButton>
                         </ActivatorContent>
                         <ChildContent>
-                            <MudMenuItem OnClick="OpenDrawer" >Vacation Request</MudMenuItem>
-                            <MudMenuItem OnClick="OpenSickLeaveDrawer">Sick Leave Request</MudMenuItem>
+                            <MudMenuItem OnClick="OpenDrawer">
+                                <MudIcon Icon="@Icons.Material.Filled.HolidayVillage"  Color="Color.Primary"/> Vacation Request
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="OpenSickLeaveDrawer">
+                                <MudIcon Icon="@Icons.Material.Filled.MedicalServices" Color="Color.Error" /> Sick Leave Request
+                            </MudMenuItem>
                         </ChildContent>
-                    </MudMenu>                                 
+                    </MudMenu>
                 </ToolBarContent>
                 <Columns>
                     <PropertyColumn Property="x => x.Text" Title="Comment" />
@@ -50,6 +56,25 @@
                                     </MudMenu>
                                 </MudStack>
                             }
+                            else if (context.Item.Status == "Requested" || context.Item.Status == "Approved")
+                            {
+                                <MudStack Row>
+                                    <MudMenu Color="Color.Primary">
+                                        <ActivatorContent>
+                                            <MudButton Color="Color.Info" Variant="Variant.Filled">
+                                                <MudIcon Icon="@Icons.Material.Filled.Settings" class="me-2" />
+                                                Action
+                                            </MudButton>
+                                        </ActivatorContent>
+                                        <ChildContent>
+                                            <MudMenuItem OnClick="@(() => AbondonRequest(context.Item))">
+                                                <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" class="me-2" />
+                                                Abondon
+                                            </MudMenuItem>                                           
+                                        </ChildContent>
+                                    </MudMenu>
+                                </MudStack>
+                            }
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>
@@ -65,11 +90,17 @@
                 <ToolbarContent>
                     <MudMenu>
                         <ActivatorContent>
-                            <MudButton Variant="Variant.Filled" Color="Color.Tertiary">Create Request</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add">
+                                Create Request
+                            </MudButton>
                         </ActivatorContent>
                         <ChildContent>
-                            <MudMenuItem OnClick="OpenDrawer">Vacation Request</MudMenuItem>
-                            <MudMenuItem OnClick="OpenSickLeaveDrawer">Sick Leave Request</MudMenuItem>
+                            <MudMenuItem OnClick="OpenDrawer">
+                                <MudIcon Icon="@Icons.Material.Filled.HolidayVillage" Color="Color.Primary" /> Vacation Request
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="OpenSickLeaveDrawer">
+                                <MudIcon Icon="@Icons.Material.Filled.MedicalServices" Color="Color.Error" /> Sick Leave Request
+                            </MudMenuItem>
                         </ChildContent>
                     </MudMenu>
                 </ToolbarContent>

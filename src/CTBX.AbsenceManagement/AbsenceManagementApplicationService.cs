@@ -12,11 +12,6 @@ namespace MinimalApiArchitecture.Application
             .GetId(cmd => new AbsenceId(cmd.Id))
             .Act((aggregate, cmd) => aggregate.ScheduleVacation(cmd.EmployeeId, cmd.From, cmd.To, cmd.Comment, cmd.ScheduledAt));
 
-            On<RequestingSickLeave>()
-                .InState(ExpectedState.New)
-                .GetId(cmd => new AbsenceId(cmd.Id))
-                .Act((aggregate, cmd) => aggregate.RequestSickLeave(cmd.EmployeeId, cmd.From, cmd.Until, cmd.ReportedAt,cmd.Comment));
-
             On<ChangingVacationSchedule>()
                 .InState(ExpectedState.Existing)
                 .GetId(cmd => new AbsenceId(cmd.Id))
@@ -40,9 +35,13 @@ namespace MinimalApiArchitecture.Application
             On<AbdoningRequest>()
                 .InState(ExpectedState.Existing)
                 .GetId(cmd => new AbsenceId(cmd.Id))
-                .Act((aggregate, cmd) => aggregate.AbandonRequest(cmd.EmployeeId, cmd.ApprovedAt, cmd.Reason));
+                .Act((aggregate, cmd) => aggregate.AbandonRequest(cmd.AbondonAt));
+
+            On<RequestingSickLeave>()
+                .InState(ExpectedState.New)
+                .GetId(cmd => new AbsenceId(cmd.Id))
+                .Act((aggregate, cmd) => aggregate.RequestSickLeave(cmd.EmployeeId, cmd.From, cmd.Until, cmd.ReportedAt, cmd.Comment));
         }
     }
-
     public record AbsenceId(string Value) : Id(Value);
 }

@@ -61,14 +61,12 @@ namespace MinimalApiArchitecture.Application
                 Status = Status.Rejected
             });
         }
-        public void AbandonRequest(int employeeId, DateTimeOffset approvedAt, string reason)
+        public void AbandonRequest(DateTimeOffset approvedAt)
         {
             EnsureExists();
             Apply(new VacationAbandoned
             {
-                EmployeeID = employeeId,
                 ApprovedAt = approvedAt,
-                Reason = reason,
                 Status = Status.Abondon
             });
         }
@@ -144,9 +142,7 @@ namespace MinimalApiArchitecture.Application
     [EventType("V1.VacationAbandoned")]
     public record VacationAbandoned
     {
-        public int EmployeeID { get; set; }
         public DateTimeOffset ApprovedAt { get; set; }
-        public string Reason { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
     }
 
