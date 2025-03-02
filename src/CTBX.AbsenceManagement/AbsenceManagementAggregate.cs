@@ -41,11 +41,12 @@ namespace MinimalApiArchitecture.Application
                 Status = Status.Requested
             });
         }
-        public void ApproveRequest(int supervisorId, DateTimeOffset approvedAt)
+        public void ApproveRequest(int employeeId,int supervisorId, DateTimeOffset approvedAt)
         {
             EnsureExists();
             Apply(new VacationApproved
             {
+                EmployeeID = employeeId,
                 SupervisorID = supervisorId,
                 ApprovedAt = approvedAt,
                 Status = Status.Approved
@@ -126,6 +127,7 @@ namespace MinimalApiArchitecture.Application
     [EventType("V1.VacationApproved")]
     public record VacationApproved
     {
+        public int EmployeeID { get; set; }
         public int SupervisorID { get; set; }
         public DateTimeOffset ApprovedAt { get; set; }
         public string Status { get; set; } = string.Empty;

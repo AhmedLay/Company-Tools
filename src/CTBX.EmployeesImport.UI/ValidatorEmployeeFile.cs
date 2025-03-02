@@ -35,7 +35,7 @@ public class ValidatorEmployeeFile : AbstractValidator<IBrowserFile>
                                  .Where(line => !string.IsNullOrWhiteSpace(line))
                                  .ToList();
 
-            // Jede Zeile überprüfen
+
             foreach (var line in dataRows)
             {
                 var columns = line.Split(';');

@@ -1,29 +1,20 @@
-/*
-@media (min-width: 641px) {
-    .navbar-toggler {
-        display: none;
-    }
-
-    .nav-scrollable {
-
-        display: block;
-        height: calc(100vh - 3.5rem);
-        overflow-y: auto;
-    }
-
-    .mud-drawer {
-        margin: 0;
-        padding: 0;
-    }
-
-    .mud-app-bar {
-        margin: 0;
-        padding: 0;
-    }
-
-    .menu-container {
-        text-transform: none;
-    }
-
+.mud-elevation-1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
 }
-*/
+
+    .nav-item:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+.nav-group {
+    margin-top: 10px;
+}
+
+.mud-navmenu {
+    padding: 10px;
+}

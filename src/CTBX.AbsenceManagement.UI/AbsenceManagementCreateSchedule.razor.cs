@@ -21,11 +21,9 @@ namespace CTBX.AbsenceManagement.UI
         public RequestModel CurrentRequest { get; set; } = new();
         public bool _visible = false;
         public List<DateTime> MarkedDates { get; set; } = new();
-        public List<DraftsItems> _events = new();
+        public List<ReadModel> _events = new();
         public bool _isEditMode = false;
         public bool _isVacationRequest = true;
- 
-
         public void OpenDrawer()
         {
             _open = true;
@@ -43,14 +41,15 @@ namespace CTBX.AbsenceManagement.UI
             var authState = await AuthenticationStateProvider!.GetAuthenticationStateAsync();
             var user = authState.User;
             var email = user.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
+            Console.WriteLine(email);
 
             if (string.IsNullOrEmpty(email))
             {
                 await NotifyError("User email not found!");
                 return;
             }
-            var employeeId = await Service.GetEmployeeID(email) ;
-       
+            var employeeId = await Service.GetEmployeeID(email);
+
             var from = new DateTimeOffset(CurrentRequest.From.Value, TimeSpan.Zero);
             var to = new DateTimeOffset(CurrentRequest.To.Value, TimeSpan.Zero);
             var scheduledat = DateTimeOffset.UtcNow;
@@ -69,15 +68,21 @@ namespace CTBX.AbsenceManagement.UI
             var id = Guid.NewGuid().ToString();
             var command = new SchedulingVacation(id, employeeId, from, to, CurrentRequest.Comment, scheduledat);
 
+            _visible = true;
+
             await OnHandleOperation(
-                operation: async () => await Service.SetSchedule(command),
+                operation: async () => {
+                    await Service.SetSchedule(command);
+                    await Task.Delay(750);
+                    await LoadVacationData();
+                },
                 successMssage: "Vacation Draft Saved",
                 errMessage: "Something went wrong!"
             );
-
             _open = false;
             ResetForm();
-            await LoadVacationData();
+            _visible = false;
+
         }
         public async Task SaveSickLeaveDraft()
         {
@@ -103,7 +108,9 @@ namespace CTBX.AbsenceManagement.UI
             var command = new RequestingSickLeave(id, 123, from, to, CurrentRequest.Comment, DateTimeOffset.UtcNow);
             var response = await Service.SendCommandSL(command);
             await OnHandleOperation(
-                    operation: async () => await Service.SendCommandSL(command),
+                    operation: async () =>
+                    await Service.SendCommandSL(command),
+
                     successMssage: "Sick Leave Draft Saved",
                     errMessage: "Something went wrong!"
                 );
@@ -112,17 +119,17 @@ namespace CTBX.AbsenceManagement.UI
             ResetForm();
             await LoadVacationData();
         }
-        public void SubmitRequest()
-        {
-            _open = false;
-            NotifySuccess("Vacation Request sent");
-            ResetForm();
-        }
         public async Task LoadVacationData()
         {
-            _visible = true;
-            _events = await Service.GetData();
-            _visible = false;
+            try
+            {
+                _events = await Service.GetData();
+                StateHasChanged(); 
+            }
+            catch (Exception ex)
+            {
+                await NotifyError("Failed to load vacation data: " + ex.Message);
+            }
         }
         private void ResetForm()
         {
@@ -137,7 +144,7 @@ namespace CTBX.AbsenceManagement.UI
             };
             _isEditMode = false;
         }
-        public void EditDraft(DraftsItems draft)
+        public void EditDraft(ReadModel draft)
         {
             _isEditMode = true;
 
@@ -170,16 +177,19 @@ namespace CTBX.AbsenceManagement.UI
             var id = CurrentRequest.Id;
             var command = new ChangingVacationSchedule(id, 123, from, to, CurrentRequest.Comment, editAt);
             await OnHandleOperation(
-               operation: async () => await Service.EditVacation(command),
+                operation: async () => {
+                    await Service.EditVacation(command);
+                    await Task.Delay(700);
+                    await LoadVacationData();
+                },
                successMssage: "Vacation Draft is Edited",
                errMessage: "Something went wrong!"
                );
             _open = false;
             ResetForm();
-            await LoadVacationData();
 
         }
-        public async Task ConfirmRequest(DraftsItems items)
+        public async Task ConfirmRequest(ReadModel items)
         {
             if (items == null)
                 return;
@@ -190,12 +200,17 @@ namespace CTBX.AbsenceManagement.UI
             var command = new RequestingVacation(id, 234, requestedAt);
 
             await OnHandleOperation(
-                operation: async () => await Service.RequestVacation(command),
-                successMssage: "Vacation Draft is requested",
-                errMessage: "Something went wrong!"
-            );
+                operation: async () =>
+                {
+                    await Service.RequestVacation(command);
+                    await Task.Delay(700);
+                    await LoadVacationData();
+                },
+               successMssage: "Vacation Requested is sended!",
+               errMessage: "Something went wrong!"
+               );
         }
-        public async Task AbondonRequest(DraftsItems items)
+        public async Task AbondonRequest(ReadModel items)
         {
             if (items == null)
                 return;
@@ -206,10 +221,15 @@ namespace CTBX.AbsenceManagement.UI
             var command = new AbdoningRequest(id, abondonAt);
 
             await OnHandleOperation(
-                operation: async () => await Service.AbondonRequest(command),
-                successMssage: "Your Request is abondoned",
+                 operation: async () =>
+                 {
+                     await Service.AbondonRequest(command);
+                     await Task.Delay(700);
+                     await LoadVacationData();
+                 },
+                successMssage: "Vacation Requested got Abondon!",
                 errMessage: "Something went wrong!"
-            );
+                );
         }
         protected override async Task OnInitializedAsync()
         {

@@ -35,6 +35,7 @@ public record RequestingVacation(
 
 public record ApprovingVacation(
     string Id,
+    int EmployeeId,
     int SupervisorId,
     DateTimeOffset ApprovedAt
 );

@@ -3,56 +3,26 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Npgsql;
 using Dapper;
-using Eventuous.Subscriptions.Context;
-using Eventuous;
+using MudBlazor;
 
 
 namespace MinimalApiArchitecture.Application
 {
     public class AbsenceManagementService
     {
-        private readonly IMongoCollection<ViewModel> _vacationSchedules;
+        private readonly IMongoCollection<ReadModelDocument> _vacationSchedules;
         private readonly string? _connectionString;
 
         public AbsenceManagementService(IMongoClient mongoClient, IConfiguration configuration)
         {
             var database = mongoClient.GetDatabase("ctbx-read-db");
-            _vacationSchedules = database.GetCollection<ViewModel>("ReadModel");
+            _vacationSchedules = database.GetCollection<ReadModelDocument>("ReadModel");
             _connectionString = configuration.GetConnectionString("ctbx-common-db")!;
         }
-        public async Task<List<DraftsItems>> GetDataEmployee()
+        public async Task<List<ReadModel>> GetData()
         {
-            var filter = Builders<ViewModel>.Filter.In(e => e.Status, new[] { "Drafted", "Requested","Approved", "Rejected" });
-            var projection = Builders<ViewModel>.Projection
-                .Include(e => e.EmployeeId)
-                .Include(e => e.Id)
-                .Include(e => e.From)
-                .Include(e => e.To)
-                .Include(e => e.Comment)
-                .Include(e =>e.Status);
-
-            var vacationScheduleCommands = await _vacationSchedules
-                .Find(filter)
-                .Project<ViewModel>(projection)
-                .ToListAsync();
-
-            var listofdrafts = vacationScheduleCommands.Select(command => new DraftsItems
-            {
-                EmployeeID = command.EmployeeId,
-                id = command.Id,
-                Start = command.From.DateTime,
-                End = command.To.DateTime,
-                Text = command.Comment,
-                Status = command.Status,
-
-            }).ToList();
-
-            return listofdrafts;
-        }
-        public async Task<List<DraftsItems>> GetDataSuperVisor()
-        {
-            var filter = Builders<ViewModel>.Filter.In(e => e.Status, new[] { "Requested" });
-            var projection = Builders<ViewModel>.Projection
+            var filter = Builders<ReadModelDocument>.Filter.In(e => e.Status, new[] { "Drafted", "Requested","Approved", "Rejected" });
+            var projection = Builders<ReadModelDocument>.Projection
                 .Include(e => e.EmployeeId)
                 .Include(e => e.Id)
                 .Include(e => e.From)
@@ -62,13 +32,12 @@ namespace MinimalApiArchitecture.Application
 
             var vacationScheduleCommands = await _vacationSchedules
                 .Find(filter)
-                .Project<ViewModel>(projection)
+                .Project<ReadModelDocument>(projection)
                 .ToListAsync();
-
             await using var connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            var listOfDrafts = new List<DraftsItems>();
+            var listOfDrafts = new List<ReadModel>();
 
             foreach (var command in vacationScheduleCommands)
             {
@@ -77,7 +46,7 @@ namespace MinimalApiArchitecture.Application
                     new { ID = command.EmployeeId }
                 );
 
-                listOfDrafts.Add(new DraftsItems
+                listOfDrafts.Add(new ReadModel
                 {
                     EmployeeID = command.EmployeeId,
                     LastName = lastName ?? "Unknown",
@@ -91,7 +60,6 @@ namespace MinimalApiArchitecture.Application
 
             return listOfDrafts;
         }
-
         public async Task<int> GetIdfromEmployees(string email)
         {
             await using var connection = new NpgsqlConnection(_connectionString);
@@ -99,9 +67,7 @@ namespace MinimalApiArchitecture.Application
                 "SELECT employeeid FROM public.employees WHERE email = @Email",
                 new { Email = email }
             );
-
             return result;
         }
-
-    }
+}
 }

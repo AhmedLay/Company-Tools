@@ -32,13 +32,9 @@ namespace CTBX.AbsenceManagement.UI
         {
             return await _httpClient.PostAsJsonAsync(BackendRoutes.RejectRequestURL, command);
         }
-        public async Task<List<DraftsItems>> GetData()
+        public async Task<List<ReadModel>> GetData()
         {
-            return await _httpClient.GetFromJsonAsync<List<DraftsItems>>(BackendRoutes.VacationCalenderViewURL) ?? new List<DraftsItems>();
-        }
-        public async Task<List<DraftsItems>> GetDataSV()
-        {
-            return await _httpClient.GetFromJsonAsync<List<DraftsItems>>(BackendRoutes.SuperVisorData) ?? new List<DraftsItems>();
+            return await _httpClient.GetFromJsonAsync<List<ReadModel>>(BackendRoutes.VacationCalenderViewURL) ?? new List<ReadModel>();
         }
         public async Task<HttpResponseMessage> RequestVacation(RequestingVacation command)
         {

@@ -14,6 +14,8 @@ public static class BackendRoutes
     public const string SICKLEAVECALENDARVIEW = "api/ctbx/sickleavecalenderview";
     public const string GetEmployeeID = "api/ctbx/GetEmployeeID";
     public const string AbondonRequestURL = "api/ctbx/AbondonRequest/{id}";
+    public const string GetApprovedList = "api/ctbx/GetApprovedList";
+    public const string GetDataSupervisor = "api/ctbx/GetDataSupervisor";
 
 
 }

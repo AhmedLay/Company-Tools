@@ -73,17 +73,9 @@ public class AbsenceManagementEndpoints : CarterModule
         app.MapGet(BackendRoutes.VacationCalenderViewURL, async (
         [FromServices] AbsenceManagementService service) =>
         {
-            var vacationSchedules = await service.GetDataEmployee();
+            var vacationSchedules = await service.GetData();
             return Results.Ok(vacationSchedules);
         });
-        app.MapGet(BackendRoutes.SuperVisorData, async (
-        [FromServices] AbsenceManagementService service) =>
-        {
-            var vacationSchedules = await service.GetDataSuperVisor();
-            return Results.Ok(vacationSchedules);
-        });
-
-
     }
     private static void RequestSickLeaveEndpoint(IEndpointRouteBuilder app)
     {
