@@ -1,5 +1,5 @@
 ﻿using Carter;
-using CTBX.AbsenceManagement.Shared.AbsenceManagerCommands;
+using CTBX.AbsenceManagement.Shared;
 using Eventuous;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -14,8 +14,8 @@ public class AbsenceManagementEndpoints : CarterModule
         app.MapGet("/absences", () => "Absence list here");
         AddVacationsEndpoints(app);
         RequestSickLeaveEndpoint(app);
+        GetDataFromEmployeesDB(app);
     }
-
     private static void AddVacationsEndpoints(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.VacationScheduleURL, async (
@@ -27,7 +27,7 @@ public class AbsenceManagementEndpoints : CarterModule
             return Results.Ok(result);
         });
 
-        app.MapPost("AbsenceManagement/{id}/Change", async (
+        app.MapPost(BackendRoutes.EditVacation, async (
         ChangingVacationSchedule command,
         CancellationToken token,
         [FromServices] AbsenceManagementApplicationService service) =>
@@ -37,15 +37,46 @@ public class AbsenceManagementEndpoints : CarterModule
 
         });
 
+        app.MapPost(BackendRoutes.RequestVacationURL, async (
+            RequestingVacation command,
+            CancellationToken token,
+             [FromServices] AbsenceManagementApplicationService service) =>
+        {
+            var result = await service.Handle(command, token);
+            return Results.Ok(result);
+        });
+
+        app.MapPost(BackendRoutes.ApproveVacationURL, async (
+         ApprovingVacation command,
+         CancellationToken token,
+          [FromServices] AbsenceManagementApplicationService service) =>
+        {
+            var result = await service.Handle(command, token);
+            return Results.Ok(result);
+        });
+        app.MapPost(BackendRoutes.RejectRequestURL, async (
+            RejectingRequest command,
+            CancellationToken token,
+            [FromServices] AbsenceManagementApplicationService service) =>
+        {
+            var result = await service.Handle(command, token);
+            return Results.Ok(result);
+        });
+        app.MapPost(BackendRoutes.AbondonRequestURL, async (
+            AbdoningRequest command,
+            CancellationToken token,
+            [FromServices] AbsenceManagementApplicationService service) =>
+        {
+            var result = await service.Handle(command, token);
+            return Results.Ok(result);
+        });
         app.MapGet(BackendRoutes.VacationCalenderViewURL, async (
         [FromServices] AbsenceManagementService service) =>
         {
-            var vacationSchedules = await service.GetCalenderData();
+            var vacationSchedules = await service.GetData();
             return Results.Ok(vacationSchedules);
         });
-
     }
-
     private static void RequestSickLeaveEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(BackendRoutes.SICKLEAVEREQUEST, async (
@@ -55,6 +86,16 @@ public class AbsenceManagementEndpoints : CarterModule
         {
             var result = await service.Handle(command, token);
             return Results.Ok(result);
+        });
+    }
+    private static void GetDataFromEmployeesDB(IEndpointRouteBuilder app)
+    {
+        app.MapGet(BackendRoutes.GetEmployeeID, async (
+            string email,
+            [FromServices] AbsenceManagementService service) =>
+        {
+            var employeeID = await service.GetIdfromEmployees(email);
+            return Results.Ok(employeeID);
         });
     }
 }

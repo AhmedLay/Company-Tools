@@ -1,22 +1,43 @@
-
 <MudNavMenu>
-    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavGroup Title="Reports" Icon="@Icons.Material.Filled.Send" Expanded="true">
-        <MudNavLink Href="vacation-schedule" Match="NavLinkMatch.Prefix">Request</MudNavLink>
+    <MudNavLink Href="" Match="NavLinkMatch.All">
+        <MudIcon Icon="@Icons.Material.Filled.Home" />
+        Home
+    </MudNavLink>
+
+    <MudNavGroup Title="Features" Expanded="true">
+        <MudNavLink Href="vacation-schedule" Match="NavLinkMatch.Prefix">
+            <MudIcon Icon="@Icons.Material.Filled.CalendarToday" />
+            Request
+        </MudNavLink>
     </MudNavGroup>
 
-    <MudNavGroup Title="Supervisor Features" Icon="@Icons.Material.Filled.SupervisorAccount" Expanded="true">
-        <MudNavLink Href="/addEmployees" Match="NavLinkMatch.Prefix">Add Employees</MudNavLink>
-        <MudNavLink Href="/employees-view" Match="NavLinkMatch.Prefix">My Employees</MudNavLink>
-        <MudNavLink Href="/holidays-upload" Match="NavLinkMatch.Prefix">Holidays Import</MudNavLink>
-		<MudNavLink Href="/holidays-view" Match="NavLinkMatch.Prefix">Holidays</MudNavLink>
-		
-		
-    </MudNavGroup>
-    <MudNavGroup Title="Settings" Icon="@Icons.Material.Filled.Settings" Expanded="true">
-        <MudNavLink Href="/users">Users</MudNavLink>
-        <MudNavLink Href="/security">Security</MudNavLink>
+    <MudNavGroup Title="Supervisor Features" Expanded="true">
+        <MudNavLink Href="request-manager" Match="NavLinkMatch.Prefix">
+            <MudIcon Icon="@Icons.Material.Filled.Assignment" />
+            Manage Requests
+        </MudNavLink>
+        <MudNavLink Href="/employees-view" Match="NavLinkMatch.Prefix">
+            <MudIcon Icon="@Icons.Material.Filled.Groups" />
+            My Employees
+        </MudNavLink>
+        <MudNavLink Href="/addEmployees" Match="NavLinkMatch.Prefix">
+            <MudIcon Icon="@Icons.Material.Filled.PersonAdd" />
+            Add Employees
+        </MudNavLink>
+        <MudNavLink Href="/holidays-upload" Match="NavLinkMatch.Prefix">
+            <MudIcon Icon="@Icons.Material.Filled.UploadFile" />
+            Holidays Import
+        </MudNavLink>
     </MudNavGroup>
 
+    <MudNavGroup Title="Settings" Expanded="true">
+        <MudNavLink Href="/users">
+            <MudIcon Icon="@Icons.Material.Filled.ManageAccounts" />
+            Users
+        </MudNavLink>
+        <MudNavLink Href="/security">
+            <MudIcon Icon="@Icons.Material.Filled.Security" />
+            Security
+        </MudNavLink>
+    </MudNavGroup>
 </MudNavMenu>
-

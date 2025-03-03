@@ -1,6 +1,7 @@
 ﻿using CTBX.AbsenceManagement.UI;
 using Microsoft.Extensions.DependencyInjection;
 
+
 namespace CTBX.EmployeesImport.UI;
 
 public static class AbsenceManagementRegistration

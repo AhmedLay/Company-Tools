@@ -13,7 +13,7 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1" Color="@(_isDarkMode ? Color.Dark : Color.Inherit)">
+    <MudAppBar Elevation="1" Color="@(_isDarkMode ? Color.Dark : Color.Info)">
 
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
 
@@ -32,7 +32,6 @@
         <MudIconButton Icon="@Icons.Material.Filled.Language" Color="Color.Inherit" />
 
         <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Inherit" />
-@*         <LoginOrLogoutIconButton CurrentUrl="_currentUrl" /> *@
         <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
         Color="Color.Inherit" OnClick="@ToggleDarkMode" />
         <LoginOrLogoutIconButton />

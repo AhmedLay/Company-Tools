@@ -1,22 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Eventuous;
+﻿using Eventuous;
 
 namespace MinimalApiArchitecture.Application
 {
     public record AbsenceState : State<AbsenceState>
     {
-        public int EmployeeId { get; init; }
-        public bool VacationApproved { get; private init; }
-        public bool SickLeaveConfirmed { get; private init; }
-
+        public AbsenceStatus Status { get; private init; } = AbsenceStatus.Drafted;
+        //on the record -> state changes 
         public AbsenceState()
         {
-            On<VacationApproved>((state, evt) => state with { VacationApproved = true });
-            On<SickLeaveConfirmed>((state, evt) => state with { SickLeaveConfirmed = true });
+            On<VacationRequested>((state, evt) => state with { Status = AbsenceStatus.Requested });
+            On<VacationApproved>((state, evt) => state with { Status = AbsenceStatus.VacationApproved });
+            On<SickLeaveConfirmed>((state, evt) => state with { Status = AbsenceStatus.SickLeaveConfirmed });
         }
+    }
+    public enum AbsenceStatus
+    {
+        Drafted,
+        Requested,
+        VacationApproved,
+        SickLeaveConfirmed,
+        Rejected,
+        Abondon
     }
 }
