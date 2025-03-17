@@ -66,7 +66,7 @@ namespace MinimalApiArchitecture.Application
             return listOfDrafts;
         }
 
-        //color based on status
+        ////color based on status
         private MudBlazor.Color GetStatusColor(string status)
         {
             return status switch

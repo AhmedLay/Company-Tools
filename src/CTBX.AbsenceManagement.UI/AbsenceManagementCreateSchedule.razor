@@ -32,54 +32,61 @@
                     <PropertyColumn Property="x => x.Text" Title="Note" />
                     <TemplateColumn CellClass="d-flex justify-end">
                         <CellTemplate>
-                            @if (context.Item.Status == "Drafted")
+                            @if (context.Item != null)
                             {
-                                <MudStack Row>
-                                    <MudMenu Color="Color.Warning">
-                                        <ActivatorContent>
-                                            <MudButton Color="Color.Info" Variant="Variant.Outlined">
-                                                <MudIcon Icon="@Icons.Material.Filled.Settings" class="me-2" />
-                                                Action
-                                            </MudButton>
-                                        </ActivatorContent>
-                                        <ChildContent>
-                                            <MudMenuItem OnClick="@(() => EditDraft(context.Item))">
-                                                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Info" class="me-2" />
-                                                Edit
-                                            </MudMenuItem>
-                                            <MudMenuItem OnClick="@(() => ConfirmRequest(context.Item))">
-                                                <MudIcon Icon="@Icons.Material.Filled.Send" Color="Color.Success" class="me-2" />
-                                                Submit
-                                            </MudMenuItem>
-                                        </ChildContent>
-                                    </MudMenu>
-                                </MudStack>
-                            }
-                            else if (context.Item.Status == "Requested" || context.Item.Status == "Approved")
-                            {
-                                <MudStack Row>
-                                    <MudMenu Color="Color.Warning">
-                                        <ActivatorContent>
-                                            <MudButton Color="Color.Info" Variant="Variant.Outlined">
-                                                <MudIcon Icon="@Icons.Material.Filled.Settings" class="me-2" />
-                                                Action
-                                            </MudButton>
-                                        </ActivatorContent>
-                                        <ChildContent>
-                                            <MudMenuItem OnClick="@(() => AbondonRequest(context.Item))">
-                                                <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" class="me-2" />
-                                                Abondon
-                                            </MudMenuItem>                                           
-                                        </ChildContent>
-                                    </MudMenu>
-                                </MudStack>
+                                @if (context.Item.Status == "Drafted")
+                                {
+                                    <MudStack Row>
+                                        <MudMenu Color="Color.Warning">
+                                            <ActivatorContent>
+                                                <MudButton Color="Color.Info" Variant="Variant.Outlined">
+                                                    <MudIcon Icon="@Icons.Material.Filled.Settings" class="me-2" />
+                                                    Action
+                                                </MudButton>
+                                            </ActivatorContent>
+                                            <ChildContent>
+                                                <MudMenuItem OnClick="@(() => EditDraft(context.Item))">
+                                                    <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Info" class="me-2" />
+                                                    Edit
+                                                </MudMenuItem>
+                                                <MudMenuItem OnClick="@(() => ConfirmRequest(context.Item))">
+                                                    <MudIcon Icon="@Icons.Material.Filled.Send" Color="Color.Success" class="me-2" />
+                                                    Submit
+                                                </MudMenuItem>
+                                            </ChildContent>
+                                        </MudMenu>
+                                    </MudStack>
+                                }
+                                else if (context.Item.Status == "Requested" || context.Item.Status == "Approved")
+                                {
+                                    <MudStack Row>
+                                        <MudMenu Color="Color.Warning">
+                                            <ActivatorContent>
+                                                <MudButton Color="Color.Info" Variant="Variant.Outlined">
+                                                    <MudIcon Icon="@Icons.Material.Filled.Settings" class="me-2" />
+                                                    Action
+                                                </MudButton>
+                                            </ActivatorContent>
+                                            <ChildContent>
+                                                <MudMenuItem OnClick="@(() => AbondonRequest(context.Item))">
+                                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" class="me-2" />
+                                                    Abondon
+                                                </MudMenuItem>
+                                            </ChildContent>
+                                        </MudMenu>
+                                    </MudStack>
+                                }
+                                else
+                                {
+                                    <MudMenuItem OnClick="@(() => AbondonRequest(context.Item))">
+                                        <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" class="me-2" />
+                                        Abondon
+                                    </MudMenuItem>
+                                }
                             }
                             else
                             {
-                                <MudMenuItem OnClick="@(() => AbondonRequest(context.Item))">
-                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" class="me-2" />
-                                    Abondon
-                                </MudMenuItem>
+                                <MudText>No data available</MudText>
                             }
                         </CellTemplate>
                     </TemplateColumn>

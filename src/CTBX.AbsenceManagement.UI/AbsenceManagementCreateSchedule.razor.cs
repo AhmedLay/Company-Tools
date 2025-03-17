@@ -26,17 +26,27 @@ namespace CTBX.AbsenceManagement.UI
         public bool _isVacationRequest = true;
         public void OpenDrawer()
         {
+            //_open = true;
+
+            _isVacationRequest = true; // Ensure the correct form type is set
+            _isEditMode = false;        // Ensure it's not in edit mode
             _open = true;
         }
         public void OpenSickLeaveDrawer()
         {
-            _isVacationRequest = false;
+            //_isVacationRequest = false;
+            //_open = true;
+
+            _isVacationRequest = false; // Ensure the correct form type is set
+            _isEditMode = false;       // Ensure it's not in edit mode
             _open = true;
         }
         public async Task SaveDraft()
         {
             if (CurrentRequest.From == null || CurrentRequest.To == null)
                 return;
+            if (AuthenticationStateProvider == null)
+                throw new InvalidOperationException("AuthenticationStateProvider is not initialized.");
 
             var authState = await AuthenticationStateProvider!.GetAuthenticationStateAsync();
             var user = authState.User;
@@ -123,7 +133,9 @@ namespace CTBX.AbsenceManagement.UI
         {
             try
             {
-                _events = await Service.GetData();
+                //_events = await Service.GetData();
+                var data = await Service.GetData();
+                _events = data?.Where(item => item != null).ToList() ?? new();
                 StateHasChanged(); 
             }
             catch (Exception ex)
@@ -143,6 +155,7 @@ namespace CTBX.AbsenceManagement.UI
                 Comment = string.Empty,
             };
             _isEditMode = false;
+            _isVacationRequest = true; // Reset to default
         }
         public void EditDraft(ReadModel draft)
         {
@@ -179,7 +192,7 @@ namespace CTBX.AbsenceManagement.UI
             await OnHandleOperation(
                 operation: async () => {
                     await Service.EditVacation(command);
-                    await Task.Delay(700);
+                    //await Task.Delay(700);
                     await LoadVacationData();
                 },
                successMssage: "Vacation Draft is Edited",
