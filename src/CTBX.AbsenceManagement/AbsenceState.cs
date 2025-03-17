@@ -10,7 +10,7 @@ namespace MinimalApiArchitecture.Application
         {
             On<VacationRequested>((state, evt) => state with { Status = AbsenceStatus.Requested });
             On<VacationApproved>((state, evt) => state with { Status = AbsenceStatus.VacationApproved });
-            On<SickLeaveConfirmed>((state, evt) => state with { Status = AbsenceStatus.SickLeaveConfirmed });
+            //On<SickLeaveConfirmed>((state, evt) => state with { Status = AbsenceStatus.SickLeaveConfirmed });
         }
     }
     public enum AbsenceStatus

@@ -80,18 +80,19 @@ namespace MinimalApiArchitecture.Application
                 From = from,
                 Until = until,
                 Comment = comment,
-                ReportedAt = reportedAt
+                ReportedAt = reportedAt,
+                Status = Status.ISickLeave
             });
         }
-        public void ConfirmSickLeave(int employeeId, DateTimeOffset confirmedAt)
-        {
-            EnsureExists();
-            Apply(new SickLeaveConfirmed
-            {
-                EmployeeId = employeeId,
-                ConfirmedAt = confirmedAt
-            });
-        }
+        //public void ConfirmSickLeave(int employeeId, DateTimeOffset confirmedAt)
+        //{
+        //    EnsureExists();
+        //    Apply(new SickLeaveConfirmed
+        //    {
+        //        EmployeeId = employeeId,
+        //        ConfirmedAt = confirmedAt
+        //    });
+        //}
     }
 
     [EventType("V1.VacationScheduled")]
@@ -156,6 +157,7 @@ namespace MinimalApiArchitecture.Application
         public DateTimeOffset Until { get; init; }
         public DateTimeOffset ReportedAt { get; init; }
         public string Comment { get; init; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
     }
 
     [EventType("V1.SickLeaveConfirmed")]

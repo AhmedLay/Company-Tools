@@ -74,6 +74,13 @@
                                     </MudMenu>
                                 </MudStack>
                             }
+                            else
+                            {
+                                <MudMenuItem OnClick="@(() => AbondonRequest(context.Item))">
+                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" class="me-2" />
+                                    Abondon
+                                </MudMenuItem>
+                            }
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>

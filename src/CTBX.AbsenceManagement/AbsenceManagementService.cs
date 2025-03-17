@@ -21,7 +21,7 @@ namespace MinimalApiArchitecture.Application
         }
         public async Task<List<ReadModel>> GetData()
         {
-            var filter = Builders<ReadModelDocument>.Filter.In(e => e.Status, new[] { "Drafted", "Requested","Approved", "Rejected" });
+            var filter = Builders<ReadModelDocument>.Filter.In(e => e.Status, new[] { "Drafted", "Requested","Approved", "Rejected", "SickLeave" });
             var projection = Builders<ReadModelDocument>.Projection
                 .Include(e => e.EmployeeId)
                 .Include(e => e.Id)
@@ -46,6 +46,10 @@ namespace MinimalApiArchitecture.Application
                     new { ID = command.EmployeeId }
                 );
 
+                //-- i added --
+                // Determine color based on status
+                var color = GetStatusColor(command.Status);
+
                 listOfDrafts.Add(new ReadModel
                 {
                     EmployeeID = command.EmployeeId,
@@ -54,12 +58,28 @@ namespace MinimalApiArchitecture.Application
                     Start = command.From.DateTime,
                     End = command.To.DateTime,
                     Text = command.Comment,
-                    Status = command.Status
+                    Status = command.Status,
+                    Color = color
                 });
             }
 
             return listOfDrafts;
         }
+
+        //color based on status
+        private MudBlazor.Color GetStatusColor(string status)
+        {
+            return status switch
+            {
+                "Drafted" => MudBlazor.Color.Default,
+                "Requested" => MudBlazor.Color.Warning,
+                "Approved" => MudBlazor.Color.Success,
+                "Rejected" => MudBlazor.Color.Error,
+                "SickLeave" => MudBlazor.Color.Info,
+                _ => MudBlazor.Color.Default
+            };
+        }
+
         public async Task<int> GetIdfromEmployees(string email)
         {
             await using var connection = new NpgsqlConnection(_connectionString);

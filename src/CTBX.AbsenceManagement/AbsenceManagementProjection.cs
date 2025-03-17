@@ -85,6 +85,7 @@ public class AbsenceManagementProjection : MongoProjector<ReadModelDocument>
                  .Set(x => x.From, evt.From)
                  .Set(x => x.To, evt.Until)
                  .Set(x => x.ScheduledAt, evt.ReportedAt)
-                 .Set(x => x.Comment, evt.Comment ?? string.Empty);
+                 .Set(x => x.Comment, evt.Comment ?? string.Empty)
+                 .Set(x => x.Status, evt.Status);
     }
 }

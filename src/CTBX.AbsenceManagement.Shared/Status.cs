@@ -13,7 +13,7 @@ namespace CTBX.AbsenceManagement.Shared
         public const string Approved = "Approved";
         public const string Rejected = "Rejected";
         public const string Abondon = "Abondon";
-
+        public const string ISickLeave = "SickLeave";
 
     }
 }
