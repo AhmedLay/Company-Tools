@@ -85,6 +85,7 @@ public class AbsenceManagementEndpoints : CarterModule
             [FromServices] AbsenceManagementApplicationService service) =>
         {
             var result = await service.Handle(command, token);
+
             return Results.Ok(result);
         });
     }

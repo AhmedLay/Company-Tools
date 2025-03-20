@@ -28,8 +28,8 @@ namespace CTBX.AbsenceManagement.UI
         {
             //_open = true;
 
-            _isVacationRequest = true; // Ensure the correct form type is set
-            _isEditMode = false;        // Ensure it's not in edit mode
+            _isVacationRequest = true; 
+            _isEditMode = false;        
             _open = true;
         }
         public void OpenSickLeaveDrawer()
@@ -37,8 +37,8 @@ namespace CTBX.AbsenceManagement.UI
             //_isVacationRequest = false;
             //_open = true;
 
-            _isVacationRequest = false; // Ensure the correct form type is set
-            _isEditMode = false;       // Ensure it's not in edit mode
+            _isVacationRequest = false; 
+            _isEditMode = false;       
             _open = true;
         }
         public async Task SaveDraft()
@@ -116,11 +116,14 @@ namespace CTBX.AbsenceManagement.UI
             }
             var id = Guid.NewGuid().ToString();
             var command = new RequestingSickLeave(id, 123, from, to, CurrentRequest.Comment, DateTimeOffset.UtcNow);
-            var response = await Service.SendCommandSL(command);
+            
             await OnHandleOperation(
                     operation: async () =>
-                    await Service.SendCommandSL(command),
-
+                    {
+                        await Service.SendCommandSL(command);
+                        await Task.Delay(750);
+                        await LoadVacationData();
+                    },
                     successMssage: "Sick Leave Draft Saved",
                     errMessage: "Something went wrong!"
                 );
@@ -133,7 +136,6 @@ namespace CTBX.AbsenceManagement.UI
         {
             try
             {
-                //_events = await Service.GetData();
                 var data = await Service.GetData();
                 _events = data?.Where(item => item != null).ToList() ?? new();
                 StateHasChanged(); 
@@ -155,7 +157,7 @@ namespace CTBX.AbsenceManagement.UI
                 Comment = string.Empty,
             };
             _isEditMode = false;
-            _isVacationRequest = true; // Reset to default
+            _isVacationRequest = true; 
         }
         public void EditDraft(ReadModel draft)
         {
@@ -192,14 +194,14 @@ namespace CTBX.AbsenceManagement.UI
             await OnHandleOperation(
                 operation: async () => {
                     await Service.EditVacation(command);
-                    //await Task.Delay(700);
+                    await Task.Delay(750);
                     await LoadVacationData();
                 },
                successMssage: "Vacation Draft is Edited",
                errMessage: "Something went wrong!"
                );
             _open = false;
-            ResetForm();
+            
 
         }
         public async Task ConfirmRequest(ReadModel items)
