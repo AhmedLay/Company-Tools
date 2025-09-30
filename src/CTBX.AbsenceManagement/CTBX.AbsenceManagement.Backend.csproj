@@ -21,6 +21,6 @@
     <ProjectReference Include="..\CTBX.AbsenceManagement.Shared\CTBX.AbsenceManagement.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="yaep" Version="2.0.9" />
+    <PackageReference Update="yaep" Version="2.1.0" />
   </ItemGroup>
 </Project>
